@@ -26,3 +26,47 @@ calmodulin <- function(time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h) {
     .Call('CalciumModelsLibrary_calmodulin', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h)
 }
 
+#' Couple a simulated CamKII protein to a given calcium time series.
+#'
+#' Takes a calcium time series and simulates the Ca-dependent protein CamKII.
+#'
+#' Implementation based on the CamKII Model by Dupont (2003, 2010)
+#'
+#' @param time A numeric vector: the times of the observations.
+#' @param calcium A numeric vector: the concentrations of cytosolic calcium [nmol].
+#' @param dt A numeric, the time interval between two output samples.
+#' @param vol A numeric, the volume of the system [l].
+#' @param a A numeric, the first parameter of the cubic function calculating k_AA.
+#' @param b A numeric, the second parameter of the cubic function calculating k_AA.
+#' @param c A numeric, the third parameter of the cubic function calculating k_AA.
+#' @param k_IB A numeric, the rate of association of CaM to a non-phosphorylated subunit.
+#' @param k_BI A numeric, the rate of dissociation of CaM from a non-phosphorylated subunit.
+#' @param k_PT A numeric, the ate of dissociation of Ca from CaM bound to a phosphorylated subunit.
+#' @param k_TP A numeric, the rate of association of Ca to CaM bound to a phosphorylated subunit.
+#' @param k_TA A numeric, the rate of dissociation of CaM from a phosphorylated subunit.
+#' @param k_AT A numeric, the rate of association of CaM to a phosphorylated subunit.
+#' @param k_AA A numeric, the phenomenological rate constant for autophosphorylation.
+#' @param c_I A numeric, the coefficient of kinase activity of inactive subunits.
+#' @param c_B A numeric, the coefficient of kinase activity of bound subunits.
+#' @param c_P A numeric, the coefficient of kinase activity of phosphorylated subunits.
+#' @param c_T A numeric, the coefficient of kinase activity of trapped subunits.
+#' @param c_A A numeric, the coefficient of kinase activity of autonomous subunits.
+#' @param camT A numeric, the total concentration of calmodulin [nmol].
+#' @param Kd A numeric, the half maximal concentration characterizing Ca binding to CaM.
+#' @param Vm_phos A numeric, the maximal velocity of the phosphatase reactions.
+#' @param Kd_phos A numeric, the half maximal concentration characterizing phosphorylated subunits being dephosphorylated.
+#' @param totalC A numeric, the total fraction of subunits that can phosphorylate or be phosphorylated.
+#' @param Wi_conc A numeric, the initial concentration of the inactive fraction [nmol].
+#' @param Wb_conc A numeric, the initial concentration of the bound fraction [nmol].
+#' @param Wp_conc A numeric, the initial concentration of the phosphorylated fraction [nmol].
+#' @param Wt_conc A numeric, the initial concentration of the trapped fraction [nmol].
+#' @param Wa_conc A numeric, the initial concentration of the autonomous fraction [nmol].
+#' @param h An integer, the Hill coefficient of Ca binding.
+#' @return A dataframe with time and the active protein time series as columns.
+#' @examples
+#' camkii()
+#' @export
+camkii <- function(time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA, k_AT, k_AA, c_I, c_B, c_P, c_T, c_A, camT, Kd, Vm_phos, Kd_phos, totalC, Wi_conc, Wb_conc, Wp_conc, Wt_conc, Wa_conc, h) {
+    .Call('CalciumModelsLibrary_camkii', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA, k_AT, k_AA, c_I, c_B, c_P, c_T, c_A, camT, Kd, Vm_phos, Kd_phos, totalC, Wi_conc, Wb_conc, Wp_conc, Wt_conc, Wa_conc, h)
+}
+

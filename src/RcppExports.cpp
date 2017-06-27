@@ -24,9 +24,50 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// camkii
+NumericMatrix camkii(NumericVector time, NumericVector calcium, double dt, double vol, double a, double b, double c, double k_IB, double k_BI, double k_PT, double k_TP, double k_TA, double k_AT, double k_AA, double c_I, double c_B, double c_P, double c_T, double c_A, double camT, double Kd, double Vm_phos, double Kd_phos, double totalC, double Wi_conc, double Wb_conc, double Wp_conc, double Wt_conc, double Wa_conc, int h);
+RcppExport SEXP CalciumModelsLibrary_camkii(SEXP timeSEXP, SEXP calciumSEXP, SEXP dtSEXP, SEXP volSEXP, SEXP aSEXP, SEXP bSEXP, SEXP cSEXP, SEXP k_IBSEXP, SEXP k_BISEXP, SEXP k_PTSEXP, SEXP k_TPSEXP, SEXP k_TASEXP, SEXP k_ATSEXP, SEXP k_AASEXP, SEXP c_ISEXP, SEXP c_BSEXP, SEXP c_PSEXP, SEXP c_TSEXP, SEXP c_ASEXP, SEXP camTSEXP, SEXP KdSEXP, SEXP Vm_phosSEXP, SEXP Kd_phosSEXP, SEXP totalCSEXP, SEXP Wi_concSEXP, SEXP Wb_concSEXP, SEXP Wp_concSEXP, SEXP Wt_concSEXP, SEXP Wa_concSEXP, SEXP hSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type calcium(calciumSEXP);
+    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< double >::type vol(volSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    Rcpp::traits::input_parameter< double >::type k_IB(k_IBSEXP);
+    Rcpp::traits::input_parameter< double >::type k_BI(k_BISEXP);
+    Rcpp::traits::input_parameter< double >::type k_PT(k_PTSEXP);
+    Rcpp::traits::input_parameter< double >::type k_TP(k_TPSEXP);
+    Rcpp::traits::input_parameter< double >::type k_TA(k_TASEXP);
+    Rcpp::traits::input_parameter< double >::type k_AT(k_ATSEXP);
+    Rcpp::traits::input_parameter< double >::type k_AA(k_AASEXP);
+    Rcpp::traits::input_parameter< double >::type c_I(c_ISEXP);
+    Rcpp::traits::input_parameter< double >::type c_B(c_BSEXP);
+    Rcpp::traits::input_parameter< double >::type c_P(c_PSEXP);
+    Rcpp::traits::input_parameter< double >::type c_T(c_TSEXP);
+    Rcpp::traits::input_parameter< double >::type c_A(c_ASEXP);
+    Rcpp::traits::input_parameter< double >::type camT(camTSEXP);
+    Rcpp::traits::input_parameter< double >::type Kd(KdSEXP);
+    Rcpp::traits::input_parameter< double >::type Vm_phos(Vm_phosSEXP);
+    Rcpp::traits::input_parameter< double >::type Kd_phos(Kd_phosSEXP);
+    Rcpp::traits::input_parameter< double >::type totalC(totalCSEXP);
+    Rcpp::traits::input_parameter< double >::type Wi_conc(Wi_concSEXP);
+    Rcpp::traits::input_parameter< double >::type Wb_conc(Wb_concSEXP);
+    Rcpp::traits::input_parameter< double >::type Wp_conc(Wp_concSEXP);
+    Rcpp::traits::input_parameter< double >::type Wt_conc(Wt_concSEXP);
+    Rcpp::traits::input_parameter< double >::type Wa_conc(Wa_concSEXP);
+    Rcpp::traits::input_parameter< int >::type h(hSEXP);
+    rcpp_result_gen = Rcpp::wrap(camkii(time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA, k_AT, k_AA, c_I, c_B, c_P, c_T, c_A, camT, Kd, Vm_phos, Kd_phos, totalC, Wi_conc, Wb_conc, Wp_conc, Wt_conc, Wa_conc, h));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"CalciumModelsLibrary_calmodulin", (DL_FUNC) &CalciumModelsLibrary_calmodulin, 9},
+    {"CalciumModelsLibrary_camkii", (DL_FUNC) &CalciumModelsLibrary_camkii, 30},
     {NULL, NULL, 0}
 };
 

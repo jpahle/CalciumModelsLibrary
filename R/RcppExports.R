@@ -26,6 +26,33 @@ calmodulin <- function(time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h) {
     .Call('CalciumModelsLibrary_calmodulin', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h)
 }
 
+#' Calculate propensity for a Calmodulin Model reaction.
+#'
+#' Return the propensity of a Calmodulin Model reaction for a given vector of particle numbers and a reaction Id. 
+#' 
+#' @param part_num A numeric vector: the particle numbers of the model species.
+#' @param calcium A numeric vector: the calcium particle number.
+#' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
+#' @return A double value (the propensity of the specified reaction).
+#' @examples
+#' calmodulin_props()
+#' @export
+calmodulin_props <- function(part_num, calcium, rId) {
+    .Call('CalciumModelsLibrary_calmodulin_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium, rId)
+}
+
+#' Define stoichiometric matrix of the model
+#' 
+#' Create and return the stoichiometric matrix of the model as a numeric matrix.
+#' 
+#' @return A numeric matrix: the stoichiometric matrix
+#' @examples
+#' calmodulin_stM()
+#' @export
+calmodulin_stM <- function() {
+    .Call('CalciumModelsLibrary_calmodulin_stM', PACKAGE = 'CalciumModelsLibrary')
+}
+
 #' Couple a simulated CamKII protein to a given calcium time series.
 #'
 #' Takes a calcium time series and simulates the Ca-dependent protein CamKII.
@@ -68,5 +95,24 @@ calmodulin <- function(time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h) {
 #' @export
 camkii <- function(time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA, k_AT, k_AA, c_I, c_B, c_P, c_T, c_A, camT, Kd, Vm_phos, Kd_phos, totalC, Wi_conc, Wb_conc, Wp_conc, Wt_conc, Wa_conc, h) {
     .Call('CalciumModelsLibrary_camkii', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA, k_AT, k_AA, c_I, c_B, c_P, c_T, c_A, camT, Kd, Vm_phos, Kd_phos, totalC, Wi_conc, Wb_conc, Wp_conc, Wt_conc, Wa_conc, h)
+}
+
+#' Stochastic Simulatior (Gillespie).
+#'
+#' Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.
+#'
+#' @param time A numeric vector: the times of the observations.
+#' @param calcium_conc A numeric vector: the concentration of cytosolic calcium [nmol].
+#' @param init_conc A numeric vector: the initial concentrations of the model species.
+#' @param calc_props A function: returns a vector of model propensities for a given vector of concentrations.
+#' @param provide_stM A function: returns a matrix of the stoichiometric coefficients of the reaction system.
+#' @param dt A numeric, the time interval between two output samples.
+#' @param vol A numeric, the volume of the system [l].
+#' @return A dataframe with time and the active protein time series as columns.
+#' @examples
+#' simulator()
+#' @export
+simulator <- function(time, calcium, init_conc, calc_props, provide_stM, dt, vol) {
+    .Call('CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', time, calcium, init_conc, calc_props, provide_stM, dt, vol)
 }
 

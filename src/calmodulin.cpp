@@ -42,7 +42,6 @@ NumericMatrix calmodulin(NumericVector time,
   /* const double f = 6.0221415e14*CellVol; */
   double f;
 
-  int i;
   double r2;
   int noutput;
   double currentTime;

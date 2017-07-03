@@ -87,6 +87,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// camkii_props
+double camkii_props(NumericVector part_num, double calcium, int rId);
+RcppExport SEXP CalciumModelsLibrary_camkii_props(SEXP part_numSEXP, SEXP calciumSEXP, SEXP rIdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type part_num(part_numSEXP);
+    Rcpp::traits::input_parameter< double >::type calcium(calciumSEXP);
+    Rcpp::traits::input_parameter< int >::type rId(rIdSEXP);
+    rcpp_result_gen = Rcpp::wrap(camkii_props(part_num, calcium, rId));
+    return rcpp_result_gen;
+END_RCPP
+}
+// camkii_stM
+NumericMatrix camkii_stM();
+RcppExport SEXP CalciumModelsLibrary_camkii_stM() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(camkii_stM());
+    return rcpp_result_gen;
+END_RCPP
+}
 // simulator
 NumericMatrix simulator(NumericVector time, NumericVector calcium, NumericVector init_conc, Function calc_props, Function provide_stM, double dt, double vol);
 RcppExport SEXP CalciumModelsLibrary_simulator(SEXP timeSEXP, SEXP calciumSEXP, SEXP init_concSEXP, SEXP calc_propsSEXP, SEXP provide_stMSEXP, SEXP dtSEXP, SEXP volSEXP) {
@@ -110,6 +133,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"CalciumModelsLibrary_calmodulin_props", (DL_FUNC) &CalciumModelsLibrary_calmodulin_props, 3},
     {"CalciumModelsLibrary_calmodulin_stM", (DL_FUNC) &CalciumModelsLibrary_calmodulin_stM, 0},
     {"CalciumModelsLibrary_camkii", (DL_FUNC) &CalciumModelsLibrary_camkii, 30},
+    {"CalciumModelsLibrary_camkii_props", (DL_FUNC) &CalciumModelsLibrary_camkii_props, 3},
+    {"CalciumModelsLibrary_camkii_stM", (DL_FUNC) &CalciumModelsLibrary_camkii_stM, 0},
     {"CalciumModelsLibrary_simulator", (DL_FUNC) &CalciumModelsLibrary_simulator, 7},
     {NULL, NULL, 0}
 };

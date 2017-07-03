@@ -9,8 +9,6 @@ simulator(time, calcium, init_conc, calc_props, provide_stM, dt, vol)
 \arguments{
 \item{time}{A numeric vector: the times of the observations.}
 
-\item{calcium}{A numeric vector: the particle numbers of cytosolic calcium [nmol].}
-
 \item{init_conc}{A numeric vector: the initial concentrations of the model species.}
 
 \item{calc_props}{A function: returns a vector of model propensities for a given vector of concentrations.}
@@ -20,12 +18,14 @@ simulator(time, calcium, init_conc, calc_props, provide_stM, dt, vol)
 \item{dt}{A numeric, the time interval between two output samples.}
 
 \item{vol}{A numeric, the volume of the system [l].}
+
+\item{calcium_conc}{A numeric vector: the concentration of cytosolic calcium [nmol].}
 }
 \value{
 A dataframe with time and the active protein time series as columns.
 }
 \description{
-Simulate a model using an implementation of Gillespie's SSA.
+Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.
 }
 \examples{
 simulator()

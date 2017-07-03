@@ -41,14 +41,6 @@ NumericMatrix simulator(NumericVector time,
   for (i=0; i < ic.length(); i++) {
     x[i] = (int)floor(ic[i]*f);  
   }
-  // get calcium particle numbers
-  //NumericVector calcium;
-  //int j;
-  //for (j=0; j < calcium_conc.length(); j++) {
-  //  calcium[j] = (double)floor(calcium_conc[j]*f);
-  //}
-  //Rcout << "x: " << x << std::endl;
-  
   // create algorithm parameters 
   int ntimepoint;
   double r2;
@@ -70,7 +62,12 @@ NumericMatrix simulator(NumericVector time,
   int nintervals = (int)floor((endTime-startTime)/dt+0.5)+1;
   // create return value matrix
   NumericMatrix retval(nintervals, 2+x.length());
-  
+  // check user supplied timestep: if too low -> exit simulation
+  if (dt < 0.00005) {
+    Rcout << "Fatal error: Value of dt too low! Timesteps below the threshold of 0.00005 cause large rounding errors. Simulation aborted!" << std::endl;
+    return retval;
+  }
+    
   /* SIMULATION ALGORITHM */
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
@@ -87,21 +84,8 @@ NumericMatrix simulator(NumericVector time,
         amu[n] = a + amu[n-1];
       }
     }
-    
-    Rcout << "amu: " << amu << std::endl;
-    
-    // terminate simulation if sum of propensities is <= 0
-    //if (a0 <= 0) {
-    //  exit(-1);
-    //}
-    
-    //Rcout << "a0: " << a0 << std::endl;
-    
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[amu.length()-1];
-    
-    //Rcout << "tau: " << tau << std::endl;
-    
     // check if reaction time exceeds time until the next observation
     // if true -> update output directly
     if ((currentTime+tau)>=time[ntimepoint+1]) {
@@ -119,10 +103,6 @@ NumericMatrix simulator(NumericVector time,
     } else {
       // if false -> select reaction to fire
       r2 = amu[amu.length()-1] * runif(1)[0];
-      
-      //Rcout << "amu: " << amu << std::endl;
-      //Rcout << "r2: " << r2 << std::endl;
-      
       rIndex = 0;
       for (rIndex=0; amu[rIndex] < r2; rIndex++);
       // propagate time
@@ -137,29 +117,22 @@ NumericMatrix simulator(NumericVector time,
         noutput++;
         outputTime += dt;
       }
-      
-      Rcout << "rIndex: " << rIndex << std::endl;
-      
       // update system state
       int species;
       for (species=0; species < stM.nrow();species++) {
         x[species] += stM(species,rIndex);
       }
-      
-      //Rcout << "rIndex: " << rIndex << std::endl;
-      Rcout << "x: " << x << " at " << ntimepoint << std::endl;
-      
     }
   }
   // update output
-  while (outputTime <= endTime) {
+  while (floor(outputTime*10000) <= floor(endTime*10000)) {
     retval(noutput, 0) = outputTime;
     retval(noutput, 1) = calcium[ntimepoint];
     for (xID=2; xID < 2+x.length(); xID++) {
       retval(noutput, xID) = x[xID-2]/f;
     }
     noutput++;
-    outputTime += dt;
+    outputTime += dt; 
   }
 
   return retval;

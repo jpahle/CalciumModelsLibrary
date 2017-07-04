@@ -202,7 +202,7 @@ NumericMatrix camkii(NumericVector time,
         break;
       case 9: // phosphatase on W_A
         x[4]--;
-        x[1]++;
+        x[0]++;
         break;
       default:
         printf("\nError in updateSystem(): rIndex (%u) out of range!\n", rIndex);

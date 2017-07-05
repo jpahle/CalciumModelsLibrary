@@ -25,15 +25,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // calmodulin_props
-double calmodulin_props(NumericVector part_num, double calcium, int rId);
-RcppExport SEXP CalciumModelsLibrary_calmodulin_props(SEXP part_numSEXP, SEXP calciumSEXP, SEXP rIdSEXP) {
+NumericVector calmodulin_props(NumericVector part_num, double calcium);
+RcppExport SEXP CalciumModelsLibrary_calmodulin_props(SEXP part_numSEXP, SEXP calciumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type part_num(part_numSEXP);
     Rcpp::traits::input_parameter< double >::type calcium(calciumSEXP);
-    Rcpp::traits::input_parameter< int >::type rId(rIdSEXP);
-    rcpp_result_gen = Rcpp::wrap(calmodulin_props(part_num, calcium, rId));
+    rcpp_result_gen = Rcpp::wrap(calmodulin_props(part_num, calcium));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -153,7 +152,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"CalciumModelsLibrary_calmodulin", (DL_FUNC) &CalciumModelsLibrary_calmodulin, 9},
-    {"CalciumModelsLibrary_calmodulin_props", (DL_FUNC) &CalciumModelsLibrary_calmodulin_props, 3},
+    {"CalciumModelsLibrary_calmodulin_props", (DL_FUNC) &CalciumModelsLibrary_calmodulin_props, 2},
     {"CalciumModelsLibrary_calmodulin_stM", (DL_FUNC) &CalciumModelsLibrary_calmodulin_stM, 0},
     {"CalciumModelsLibrary_camkii", (DL_FUNC) &CalciumModelsLibrary_camkii, 30},
     {"CalciumModelsLibrary_camkii_props", (DL_FUNC) &CalciumModelsLibrary_camkii_props, 3},

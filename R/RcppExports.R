@@ -26,19 +26,19 @@ calmodulin <- function(time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h) {
     .Call('CalciumModelsLibrary_calmodulin', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h)
 }
 
-#' Calculate propensity for a Calmodulin Model reaction.
+#' Calculate propensities for the Calmodulin Model.
 #'
-#' Return the propensity of a Calmodulin Model reaction for a given vector of particle numbers and a reaction Id. 
+#' Return the propensity vector of the Calmodulin Model for a given vector of particle numbers. 
 #' 
 #' @param part_num A numeric vector: the particle numbers of the model species.
 #' @param calcium A numeric vector: the calcium particle number.
 #' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-#' @return A double value (the propensity of the specified reaction).
+#' @return A numeric vector containing a cumulative sum of all reaction propensities.
 #' @examples
 #' calmodulin_props()
 #' @export
-calmodulin_props <- function(part_num, calcium, rId) {
-    .Call('CalciumModelsLibrary_calmodulin_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium, rId)
+calmodulin_props <- function(part_num, calcium) {
+    .Call('CalciumModelsLibrary_calmodulin_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium)
 }
 
 #' Define stoichiometric matrix of the model

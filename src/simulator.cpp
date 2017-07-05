@@ -60,11 +60,6 @@ NumericMatrix simulator(NumericVector time,
   ntimepoint = 0;
   outputTime = currentTime;
   int nintervals = (int)floor((endTime-startTime)/dt+0.5)+1;
-  
-  printf("Simulation setup \n");
-  printf("startTime: %f \n", startTime);
-  printf("endTime: %f \n", endTime);
-  
   // create return value matrix
   NumericMatrix retval(nintervals, 2+x.length());
   // check user supplied timestep: if too low -> exit simulation
@@ -76,28 +71,10 @@ NumericMatrix simulator(NumericVector time,
   /* SIMULATION ALGORITHM */
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
-    // calcium particle number at current timepoint (ntimepoint)
-    double curr_ca;
-    curr_ca = calcium[ntimepoint];
-    // calculate propensity amu for every reaction
-    int n;
-    for (n=0; n < stM.ncol(); n++) {
-      double a = as<double>(calc_props(x, curr_ca, n));
-      if (n == 0) {
-        amu[n] = a;
-      } else {
-        amu[n] = a + amu[n-1];
-      }
-    }
-    
-    Rcout << "amu: \n" << amu << std::endl;
-    
+    // get cumulative propensity vector (last entry is sum of all propensities)
+    NumericVector amu = calc_props(x, calcium[ntimepoint]);
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[amu.length()-1];
-    
-    printf("tau: %f \n", tau);
-    printf("dt: %f \n", dt);
-    
     // check if reaction time exceeds time until the next observation
     // if true -> update output directly
     if ((currentTime+tau)>=time[ntimepoint+1]) {
@@ -115,9 +92,6 @@ NumericMatrix simulator(NumericVector time,
     } else {
       // if false -> select reaction to fire
       r2 = amu[amu.length()-1] * runif(1)[0];
-      
-      printf("r2: %f \n", r2);
-      
       rIndex = 0;
       for (rIndex=0; amu[rIndex] < r2; rIndex++);
       // propagate time
@@ -138,13 +112,6 @@ NumericMatrix simulator(NumericVector time,
         x[species] += stM(species,rIndex);
       }
     }
-    
-    Rcout << "x: \n" << x << std::endl;
-    
-    printf("Simulation cycle complete. \n");
-    printf("outputTime: %f \n", outputTime);
-    printf("endTime: %f \n", endTime);
-    
   }
   // update output
   while (floor(outputTime*10000) <= floor(endTime*10000)) {
@@ -157,7 +124,5 @@ NumericMatrix simulator(NumericVector time,
     outputTime += dt; 
   }
   
-  printf("\n Simulation end. \n");
-    
   return retval;
 }

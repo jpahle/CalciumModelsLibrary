@@ -8,11 +8,11 @@ using namespace Rcpp;
 //' @param time A numeric vector: the times of the observations.
 //' @param calcium_conc A numeric vector: the concentration of cytosolic calcium [nmol].
 //' @param init_conc A numeric vector: the initial concentrations of the model species.
-//' @param calc_props A function: returns a vector of model propensities for a given vector of concentrations.
+//' @param calc_props A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.
 //' @param provide_stM A function: returns a matrix of the stoichiometric coefficients of the reaction system.
 //' @param dt A numeric, the time interval between two output samples.
 //' @param vol A numeric, the volume of the system [l].
-//' @return A dataframe with time and the active protein time series as columns.
+//' @return A dataframe with time, calcium and the active protein time series as columns.
 //' @examples
 //' simulator()
 //' @export

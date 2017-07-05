@@ -124,6 +124,33 @@ camkii_stM <- function() {
     .Call('CalciumModelsLibrary_camkii_stM', PACKAGE = 'CalciumModelsLibrary')
 }
 
+#' Calculate propensity for a PKC Model reaction.
+#'
+#' Return the propensity of a PKC Model reaction for a given vector of particle numbers and a reaction Id. 
+#' 
+#' @param part_num A numeric vector: the particle numbers of the model species.
+#' @param calcium A numeric vector: the calcium particle number.
+#' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
+#' @return A double value (the propensity of the specified reaction).
+#' @examples
+#' pkc_props()
+#' @export
+pkc_props <- function(part_num, calcium, rId) {
+    .Call('CalciumModelsLibrary_pkc_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium, rId)
+}
+
+#' Define stoichiometric matrix of the PKC model
+#' 
+#' Create and return the stoichiometric matrix of the PKC model as a numeric matrix.
+#' 
+#' @return A numeric matrix: the stoichiometric matrix
+#' @examples
+#' pkc_stM()
+#' @export
+pkc_stM <- function() {
+    .Call('CalciumModelsLibrary_pkc_stM', PACKAGE = 'CalciumModelsLibrary')
+}
+
 #' Stochastic Simulatior (Gillespie).
 #'
 #' Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.

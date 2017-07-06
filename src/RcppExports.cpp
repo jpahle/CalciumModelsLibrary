@@ -108,6 +108,44 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pkc
+NumericMatrix pkc(NumericVector time, NumericVector calcium, double dt, double vol, double k1, double k2, double k3, double k4, double k5, double k6, double k7, double k8, double k9, double k10, double k11, double k12, double k13, double k14, double k15, double k16, double k17, double k18, double k19, double k20, double AA, double DAG, double PKCinact0_conc, double PKCbasal0_conc);
+RcppExport SEXP CalciumModelsLibrary_pkc(SEXP timeSEXP, SEXP calciumSEXP, SEXP dtSEXP, SEXP volSEXP, SEXP k1SEXP, SEXP k2SEXP, SEXP k3SEXP, SEXP k4SEXP, SEXP k5SEXP, SEXP k6SEXP, SEXP k7SEXP, SEXP k8SEXP, SEXP k9SEXP, SEXP k10SEXP, SEXP k11SEXP, SEXP k12SEXP, SEXP k13SEXP, SEXP k14SEXP, SEXP k15SEXP, SEXP k16SEXP, SEXP k17SEXP, SEXP k18SEXP, SEXP k19SEXP, SEXP k20SEXP, SEXP AASEXP, SEXP DAGSEXP, SEXP PKCinact0_concSEXP, SEXP PKCbasal0_concSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type calcium(calciumSEXP);
+    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< double >::type vol(volSEXP);
+    Rcpp::traits::input_parameter< double >::type k1(k1SEXP);
+    Rcpp::traits::input_parameter< double >::type k2(k2SEXP);
+    Rcpp::traits::input_parameter< double >::type k3(k3SEXP);
+    Rcpp::traits::input_parameter< double >::type k4(k4SEXP);
+    Rcpp::traits::input_parameter< double >::type k5(k5SEXP);
+    Rcpp::traits::input_parameter< double >::type k6(k6SEXP);
+    Rcpp::traits::input_parameter< double >::type k7(k7SEXP);
+    Rcpp::traits::input_parameter< double >::type k8(k8SEXP);
+    Rcpp::traits::input_parameter< double >::type k9(k9SEXP);
+    Rcpp::traits::input_parameter< double >::type k10(k10SEXP);
+    Rcpp::traits::input_parameter< double >::type k11(k11SEXP);
+    Rcpp::traits::input_parameter< double >::type k12(k12SEXP);
+    Rcpp::traits::input_parameter< double >::type k13(k13SEXP);
+    Rcpp::traits::input_parameter< double >::type k14(k14SEXP);
+    Rcpp::traits::input_parameter< double >::type k15(k15SEXP);
+    Rcpp::traits::input_parameter< double >::type k16(k16SEXP);
+    Rcpp::traits::input_parameter< double >::type k17(k17SEXP);
+    Rcpp::traits::input_parameter< double >::type k18(k18SEXP);
+    Rcpp::traits::input_parameter< double >::type k19(k19SEXP);
+    Rcpp::traits::input_parameter< double >::type k20(k20SEXP);
+    Rcpp::traits::input_parameter< double >::type AA(AASEXP);
+    Rcpp::traits::input_parameter< double >::type DAG(DAGSEXP);
+    Rcpp::traits::input_parameter< double >::type PKCinact0_conc(PKCinact0_concSEXP);
+    Rcpp::traits::input_parameter< double >::type PKCbasal0_conc(PKCbasal0_concSEXP);
+    rcpp_result_gen = Rcpp::wrap(pkc(time, calcium, dt, vol, k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k20, AA, DAG, PKCinact0_conc, PKCbasal0_conc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pkc_props
 NumericVector pkc_props(NumericVector part_num, double calcium);
 RcppExport SEXP CalciumModelsLibrary_pkc_props(SEXP part_numSEXP, SEXP calciumSEXP) {
@@ -155,6 +193,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"CalciumModelsLibrary_camkii", (DL_FUNC) &CalciumModelsLibrary_camkii, 30},
     {"CalciumModelsLibrary_camkii_props", (DL_FUNC) &CalciumModelsLibrary_camkii_props, 2},
     {"CalciumModelsLibrary_camkii_stM", (DL_FUNC) &CalciumModelsLibrary_camkii_stM, 0},
+    {"CalciumModelsLibrary_pkc", (DL_FUNC) &CalciumModelsLibrary_pkc, 28},
     {"CalciumModelsLibrary_pkc_props", (DL_FUNC) &CalciumModelsLibrary_pkc_props, 2},
     {"CalciumModelsLibrary_pkc_stM", (DL_FUNC) &CalciumModelsLibrary_pkc_stM, 0},
     {"CalciumModelsLibrary_simulator", (DL_FUNC) &CalciumModelsLibrary_simulator, 7},

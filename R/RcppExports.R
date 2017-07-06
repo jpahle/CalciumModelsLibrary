@@ -124,6 +124,29 @@ camkii_stM <- function() {
     .Call('CalciumModelsLibrary_camkii_stM', PACKAGE = 'CalciumModelsLibrary')
 }
 
+#' Couple a simulated PKC protein to a given calcium time series.
+#'
+#' Takes a calcium time series and simulates the Ca-dependent protein PKC.
+#'
+#' Implementation based on the PKC Model by Manninnen (2006)
+#'
+#' @param time A numeric vector: the times of the observations.
+#' @param calcium A numeric vector: the concentrations of cytosolic calcium [nmol].
+#' @param dt A numeric, the time interval between two output samples.
+#' @param vol A numeric, the volume of the system [l].
+#' @param k1-20 Double values, reaction rate parameters [1/s].
+#' @param AA A double, concentration of AA [nmol].
+#' @param DAG A double, concentration of DAG [nmol].
+#' @param PKCinact0_conc A double, initial concentration of inactive PKC [nmol].
+#' @param PKCbasal0_conc A double, initial concentration of basal PKC [nmol].
+#' @return A dataframe with time and the active protein time series as columns.
+#' @examples
+#' pkc()
+#' @export
+pkc <- function(time, calcium, dt, vol, k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k20, AA, DAG, PKCinact0_conc, PKCbasal0_conc) {
+    .Call('CalciumModelsLibrary_pkc', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k20, AA, DAG, PKCinact0_conc, PKCbasal0_conc)
+}
+
 #' Calculate propensities for the PKC Model.
 #'
 #' Return the propensity vector of the PKC Model for a given vector of particle numbers. 

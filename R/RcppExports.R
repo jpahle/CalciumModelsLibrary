@@ -97,19 +97,19 @@ camkii <- function(time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA
     .Call('CalciumModelsLibrary_camkii', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA, k_AT, k_AA, c_I, c_B, c_P, c_T, c_A, camT, Kd, Vm_phos, Kd_phos, totalC, Wi_conc, Wb_conc, Wp_conc, Wt_conc, Wa_conc, h)
 }
 
-#' Calculate propensity for a Camkii Model reaction.
+#' Calculate propensities for the CamKII Model.
 #'
-#' Return the propensity of a Camkii Model reaction for a given vector of particle numbers and a reaction Id. 
+#' Return the propensity vector of the CamKII Model for a given vector of particle numbers. 
 #' 
 #' @param part_num A numeric vector: the particle numbers of the model species.
 #' @param calcium A numeric vector: the calcium particle number.
 #' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-#' @return A double value (the propensity of the specified reaction).
+#' @return A numeric vector containing a cumulative sum of all reaction propensities.
 #' @examples
 #' camkii_props()
 #' @export
-camkii_props <- function(part_num, calcium, rId) {
-    .Call('CalciumModelsLibrary_camkii_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium, rId)
+camkii_props <- function(part_num, calcium) {
+    .Call('CalciumModelsLibrary_camkii_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium)
 }
 
 #' Define stoichiometric matrix of the CamKII model
@@ -124,19 +124,19 @@ camkii_stM <- function() {
     .Call('CalciumModelsLibrary_camkii_stM', PACKAGE = 'CalciumModelsLibrary')
 }
 
-#' Calculate propensity for a PKC Model reaction.
+#' Calculate propensities for the PKC Model.
 #'
-#' Return the propensity of a PKC Model reaction for a given vector of particle numbers and a reaction Id. 
+#' Return the propensity vector of the PKC Model for a given vector of particle numbers. 
 #' 
 #' @param part_num A numeric vector: the particle numbers of the model species.
 #' @param calcium A numeric vector: the calcium particle number.
 #' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-#' @return A double value (the propensity of the specified reaction).
+#' @return A numeric vector containing a cumulative sum of all reaction propensities.
 #' @examples
 #' pkc_props()
 #' @export
-pkc_props <- function(part_num, calcium, rId) {
-    .Call('CalciumModelsLibrary_pkc_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium, rId)
+pkc_props <- function(part_num, calcium) {
+    .Call('CalciumModelsLibrary_pkc_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium)
 }
 
 #' Define stoichiometric matrix of the PKC model

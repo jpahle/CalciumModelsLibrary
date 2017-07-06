@@ -1,21 +1,22 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Calculate propensity for a Camkii Model reaction.
+//' Calculate propensities for the CamKII Model.
 //'
-//' Return the propensity of a Camkii Model reaction for a given vector of particle numbers and a reaction Id. 
+//' Return the propensity vector of the CamKII Model for a given vector of particle numbers. 
 //' 
 //' @param part_num A numeric vector: the particle numbers of the model species.
 //' @param calcium A numeric vector: the calcium particle number.
 //' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-//' @return A double value (the propensity of the specified reaction).
+//' @return A numeric vector containing a cumulative sum of all reaction propensities.
 //' @examples
 //' camkii_props()
 //' @export
 // [[Rcpp::export]]
-double camkii_props(NumericVector part_num, double calcium, int rId) {
+NumericVector camkii_props(NumericVector part_num, double calcium) {
   
   // model parameters
+  NumericVector x = part_num;
   double a = -0.22;
   double b = 1.826;
   double c = 0.1;
@@ -37,50 +38,24 @@ double camkii_props(NumericVector part_num, double calcium, int rId) {
   double Kd_phos = 0.3;
   double totalC = 40;
   int h = 4;
-  
   // calculate propensity of selected reaction
-  NumericVector x = part_num;
-  double prop;
-  switch (rId) {
-  case 0:
-    prop = x[0] * ((k_IB * camT * pow((double)calcium,(double)h)) / (pow((double)calcium,(double)h) + pow((double)Kd,(double)h)));
-    break;
-  case 1:
-    prop = k_BI * x[1];
-    break;
-  case 2: {
-    double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / totalC;
-    double prob =  a * activeSubunits + b*(pow((double)activeSubunits,(double)2)) + c*(pow((double)activeSubunits,(double)3));
-    prop = totalC * k_AA * prob * ((c_B * x[1]) / pow((double)totalC,(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
-    break;
-  }
-  case 3:
-    prop = k_PT * x[2];
-    break;
-  case 4:
-    prop = k_TP * x[3] * pow((double)calcium,(double)h);
-    break;
-  case 5:
-    prop = k_TA * x[3];
-    break;
-  case 6:
-    prop = k_AT * x[4] * (camT - ((camT * pow((double)calcium,(double)h)) / (pow((double)calcium,(double)h) + pow((double)Kd,(double)h))));
-    break;
-  case 7:
-    prop = ((Vm_phos * x[2]) / (Kd_phos + (x[2] / totalC)));
-    break;
-  case 8:
-    prop = ((Vm_phos * x[3]) / (Kd_phos + (x[3] / totalC)));
-    break;
-  case 9:
-    prop = ((Vm_phos * x[4]) / (Kd_phos + (x[4] / totalC)));
-    break;
-  default:
-    printf("\nError in propensity calculation: reaction Index (%u) out of range!\n", rId);
-    prop = 0;
-  }
+  NumericVector amu(10);
+  amu[0] = x[0] * ((k_IB * camT * pow((double)calcium,(double)h)) / (pow((double)calcium,(double)h) + pow((double)Kd,(double)h)));
+  amu[1] = amu[0] + k_BI * x[1];
   
-  return prop;
+  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / totalC;
+  double prob =  a * activeSubunits + b*(pow((double)activeSubunits,(double)2)) + c*(pow((double)activeSubunits,(double)3));
+  amu[2] = amu[1] +  totalC * k_AA * prob * ((c_B * x[1]) / pow((double)totalC,(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
+  
+  amu[3] = amu[2] + k_PT * x[2];
+  amu[4] = amu[3] + k_TP * x[3] * pow((double)calcium,(double)h);
+  amu[5] = amu[4] + k_TA * x[3];
+  amu[6] = amu[5] + k_AT * x[4] * (camT - ((camT * pow((double)calcium,(double)h)) / (pow((double)calcium,(double)h) + pow((double)Kd,(double)h))));
+  amu[7] = amu[6] + ((Vm_phos * x[2]) / (Kd_phos + (x[2] / totalC)));
+  amu[8] = amu[7] + ((Vm_phos * x[3]) / (Kd_phos + (x[3] / totalC)));
+  amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / totalC)));
+
+  return amu;
 }
 
 //' Define stoichiometric matrix of the CamKII model

@@ -87,15 +87,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // camkii_props
-double camkii_props(NumericVector part_num, double calcium, int rId);
-RcppExport SEXP CalciumModelsLibrary_camkii_props(SEXP part_numSEXP, SEXP calciumSEXP, SEXP rIdSEXP) {
+NumericVector camkii_props(NumericVector part_num, double calcium);
+RcppExport SEXP CalciumModelsLibrary_camkii_props(SEXP part_numSEXP, SEXP calciumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type part_num(part_numSEXP);
     Rcpp::traits::input_parameter< double >::type calcium(calciumSEXP);
-    Rcpp::traits::input_parameter< int >::type rId(rIdSEXP);
-    rcpp_result_gen = Rcpp::wrap(camkii_props(part_num, calcium, rId));
+    rcpp_result_gen = Rcpp::wrap(camkii_props(part_num, calcium));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -110,15 +109,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // pkc_props
-double pkc_props(NumericVector part_num, double calcium, int rId);
-RcppExport SEXP CalciumModelsLibrary_pkc_props(SEXP part_numSEXP, SEXP calciumSEXP, SEXP rIdSEXP) {
+NumericVector pkc_props(NumericVector part_num, double calcium);
+RcppExport SEXP CalciumModelsLibrary_pkc_props(SEXP part_numSEXP, SEXP calciumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type part_num(part_numSEXP);
     Rcpp::traits::input_parameter< double >::type calcium(calciumSEXP);
-    Rcpp::traits::input_parameter< int >::type rId(rIdSEXP);
-    rcpp_result_gen = Rcpp::wrap(pkc_props(part_num, calcium, rId));
+    rcpp_result_gen = Rcpp::wrap(pkc_props(part_num, calcium));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -155,9 +153,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"CalciumModelsLibrary_calmodulin_props", (DL_FUNC) &CalciumModelsLibrary_calmodulin_props, 2},
     {"CalciumModelsLibrary_calmodulin_stM", (DL_FUNC) &CalciumModelsLibrary_calmodulin_stM, 0},
     {"CalciumModelsLibrary_camkii", (DL_FUNC) &CalciumModelsLibrary_camkii, 30},
-    {"CalciumModelsLibrary_camkii_props", (DL_FUNC) &CalciumModelsLibrary_camkii_props, 3},
+    {"CalciumModelsLibrary_camkii_props", (DL_FUNC) &CalciumModelsLibrary_camkii_props, 2},
     {"CalciumModelsLibrary_camkii_stM", (DL_FUNC) &CalciumModelsLibrary_camkii_stM, 0},
-    {"CalciumModelsLibrary_pkc_props", (DL_FUNC) &CalciumModelsLibrary_pkc_props, 3},
+    {"CalciumModelsLibrary_pkc_props", (DL_FUNC) &CalciumModelsLibrary_pkc_props, 2},
     {"CalciumModelsLibrary_pkc_stM", (DL_FUNC) &CalciumModelsLibrary_pkc_stM, 0},
     {"CalciumModelsLibrary_simulator", (DL_FUNC) &CalciumModelsLibrary_simulator, 7},
     {NULL, NULL, 0}

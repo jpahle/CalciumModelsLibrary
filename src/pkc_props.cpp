@@ -1,21 +1,22 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Calculate propensity for a PKC Model reaction.
+//' Calculate propensities for the PKC Model.
 //'
-//' Return the propensity of a PKC Model reaction for a given vector of particle numbers and a reaction Id. 
+//' Return the propensity vector of the PKC Model for a given vector of particle numbers. 
 //' 
 //' @param part_num A numeric vector: the particle numbers of the model species.
 //' @param calcium A numeric vector: the calcium particle number.
 //' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-//' @return A double value (the propensity of the specified reaction).
+//' @return A numeric vector containing a cumulative sum of all reaction propensities.
 //' @examples
 //' pkc_props()
 //' @export
 // [[Rcpp::export]]
-double pkc_props(NumericVector part_num, double calcium, int rId) {
+NumericVector pkc_props(NumericVector part_num, double calcium) {
   
   // model parameters
+  NumericVector x = part_num;
   double k1 = 1;
   double k2 = 50;
   double k3 = 1.2e-7;
@@ -38,77 +39,30 @@ double pkc_props(NumericVector part_num, double calcium, int rId) {
   double k20 = 2;
   double AA = 11000;
   double DAG = 5000;
-  
   // calculate propensity of selected reaction
-  NumericVector x = part_num;
-  double prop;
-  
-  switch (rId) {
-  case 0:
-  prop = k1 * x[0];
-  case 1:
-    prop = k2 * x[5];
-    break;
-  case 2:
-    prop = k3 * AA * (double)x[0]; /* AA given as conc., hence, no scaling */
-    break;
-  case 3:
-    prop = k4 * x[6];
-    break;
-  case 4:
-    prop = k5 * x[1];
-    break;
-  case 5:
-    prop = k6 * x[7];
-    break;
-  case 6:
-    prop = k7 * AA * (double)x[1];  /* AA given as conc., hence, no scaling */
-    break;
-  case 7:
-    prop = k8 * x[8];
-    break;
-  case 8:
-    prop = k9 * x[2];
-    break;
-  case 9:
-    prop = k10 * x[9];
-    break;
-  case 10:
-    prop = k11 * x[3];
-    break;
-  case 11:
-    prop = k12 * x[4];
-    break;
-  case 12:
-    prop = calcium * k13 * (double)x[0]; /* Ca given as conc., hence, no scaling */
-    break;
-  case 13:
-    prop = k14 * x[1];
-    break;
-  case 14:
-    prop = k15 * DAG * (double)x[1]; /* DAG given as conc., hence, no scaling */
-    break;
-  case 15:
-    prop = k16 * x[2];
-    break;
-  case 16:
-    prop = k17 * DAG * (double)x[0]; /* DAG given as conc., hence, no scaling */
-    break;
-  case 17:
-    prop = k18 * x[10];
-    break;
-  case 18:
-    prop = k19 * AA * (double)x[10];  /* AA given as conc., hence, no scaling */
-    break;
-  case 19:
-    prop = k20 * x[3];
-    break;
-  default:
-    printf("\nError in propensity calculation: reaction Index (%u) out of range!\n", rId);
-    prop = 0;
-  }
-    
-  return prop;
+  NumericVector amu(20);
+  amu[0] = k1 * x[0];
+  amu[1] = amu[0] + k2 * x[5];
+  amu[2] = amu[1] + k3 * AA * (double)x[0]; /* AA given as conc., hence, no scaling */
+  amu[3] = amu[2] + k4 * x[6];
+  amu[4] = amu[3] + k5 * x[1];
+  amu[5] = amu[4] + k6 * x[7];
+  amu[6] = amu[5] + k7 * AA * (double)x[1];  /* AA given as conc., hence, no scaling */
+  amu[7] = amu[6] + k8 * x[8];
+  amu[8] = amu[7] + k9 * x[2];
+  amu[9] = amu[8] + k10 * x[9];
+  amu[10] = amu[9] + k11 * x[3];
+  amu[11] = amu[10] + k12 * x[4];
+  amu[12] = amu[11] + calcium * k13 * (double)x[0]; /* Ca given as conc., hence, no scaling */
+  amu[13] = amu[12] + k14 * x[1];
+  amu[14] = amu[13] + k15 * DAG * (double)x[1]; /* DAG given as conc., hence, no scaling */
+  amu[15] = amu[14] + k16 * x[2];
+  amu[16] = amu[15] + k17 * DAG * (double)x[0]; /* DAG given as conc., hence, no scaling */
+  amu[17] = amu[16] + k18 * x[10];
+  amu[18] = amu[17] + k19 * AA * (double)x[10];  /* AA given as conc., hence, no scaling */
+  amu[19] = amu[18] + k20 * x[3];
+      
+  return amu;
 }
 
 //' Define stoichiometric matrix of the PKC model

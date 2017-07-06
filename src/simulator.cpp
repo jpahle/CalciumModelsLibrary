@@ -112,6 +112,10 @@ NumericMatrix simulator(NumericVector time,
         x[species] += stM(species,rIndex);
       }
     }
+    
+    // Debugging
+    Rcout << "outputTime: \n" << outputTime << std::endl;
+    
   }
   // update output
   while (floor(outputTime*10000) <= floor(endTime*10000)) {

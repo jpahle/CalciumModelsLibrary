@@ -8,11 +8,11 @@ using namespace Rcpp;
 //' @param time A numeric vector: the times of the observations.
 //' @param calcium_conc A numeric vector: the concentration of cytosolic calcium [nmol].
 //' @param init_conc A numeric vector: the initial concentrations of the model species.
-//' @param calc_props A function: returns a vector of model propensities for a given vector of concentrations.
+//' @param calc_props A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.
 //' @param provide_stM A function: returns a matrix of the stoichiometric coefficients of the reaction system.
 //' @param dt A numeric, the time interval between two output samples.
 //' @param vol A numeric, the volume of the system [l].
-//' @return A dataframe with time and the active protein time series as columns.
+//' @return A dataframe with time, calcium and the active protein time series as columns.
 //' @examples
 //' simulator()
 //' @export
@@ -71,19 +71,8 @@ NumericMatrix simulator(NumericVector time,
   /* SIMULATION ALGORITHM */
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
-    // calcium particle number at current timepoint (ntimepoint)
-    double curr_ca;
-    curr_ca = calcium[ntimepoint];
-    // calculate propensity amu for every reaction
-    int n;
-    for (n=0; n < stM.ncol(); n++) {
-      double a = as<double>(calc_props(x, curr_ca, n));
-      if (n == 0) {
-        amu[n] = a;
-      } else {
-        amu[n] = a + amu[n-1];
-      }
-    }
+    // get cumulative propensity vector (last entry is sum of all propensities)
+    NumericVector amu = calc_props(x, calcium[ntimepoint]);
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[amu.length()-1];
     // check if reaction time exceeds time until the next observation
@@ -123,6 +112,10 @@ NumericMatrix simulator(NumericVector time,
         x[species] += stM(species,rIndex);
       }
     }
+    
+    // Debugging
+    Rcout << "outputTime: \n" << outputTime << std::endl;
+    
   }
   // update output
   while (floor(outputTime*10000) <= floor(endTime*10000)) {
@@ -134,6 +127,6 @@ NumericMatrix simulator(NumericVector time,
     noutput++;
     outputTime += dt; 
   }
-
+  
   return retval;
 }

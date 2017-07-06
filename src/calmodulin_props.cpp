@@ -1,19 +1,19 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Calculate propensity for a Calmodulin Model reaction.
+//' Calculate propensities for the Calmodulin Model.
 //'
-//' Return the propensity of a Calmodulin Model reaction for a given vector of particle numbers and a reaction Id. 
+//' Return the propensity vector of the Calmodulin Model for a given vector of particle numbers. 
 //' 
 //' @param part_num A numeric vector: the particle numbers of the model species.
 //' @param calcium A numeric vector: the calcium particle number.
 //' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-//' @return A double value (the propensity of the specified reaction).
+//' @return A numeric vector containing a cumulative sum of all reaction propensities.
 //' @examples
 //' calmodulin_props()
 //' @export
 // [[Rcpp::export]]
-double calmodulin_props(NumericVector part_num, double calcium, int rId) {
+NumericVector calmodulin_props(NumericVector part_num, double calcium) {
   
   // model parameters
   NumericVector x = part_num;
@@ -21,21 +21,12 @@ double calmodulin_props(NumericVector part_num, double calcium, int rId) {
   double k_off = 0.005;
   double Km = 1.0;
   int h = 4;
+  // calculate cumulative propensity vector (amu[0], amu[0] + amu[1], etc.)
+  NumericVector amu(2);
+  amu[0] = ((k_on * pow((double)calcium,(double)h)) / (pow((double)Km,(double)h) + pow((double)calcium,(double)h))) * x[0];
+  amu[1] = amu[0] + k_off * x[1];
   
-  // calculate propensity of selected reaction
-  double a;
-  switch (rId) {
-  case 0:
-    a = ((k_on * pow((double)calcium,(double)h)) / (pow((double)Km,(double)h) + pow((double)calcium,(double)h))) * x[0];
-    break;
-  case 1:
-    a =  k_off * x[1];
-    break;
-  default:
-    printf("\nError in propensity calculation: reaction Index (%u) out of range!\n", rId);
-    a = 0;
-  }
-  return a;
+  return amu;  
 }
 
 //' Define stoichiometric matrix of the model
@@ -54,5 +45,6 @@ NumericMatrix calmodulin_stM() {
   stM(0,1) = 1;
   stM(1,0) = 1;
   stM(1,1) = -1;
+  
   return stM;
 }

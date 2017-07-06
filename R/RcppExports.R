@@ -26,19 +26,19 @@ calmodulin <- function(time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h) {
     .Call('CalciumModelsLibrary_calmodulin', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, k_on, Km, k_off, E0_conc, h)
 }
 
-#' Calculate propensity for a Calmodulin Model reaction.
+#' Calculate propensities for the Calmodulin Model.
 #'
-#' Return the propensity of a Calmodulin Model reaction for a given vector of particle numbers and a reaction Id. 
+#' Return the propensity vector of the Calmodulin Model for a given vector of particle numbers. 
 #' 
 #' @param part_num A numeric vector: the particle numbers of the model species.
 #' @param calcium A numeric vector: the calcium particle number.
 #' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-#' @return A double value (the propensity of the specified reaction).
+#' @return A numeric vector containing a cumulative sum of all reaction propensities.
 #' @examples
 #' calmodulin_props()
 #' @export
-calmodulin_props <- function(part_num, calcium, rId) {
-    .Call('CalciumModelsLibrary_calmodulin_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium, rId)
+calmodulin_props <- function(part_num, calcium) {
+    .Call('CalciumModelsLibrary_calmodulin_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium)
 }
 
 #' Define stoichiometric matrix of the model
@@ -97,19 +97,19 @@ camkii <- function(time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA
     .Call('CalciumModelsLibrary_camkii', PACKAGE = 'CalciumModelsLibrary', time, calcium, dt, vol, a, b, c, k_IB, k_BI, k_PT, k_TP, k_TA, k_AT, k_AA, c_I, c_B, c_P, c_T, c_A, camT, Kd, Vm_phos, Kd_phos, totalC, Wi_conc, Wb_conc, Wp_conc, Wt_conc, Wa_conc, h)
 }
 
-#' Calculate propensity for a Camkii Model reaction.
+#' Calculate propensities for the CamKII Model.
 #'
-#' Return the propensity of a Camkii Model reaction for a given vector of particle numbers and a reaction Id. 
+#' Return the propensity vector of the CamKII Model for a given vector of particle numbers. 
 #' 
 #' @param part_num A numeric vector: the particle numbers of the model species.
 #' @param calcium A numeric vector: the calcium particle number.
 #' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-#' @return A double value (the propensity of the specified reaction).
+#' @return A numeric vector containing a cumulative sum of all reaction propensities.
 #' @examples
 #' camkii_props()
 #' @export
-camkii_props <- function(part_num, calcium, rId) {
-    .Call('CalciumModelsLibrary_camkii_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium, rId)
+camkii_props <- function(part_num, calcium) {
+    .Call('CalciumModelsLibrary_camkii_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium)
 }
 
 #' Define stoichiometric matrix of the CamKII model
@@ -124,6 +124,33 @@ camkii_stM <- function() {
     .Call('CalciumModelsLibrary_camkii_stM', PACKAGE = 'CalciumModelsLibrary')
 }
 
+#' Calculate propensities for the PKC Model.
+#'
+#' Return the propensity vector of the PKC Model for a given vector of particle numbers. 
+#' 
+#' @param part_num A numeric vector: the particle numbers of the model species.
+#' @param calcium A numeric vector: the calcium particle number.
+#' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
+#' @return A numeric vector containing a cumulative sum of all reaction propensities.
+#' @examples
+#' pkc_props()
+#' @export
+pkc_props <- function(part_num, calcium) {
+    .Call('CalciumModelsLibrary_pkc_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium)
+}
+
+#' Define stoichiometric matrix of the PKC model
+#' 
+#' Create and return the stoichiometric matrix of the PKC model as a numeric matrix.
+#' 
+#' @return A numeric matrix: the stoichiometric matrix
+#' @examples
+#' pkc_stM()
+#' @export
+pkc_stM <- function() {
+    .Call('CalciumModelsLibrary_pkc_stM', PACKAGE = 'CalciumModelsLibrary')
+}
+
 #' Stochastic Simulatior (Gillespie).
 #'
 #' Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.
@@ -131,11 +158,11 @@ camkii_stM <- function() {
 #' @param time A numeric vector: the times of the observations.
 #' @param calcium_conc A numeric vector: the concentration of cytosolic calcium [nmol].
 #' @param init_conc A numeric vector: the initial concentrations of the model species.
-#' @param calc_props A function: returns a vector of model propensities for a given vector of concentrations.
+#' @param calc_props A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.
 #' @param provide_stM A function: returns a matrix of the stoichiometric coefficients of the reaction system.
 #' @param dt A numeric, the time interval between two output samples.
 #' @param vol A numeric, the volume of the system [l].
-#' @return A dataframe with time and the active protein time series as columns.
+#' @return A dataframe with time, calcium and the active protein time series as columns.
 #' @examples
 #' simulator()
 #' @export

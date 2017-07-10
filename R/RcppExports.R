@@ -124,6 +124,58 @@ camkii_stM <- function() {
     .Call('CalciumModelsLibrary_camkii_stM', PACKAGE = 'CalciumModelsLibrary')
 }
 
+#' Global variables
+NULL
+
+#' Propensity Calculation
+#'
+#' Calculates the propensities of all PKC model reactions and stores them in the vector amu.
+#'
+#' @param None
+#' @return None
+#' @examples
+#' calculate_amu() 
+#' @export
+calculate_amu <- function() {
+    invisible(.Call('CalciumModelsLibrary_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
+}
+
+#' System Update
+#'
+#' Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
+#'
+#' @param rIndex An unsigned integer: the id of the chosen reaction.
+#' @return void
+#' @examples
+#' update_system() 
+#' @export
+update_system <- function(rIndex) {
+    invisible(.Call('CalciumModelsLibrary_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
+}
+
+#' Couple a simulated PKC protein to a given calcium time series.
+#'
+#' Takes a calcium time series and simulates the Ca-dependent protein PKC.
+#'
+#' Implementation based on the PKC Model by Manninnen (2006)
+#'
+#' @param timeseries A numeric vector: the times of the observations.
+#' @param _calcium A numeric vector: the concentrations of cytosolic calcium [nmol].
+#' @param _dt A numeric, the time interval between two output samples.
+#' @param _vol A numeric, the volume of the system [l].
+#' @param k1-20 Double values, reaction rate parameters [1/s].
+#' @param _AA A double, concentration of AA [nmol].
+#' @param _DAG A double, concentration of DAG [nmol].
+#' @param _PKCinact0_conc A double, initial concentration of inactive PKC [nmol].
+#' @param _PKCbasal0_conc A double, initial concentration of basal PKC [nmol].
+#' @return A dataframe with time and the active protein time series as columns.
+#' @examples
+#' pkc()
+#' @export
+pkc <- function(param_time, param_calcium, param_timestep, param_vol, param_k1, param_k2, param_k3, param_k4, param_k5, param_k6, param_k7, param_k8, param_k9, param_k10, param_k11, param_k12, param_k13, param_k14, param_k15, param_k16, param_k17, param_k18, param_k19, param_k20, param_AA, param_DAG, param_PKCinact0_conc, param_PKCbasal0_conc) {
+    .Call('CalciumModelsLibrary_pkc', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_k1, param_k2, param_k3, param_k4, param_k5, param_k6, param_k7, param_k8, param_k9, param_k10, param_k11, param_k12, param_k13, param_k14, param_k15, param_k16, param_k17, param_k18, param_k19, param_k20, param_AA, param_DAG, param_PKCinact0_conc, param_PKCbasal0_conc)
+}
+
 #' Calculate propensities for the PKC Model.
 #'
 #' Return the propensity vector of the PKC Model for a given vector of particle numbers. 

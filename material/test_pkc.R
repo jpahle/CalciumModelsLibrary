@@ -71,8 +71,8 @@ output$active_fraction <- with(output, (PKCbasal +
                                         PKC_inact))
 # Plot output
 plot(output$time, output$calcium, xlim = c(0, 1), col="blue",type="l", xlab="time", ylab="concentration")
-lines(output$time, output$PKC_act, col="red", type = "l")
-lines(output$time, output$active_fraction, col="green", type="l")
+lines(output$PKC_act, col="red", type = "l")
+lines(output$active_fraction, col="green", type="l")
 legend("topright", legend=c("calcium", "PKC_act", "active_fraction"),
        col=c("blue", "red", "green"),
        lty=c(1,1))

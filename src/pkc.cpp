@@ -69,7 +69,6 @@ void calculate_amu() {
   amu[19] = amu[18] + k20 * x[3];
 }
 
-
 //' System Update
 //'
 //' Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
@@ -167,7 +166,6 @@ void update_system(unsigned int rIndex) {
     exit(-1);
   }
 }
-
 
 //' Couple a simulated PKC protein to a given calcium time series.
 //'
@@ -356,10 +354,6 @@ NumericMatrix pkc(NumericVector param_time,
       // update system state
       update_system(rIndex);      
     }
-    
-    // Debugging
-    // Rcout << "outputTime: \n" << outputTime << std::endl;
-    
   }
   // update output
   while (outputTime <= endTime) {
@@ -380,11 +374,9 @@ NumericMatrix pkc(NumericVector param_time,
     noutput++;
     outputTime += timestep;
   }
-
   // Free dyn. allocated pointers
   Free(amu);
   Free(x);
   
-  UNPROTECT(1);
   return retval;
   }

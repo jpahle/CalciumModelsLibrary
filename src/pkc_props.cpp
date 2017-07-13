@@ -1,4 +1,4 @@
-#include "global_vars.h"
+#include "global_vars.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -61,7 +61,6 @@ void calc_propensities() {
   amu[17] = amu[16] + k18 * x[10];
   amu[18] = amu[17] + k19 * AA * (double)x[10];  /* AA given as conc., hence, no scaling */
   amu[19] = amu[18] + k20 * x[3];
-  
 }
 
 //' System Update

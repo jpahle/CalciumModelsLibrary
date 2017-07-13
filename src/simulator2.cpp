@@ -1,6 +1,13 @@
-#include "global_vars.h"
+#include "global_vars.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
+
+/* Global Variables */
+NumericVector calcium;
+unsigned int ntimepoint;
+double *amu;
+unsigned long long int *x;
+
 
 //' Couple a simulated PKC protein to a given calcium time series.
 //'
@@ -28,7 +35,9 @@ NumericMatrix simulator2(NumericVector param_time,
                    Function calc_propensities,
                    Function update_system_state
                    ) {
-
+  
+  /* get R random generator state */
+  GetRNGstate();
   
   /* Memory allocation */
   amu = (double *)Calloc(nreactions, double);
@@ -36,15 +45,15 @@ NumericMatrix simulator2(NumericVector param_time,
 
   
   /* Variables */
-  timevector = param_time;
+  NumericVector timevector = param_time;
   calcium = param_calcium;
-  timestep = param_timestep;
+  double timestep = param_timestep;
   // check user supplied timestep: if too low -> exit simulation
   if (timestep < 0.00005) {
     Rcout << "Fatal error: Value of dt too low! Timesteps below the threshold of 0.00005 cause large rounding errors. Simulation aborted!" << std::endl;
     return 0;
   }
-  vol = param_vol;
+  double vol = param_vol;
   // Particle number to concentration (nmol/l) factor
   double f;
   f = 6.0221415e14*vol;
@@ -56,8 +65,8 @@ NumericMatrix simulator2(NumericVector param_time,
   }
   int xID;
   // Control variables
-  int noutput;
   ntimepoint = 0;
+  int noutput;
   noutput = 0;
   // Variables for random steps
   double tau;
@@ -74,12 +83,12 @@ NumericMatrix simulator2(NumericVector param_time,
   outputTime = currentTime;
   // Return value
   int nintervals = (int)floor((endTime-startTime)/timestep+0.5)+1;
-  NumericMatrix retval(nintervals, 13);
+  NumericMatrix retval(nintervals, 2+nspecies);
 
   
   /* Simulation loop */
   while (currentTime < endTime) {
-    R_CheckUserInterrupt();
+    // R_CheckUserInterrupt();
     // calculate propensity amu for every reaction
     calc_propensities();
     // calculate time step tau
@@ -116,7 +125,7 @@ NumericMatrix simulator2(NumericVector param_time,
         outputTime += timestep;
       }
       // update system state
-      update_system_state(rIndex);      
+      update_system_state(rIndex);
     }
   }
   // update output
@@ -129,9 +138,13 @@ NumericMatrix simulator2(NumericVector param_time,
     noutput++;
     outputTime += timestep;
   }
+ 
   // Free dyn. allocated pointers
   Free(amu);
   Free(x);
+    
+  /* send random generator state back to R*/
+  PutRNGstate();
   
   return retval;
-  }
+}

@@ -11,7 +11,7 @@ simulator(time, calcium, init_conc, calc_props, provide_stM, dt, vol)
 
 \item{init_conc}{A numeric vector: the initial concentrations of the model species.}
 
-\item{calc_props}{A function: returns a vector of model propensities for a given vector of concentrations.}
+\item{calc_props}{A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.}
 
 \item{provide_stM}{A function: returns a matrix of the stoichiometric coefficients of the reaction system.}
 
@@ -22,7 +22,7 @@ simulator(time, calcium, init_conc, calc_props, provide_stM, dt, vol)
 \item{calcium_conc}{A numeric vector: the concentration of cytosolic calcium [nmol].}
 }
 \value{
-A dataframe with time and the active protein time series as columns.
+A dataframe with time, calcium and the active protein time series as columns.
 }
 \description{
 Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.

@@ -1,3 +1,5 @@
+set.seed(1)
+
 # Define variables
 timestep <- 1
 vol <- 1e-15
@@ -11,9 +13,10 @@ init_conc <- c(1000, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0)
 input <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
 # Simulate model
-output <- pkc(input$time, input$Ca/f, timestep, vol, init_conc, calc_propensities, update_system_state)
+output <- simulator2(input$time, input$Ca/f, timestep, vol, init_conc, calc_propensities, update_system_state)
 output <- as.data.frame(output)
 colnames(output) <- c("time",
+                      "calcium",
                       "PKC_inact",
                       "CaPKC",
                       "DAGCaPKC",
@@ -24,8 +27,7 @@ colnames(output) <- c("time",
                       "CaPKCmemb",
                       "AACaPKC",
                       "DAGPKCmemb",
-                      "DAGPKC",
-                      "calcium"
+                      "DAGPKC"
                       )
 
 # Define relevant output for plotting

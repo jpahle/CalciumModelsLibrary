@@ -1,132 +1,140 @@
+#include "CaModLib_global_vars.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Stochastic Simulatior (Gillespie).
+/* Global variables */
+NumericVector timevector;
+double timestep;
+double vol;
+double PKCinact0_conc;
+double PKCbasal0_conc;
+
+
+//' Couple a simulated PKC protein to a given calcium time series.
 //'
-//' Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.
+//' Takes a calcium time series and simulates the Ca-dependent protein PKC.
 //'
-//' @param time A numeric vector: the times of the observations.
-//' @param calcium_conc A numeric vector: the concentration of cytosolic calcium [nmol].
-//' @param init_conc A numeric vector: the initial concentrations of the model species.
-//' @param calc_props A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.
-//' @param provide_stM A function: returns a matrix of the stoichiometric coefficients of the reaction system.
-//' @param dt A numeric, the time interval between two output samples.
-//' @param vol A numeric, the volume of the system [l].
-//' @return A dataframe with time, calcium and the active protein time series as columns.
+//' Implementation based on the PKC Model by Manninnen (2006)
+//'
+//' @param param_time A numeric vector: the times of the observations.
+//' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
+//' @param param_timestep A numeric, the time interval between two output samples.
+//' @param param_vol A numeric, the volume of the system [l].
+//' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
+//' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix simulator(NumericVector time,
-                         NumericVector calcium,
-                         NumericVector init_conc,
-                         Function calc_props,
-                         Function provide_stM,
-                         double dt,
-                         double vol
-                         ) {
+NumericMatrix simulator(NumericVector param_time,
+                   NumericVector param_calcium,
+                   double param_timestep,
+                   double param_vol,
+                   NumericVector param_init_conc) {
 
+  // get R random generator state
+  GetRNGstate();
+  
   /* VARIABLES */
-  // fetch stoichiometric matrix
-  NumericMatrix stM = provide_stM();
-  // create empty vector for propensities (length = no. of cols of the stoich matrix)
-  NumericVector amu(stM.ncol());
-  // particle number from concentration (nmol/l) factor
+  
+  // get parameter values from arguments
+  timevector = param_time;
+  calcium = param_calcium;
+  timestep = param_timestep;
+  vol = param_vol;
+  NumericVector ic = param_init_conc;
+  // particle number to concentration (nmol/l) factor
   double f;
   f = 6.0221415e14*vol;
-  // create initial particle number vector x from initial conc vector ic
-  NumericVector ic = init_conc;
-  NumericVector x(ic.length());
-  int i;
-  for (i=0; i < ic.length(); i++) {
-    x[i] = (int)floor(ic[i]*f);  
-  }
-  // create algorithm parameters 
-  int ntimepoint;
-  double r2;
+  // Control variables
   int noutput;
-  double currentTime;
-  double outputTime;
+  ntimepoint = 0;
+  noutput = 0;
+  int xID;
+  // Variables for random steps
+  double tau;
+  double r2;
+  unsigned int rIndex;
+  // Time variables
   double startTime;
   double endTime;
-  double tau;
-  unsigned int rIndex;
-  int xID;
-  // initial algorithm time settings
-  startTime = time[0];
-  endTime = time[time.length()-1];
+  double currentTime;
+  double outputTime;
+  startTime = timevector[0];
+  endTime = timevector[timevector.length()-1];
   currentTime = startTime;
-  noutput = 0;
-  ntimepoint = 0;
   outputTime = currentTime;
-  int nintervals = (int)floor((endTime-startTime)/dt+0.5)+1;
-  // create return value matrix
-  NumericMatrix retval(nintervals, 2+x.length());
-  // check user supplied timestep: if too low -> exit simulation
-  if (dt < 0.00005) {
-    Rcout << "Fatal error: Value of dt too low! Timesteps below the threshold of 0.00005 cause large rounding errors. Simulation aborted!" << std::endl;
-    return retval;
+  // Return value
+  int nintervals = (int)floor((endTime-startTime)/timestep+0.5)+1;
+  NumericMatrix retval(nintervals, nspecies+2); // nspecies+2 because time and calcium
+  // Memory allocation for propensity and particle number pointers
+  amu = (double *)Calloc(nreactions, double);
+  x = (unsigned long long int *)Calloc(nspecies, unsigned long long int);
+  // Initial particle numbers
+  int i;
+  for (i=0; i < ic.length(); i++) {
+    x[i] = (unsigned long long int)floor(ic[i]*f);  
   }
-    
-  /* SIMULATION ALGORITHM */
+  
+  /* SIMULATION LOOP */
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
-    // get cumulative propensity vector (last entry is sum of all propensities)
-    NumericVector amu = calc_props(x, calcium[ntimepoint]);
+    // calculate propensity amu for every reaction
+    calculate_amu();
     // calculate time step tau
-    tau = - log(runif(1)[0])/amu[amu.length()-1];
+    tau = - log(runif(1)[0])/amu[nreactions-1];
     // check if reaction time exceeds time until the next observation
-    // if true -> update output directly
-    if ((currentTime+tau)>=time[ntimepoint+1]) {
-      currentTime = time[ntimepoint+1];
+    // and update output
+   if ((currentTime+tau)>=timevector[ntimepoint+1]) {
+      currentTime = timevector[ntimepoint+1];
       while ((currentTime > outputTime)&&(outputTime < endTime)) {
         retval(noutput, 0) = outputTime;
         retval(noutput, 1) = calcium[ntimepoint];
-        for (xID=2; xID < 2+x.length(); xID++) {
+        for (xID=2; xID < 2+nspecies; xID++) {
           retval(noutput, xID) = x[xID-2]/f;
         }
         noutput++;
-        outputTime += dt;
+        outputTime += timestep;
       }
       ntimepoint++;
     } else {
-      // if false -> select reaction to fire
-      r2 = amu[amu.length()-1] * runif(1)[0];
+      // select reaction to fire
+      r2 = amu[nreactions-1] * runif(1)[0];
       rIndex = 0;
       for (rIndex=0; amu[rIndex] < r2; rIndex++);
       // propagate time
       currentTime += tau;
-      // update output
+     // update output
       while ((currentTime > outputTime)&&(outputTime < endTime)) {
         retval(noutput, 0) = outputTime;
         retval(noutput, 1) = calcium[ntimepoint];
-        for (xID=2; xID < 2+x.length(); xID++) {
+        for (xID=2; xID < 2+nspecies; xID++) {
           retval(noutput, xID) = x[xID-2]/f;
         }
         noutput++;
-        outputTime += dt;
+        outputTime += timestep;
       }
       // update system state
-      int species;
-      for (species=0; species < stM.nrow();species++) {
-        x[species] += stM(species,rIndex);
-      }
+      update_system(rIndex);
     }
-    
-    // Debugging
-    Rcout << "outputTime: \n" << outputTime << std::endl;
-    
   }
   // update output
-  while (floor(outputTime*10000) <= floor(endTime*10000)) {
+  while (outputTime <= endTime) {
     retval(noutput, 0) = outputTime;
     retval(noutput, 1) = calcium[ntimepoint];
-    for (xID=2; xID < 2+x.length(); xID++) {
+    for (xID=2; xID < 2+nspecies; xID++) {
       retval(noutput, xID) = x[xID-2]/f;
     }
     noutput++;
-    outputTime += dt; 
+    outputTime += timestep;
   }
+     
+  // Free dyn. allocated pointers
+  Free(amu);
+  Free(x);
+  
+  /* send random generator state back to R*/
+  PutRNGstate();
   
   return retval;
 }

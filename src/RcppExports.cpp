@@ -108,45 +108,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// calc_propensities
-void calc_propensities();
-RcppExport SEXP CalciumModelsLibrary_calc_propensities() {
+// calculate_amu
+void calculate_amu();
+RcppExport SEXP CalciumModelsLibrary_calculate_amu() {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    calc_propensities();
+    calculate_amu();
     return R_NilValue;
 END_RCPP
 }
-// update_system_state
-void update_system_state(unsigned int rIndex);
-RcppExport SEXP CalciumModelsLibrary_update_system_state(SEXP rIndexSEXP) {
+// update_system
+void update_system(unsigned int rIndex);
+RcppExport SEXP CalciumModelsLibrary_update_system(SEXP rIndexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< unsigned int >::type rIndex(rIndexSEXP);
-    update_system_state(rIndex);
+    update_system(rIndex);
     return R_NilValue;
 END_RCPP
 }
 // simulator
-NumericMatrix simulator(NumericVector time, NumericVector calcium, NumericVector init_conc, Function calc_props, Function provide_stM, double dt, double vol);
-RcppExport SEXP CalciumModelsLibrary_simulator(SEXP timeSEXP, SEXP calciumSEXP, SEXP init_concSEXP, SEXP calc_propsSEXP, SEXP provide_stMSEXP, SEXP dtSEXP, SEXP volSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type calcium(calciumSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type init_conc(init_concSEXP);
-    Rcpp::traits::input_parameter< Function >::type calc_props(calc_propsSEXP);
-    Rcpp::traits::input_parameter< Function >::type provide_stM(provide_stMSEXP);
-    Rcpp::traits::input_parameter< double >::type dt(dtSEXP);
-    Rcpp::traits::input_parameter< double >::type vol(volSEXP);
-    rcpp_result_gen = Rcpp::wrap(simulator(time, calcium, init_conc, calc_props, provide_stM, dt, vol));
-    return rcpp_result_gen;
-END_RCPP
-}
-// simulator2
-NumericMatrix simulator2(NumericVector param_time, NumericVector param_calcium, double param_timestep, double param_vol, NumericVector param_init_conc, Function calc_propensities, Function update_system_state);
-RcppExport SEXP CalciumModelsLibrary_simulator2(SEXP param_timeSEXP, SEXP param_calciumSEXP, SEXP param_timestepSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP, SEXP calc_propensitiesSEXP, SEXP update_system_stateSEXP) {
+NumericMatrix simulator(NumericVector param_time, NumericVector param_calcium, double param_timestep, double param_vol, NumericVector param_init_conc);
+RcppExport SEXP CalciumModelsLibrary_simulator(SEXP param_timeSEXP, SEXP param_calciumSEXP, SEXP param_timestepSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -155,9 +138,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type param_timestep(param_timestepSEXP);
     Rcpp::traits::input_parameter< double >::type param_vol(param_volSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type param_init_conc(param_init_concSEXP);
-    Rcpp::traits::input_parameter< Function >::type calc_propensities(calc_propensitiesSEXP);
-    Rcpp::traits::input_parameter< Function >::type update_system_state(update_system_stateSEXP);
-    rcpp_result_gen = Rcpp::wrap(simulator2(param_time, param_calcium, param_timestep, param_vol, param_init_conc, calc_propensities, update_system_state));
+    rcpp_result_gen = Rcpp::wrap(simulator(param_time, param_calcium, param_timestep, param_vol, param_init_conc));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -169,10 +150,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"CalciumModelsLibrary_camkii", (DL_FUNC) &CalciumModelsLibrary_camkii, 30},
     {"CalciumModelsLibrary_camkii_props", (DL_FUNC) &CalciumModelsLibrary_camkii_props, 2},
     {"CalciumModelsLibrary_camkii_stM", (DL_FUNC) &CalciumModelsLibrary_camkii_stM, 0},
-    {"CalciumModelsLibrary_calc_propensities", (DL_FUNC) &CalciumModelsLibrary_calc_propensities, 0},
-    {"CalciumModelsLibrary_update_system_state", (DL_FUNC) &CalciumModelsLibrary_update_system_state, 1},
-    {"CalciumModelsLibrary_simulator", (DL_FUNC) &CalciumModelsLibrary_simulator, 7},
-    {"CalciumModelsLibrary_simulator2", (DL_FUNC) &CalciumModelsLibrary_simulator2, 7},
+    {"CalciumModelsLibrary_calculate_amu", (DL_FUNC) &CalciumModelsLibrary_calculate_amu, 0},
+    {"CalciumModelsLibrary_update_system", (DL_FUNC) &CalciumModelsLibrary_update_system, 1},
+    {"CalciumModelsLibrary_simulator", (DL_FUNC) &CalciumModelsLibrary_simulator, 5},
     {NULL, NULL, 0}
 };
 

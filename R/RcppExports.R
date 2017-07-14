@@ -131,10 +131,10 @@ camkii_stM <- function() {
 #' @param None
 #' @return None
 #' @examples
-#' calc_propensities() 
+#' calculate_amu() 
 #' @export
-calc_propensities <- function() {
-    invisible(.Call('CalciumModelsLibrary_calc_propensities', PACKAGE = 'CalciumModelsLibrary'))
+calculate_amu <- function() {
+    invisible(.Call('CalciumModelsLibrary_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
 }
 
 #' System Update
@@ -144,29 +144,10 @@ calc_propensities <- function() {
 #' @param rIndex An unsigned integer: the id of the chosen reaction.
 #' @return void
 #' @examples
-#' update_system_state() 
+#' update_system() 
 #' @export
-update_system_state <- function(rIndex) {
-    invisible(.Call('CalciumModelsLibrary_update_system_state', PACKAGE = 'CalciumModelsLibrary', rIndex))
-}
-
-#' Stochastic Simulatior (Gillespie).
-#'
-#' Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.
-#'
-#' @param time A numeric vector: the times of the observations.
-#' @param calcium_conc A numeric vector: the concentration of cytosolic calcium [nmol].
-#' @param init_conc A numeric vector: the initial concentrations of the model species.
-#' @param calc_props A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.
-#' @param provide_stM A function: returns a matrix of the stoichiometric coefficients of the reaction system.
-#' @param dt A numeric, the time interval between two output samples.
-#' @param vol A numeric, the volume of the system [l].
-#' @return A dataframe with time, calcium and the active protein time series as columns.
-#' @examples
-#' simulator()
-#' @export
-simulator <- function(time, calcium, init_conc, calc_props, provide_stM, dt, vol) {
-    .Call('CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', time, calcium, init_conc, calc_props, provide_stM, dt, vol)
+update_system <- function(rIndex) {
+    invisible(.Call('CalciumModelsLibrary_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
 }
 
 #' Couple a simulated PKC protein to a given calcium time series.
@@ -177,16 +158,14 @@ simulator <- function(time, calcium, init_conc, calc_props, provide_stM, dt, vol
 #'
 #' @param param_time A numeric vector: the times of the observations.
 #' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
-#' @param param_timestep A double, the time interval between two output samples.
-#' @param param_vol A double, the volume of the system [l].
-#' @param param_init_conc A numeric vector: the initial concentrations of the model species [nmol/l].
-#' @param calculate_amu A function: provides parameter values and result of propensity equations.
-#' @param update_system A function: contains stoichiometric effects of all reactions.
+#' @param param_timestep A numeric, the time interval between two output samples.
+#' @param param_vol A numeric, the volume of the system [l].
+#' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
 #' @return A dataframe with time and the active protein time series as columns.
 #' @examples
-#' simulator2()
+#' simulator()
 #' @export
-simulator2 <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc, calc_propensities, update_system_state) {
-    .Call('CalciumModelsLibrary_simulator2', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc, calc_propensities, update_system_state)
+simulator <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
+    .Call('CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
 }
 

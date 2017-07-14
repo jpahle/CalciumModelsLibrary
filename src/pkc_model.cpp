@@ -1,8 +1,8 @@
-#include "global_vars.hpp"
+#include "CaModLib_global_vars.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// Declare and initialise parameters, species and other variables
+/* Global variables */
 int nspecies = 11;
 int nreactions = 20;
 double k1 = 1;
@@ -28,6 +28,17 @@ double k20 = 2;
 double AA = 11000;  // given as conc. remains fixed throughout the simulation
 double DAG = 5000;  // given as conc. remains fixed throughout the simulation
 
+// Define (initialize) variables declared in header
+// Pointers *amu and *x are initialized with the adress of filler variables
+// (These values are overwritten by the simulation)
+NumericVector calcium(1);
+unsigned int ntimepoint = 0;
+double amu_init_value = 0.1;
+double *amu = &amu_init_value;
+unsigned long long int x_init_value = 1000000;
+unsigned long long int *x = &x_init_value; 
+
+
 //' Propensity Calculation
 //'
 //' Calculates the propensities of all PKC model reactions and stores them in the vector amu.
@@ -35,12 +46,11 @@ double DAG = 5000;  // given as conc. remains fixed throughout the simulation
 //' @param None
 //' @return None
 //' @examples
-//' calc_propensities() 
+//' calculate_amu() 
 //' @export
 // [[Rcpp::export]]
-void calc_propensities() {
+void calculate_amu() {
 
-  // Define propensity functions
   amu[0] = k1 * x[0];
   amu[1] = amu[0] + k2 * x[5];
   amu[2] = amu[1] + k3 * AA * (double)x[0]; /* AA given as conc., hence, no scaling */
@@ -70,12 +80,11 @@ void calc_propensities() {
 //' @param rIndex An unsigned integer: the id of the chosen reaction.
 //' @return void
 //' @examples
-//' update_system_state() 
+//' update_system() 
 //' @export
 // [[Rcpp::export]]
-void update_system_state(unsigned int rIndex) {
-
-  // Define effects of reactions on species particle numbers
+void update_system(unsigned int rIndex) {
+  
   switch (rIndex) {
   case 0:   /* R1 */
     x[0]--;

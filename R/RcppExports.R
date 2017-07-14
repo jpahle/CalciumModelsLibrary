@@ -124,9 +124,6 @@ camkii_stM <- function() {
     .Call('CalciumModelsLibrary_camkii_stM', PACKAGE = 'CalciumModelsLibrary')
 }
 
-#' Global variables
-NULL
-
 #' Propensity Calculation
 #'
 #' Calculates the propensities of all PKC model reactions and stores them in the vector amu.
@@ -159,66 +156,16 @@ update_system <- function(rIndex) {
 #'
 #' Implementation based on the PKC Model by Manninnen (2006)
 #'
-#' @param timeseries A numeric vector: the times of the observations.
-#' @param _calcium A numeric vector: the concentrations of cytosolic calcium [nmol].
-#' @param _dt A numeric, the time interval between two output samples.
-#' @param _vol A numeric, the volume of the system [l].
-#' @param k1-20 Double values, reaction rate parameters [1/s].
-#' @param _AA A double, concentration of AA [nmol].
-#' @param _DAG A double, concentration of DAG [nmol].
-#' @param _PKCinact0_conc A double, initial concentration of inactive PKC [nmol].
-#' @param _PKCbasal0_conc A double, initial concentration of basal PKC [nmol].
+#' @param param_time A numeric vector: the times of the observations.
+#' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
+#' @param param_timestep A numeric, the time interval between two output samples.
+#' @param param_vol A numeric, the volume of the system [l].
+#' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
 #' @return A dataframe with time and the active protein time series as columns.
-#' @examples
-#' pkc()
-#' @export
-pkc <- function(param_time, param_calcium, param_timestep, param_vol, param_k1, param_k2, param_k3, param_k4, param_k5, param_k6, param_k7, param_k8, param_k9, param_k10, param_k11, param_k12, param_k13, param_k14, param_k15, param_k16, param_k17, param_k18, param_k19, param_k20, param_AA, param_DAG, param_PKCinact0_conc, param_PKCbasal0_conc) {
-    .Call('CalciumModelsLibrary_pkc', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_k1, param_k2, param_k3, param_k4, param_k5, param_k6, param_k7, param_k8, param_k9, param_k10, param_k11, param_k12, param_k13, param_k14, param_k15, param_k16, param_k17, param_k18, param_k19, param_k20, param_AA, param_DAG, param_PKCinact0_conc, param_PKCbasal0_conc)
-}
-
-#' Calculate propensities for the PKC Model.
-#'
-#' Return the propensity vector of the PKC Model for a given vector of particle numbers. 
-#' 
-#' @param part_num A numeric vector: the particle numbers of the model species.
-#' @param calcium A numeric vector: the calcium particle number.
-#' @param rId An integer value: the id of the specified reaction for which the propensity should be calculated.
-#' @return A numeric vector containing a cumulative sum of all reaction propensities.
-#' @examples
-#' pkc_props()
-#' @export
-pkc_props <- function(part_num, calcium) {
-    .Call('CalciumModelsLibrary_pkc_props', PACKAGE = 'CalciumModelsLibrary', part_num, calcium)
-}
-
-#' Define stoichiometric matrix of the PKC model
-#' 
-#' Create and return the stoichiometric matrix of the PKC model as a numeric matrix.
-#' 
-#' @return A numeric matrix: the stoichiometric matrix
-#' @examples
-#' pkc_stM()
-#' @export
-pkc_stM <- function() {
-    .Call('CalciumModelsLibrary_pkc_stM', PACKAGE = 'CalciumModelsLibrary')
-}
-
-#' Stochastic Simulatior (Gillespie).
-#'
-#' Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.
-#'
-#' @param time A numeric vector: the times of the observations.
-#' @param calcium_conc A numeric vector: the concentration of cytosolic calcium [nmol].
-#' @param init_conc A numeric vector: the initial concentrations of the model species.
-#' @param calc_props A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.
-#' @param provide_stM A function: returns a matrix of the stoichiometric coefficients of the reaction system.
-#' @param dt A numeric, the time interval between two output samples.
-#' @param vol A numeric, the volume of the system [l].
-#' @return A dataframe with time, calcium and the active protein time series as columns.
 #' @examples
 #' simulator()
 #' @export
-simulator <- function(time, calcium, init_conc, calc_props, provide_stM, dt, vol) {
-    .Call('CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', time, calcium, init_conc, calc_props, provide_stM, dt, vol)
+simulator <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
+    .Call('CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
 }
 

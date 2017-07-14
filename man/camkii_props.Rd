@@ -2,9 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{camkii_props}
 \alias{camkii_props}
-\title{Calculate propensity for a Camkii Model reaction.}
+\title{Calculate propensities for the CamKII Model.}
 \usage{
-camkii_props(part_num, calcium, rId)
+camkii_props(part_num, calcium)
 }
 \arguments{
 \item{part_num}{A numeric vector: the particle numbers of the model species.}
@@ -14,10 +14,10 @@ camkii_props(part_num, calcium, rId)
 \item{rId}{An integer value: the id of the specified reaction for which the propensity should be calculated.}
 }
 \value{
-A double value (the propensity of the specified reaction).
+A numeric vector containing a cumulative sum of all reaction propensities.
 }
 \description{
-Return the propensity of a Camkii Model reaction for a given vector of particle numbers and a reaction Id.
+Return the propensity vector of the CamKII Model for a given vector of particle numbers.
 }
 \examples{
 camkii_props()

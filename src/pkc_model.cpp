@@ -2,41 +2,42 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
 /* Global variables */
-int nspecies = 11;
-int nreactions = 20;
-double k1 = 1;
-double k2 = 50;
-double k3 = 1.2e-7;
-double k4 = 0.1;
-double k5 = 1.2705;
-double k6 = 3.5026;
-double k7 = 1.2e-7;
-double k8 = 0.1;
-double k9 = 1;
-double k10 = 0.1;
-double k11 = 2;
-double k12 = 0.2;
-double k13 = 0.0006;
-double k14 = 0.5;
-double k15 = 7.998e-6;
-double k16 = 8.6348;
-double k17 = 6e-7;
-double k18 = 0.1;
-double k19 = 1.8e-5;
-double k20 = 2;
-double AA = 11000;  // given as conc. remains fixed throughout the simulation
-double DAG = 5000;  // given as conc. remains fixed throughout the simulation
+static int nspecies = 11;
+static int nreactions = 20;
+static double k1 = 1;
+static double k2 = 50;
+static double k3 = 1.2e-7;
+static double k4 = 0.1;
+static double k5 = 1.2705;
+static double k6 = 3.5026;
+static double k7 = 1.2e-7;
+static double k8 = 0.1;
+static double k9 = 1;
+static double k10 = 0.1;
+static double k11 = 2;
+static double k12 = 0.2;
+static double k13 = 0.0006;
+static double k14 = 0.5;
+static double k15 = 7.998e-6;
+static double k16 = 8.6348;
+static double k17 = 6e-7;
+static double k18 = 0.1;
+static double k19 = 1.8e-5;
+static double k20 = 2;
+static double AA = 11000;  // given as conc. remains fixed throughout the simulation
+static double DAG = 5000;  // given as conc. remains fixed throughout the simulation
 
 // Define (initialize) variables declared in header
 // Pointers *amu and *x are initialized with the adress of filler variables
 // (These values are overwritten by the simulation)
-NumericVector calcium(1);
-unsigned int ntimepoint = 0;
-double amu_init_value = 0.1;
-double *amu = &amu_init_value;
-unsigned long long int x_init_value = 1000000;
-unsigned long long int *x = &x_init_value; 
+static NumericVector calcium(1);
+static unsigned int ntimepoint = 0;
+static double amu_init_value = 0.1;
+static double *amu = &amu_init_value;
+static unsigned long long int x_init_value = 1000000;
+static unsigned long long int *x = &x_init_value; 
 
 
 //' Propensity Calculation
@@ -49,7 +50,7 @@ unsigned long long int *x = &x_init_value;
 //' calculate_amu() 
 //' @export
 // [[Rcpp::export]]
-void calculate_amu() {
+void pkc_calculate_amu() {
 
   amu[0] = k1 * x[0];
   amu[1] = amu[0] + k2 * x[5];
@@ -83,7 +84,7 @@ void calculate_amu() {
 //' update_system() 
 //' @export
 // [[Rcpp::export]]
-void update_system(unsigned int rIndex) {
+void pkc_update_system(unsigned int rIndex) {
   
   switch (rIndex) {
   case 0:   /* R1 */

@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
 /* Global variables */
 NumericVector timevector;
 double timestep;
@@ -10,11 +11,9 @@ double PKCinact0_conc;
 double PKCbasal0_conc;
 
 
-//' Couple a simulated PKC protein to a given calcium time series.
+//' Couple a simulated Ca-dependent protein to a given calcium time series.
 //'
-//' Takes a calcium time series and simulates the Ca-dependent protein PKC.
-//'
-//' Implementation based on the PKC Model by Manninnen (2006)
+//' Takes a calcium time series and simulates the coupled Ca-dependent protein.
 //'
 //' @param param_time A numeric vector: the times of the observations.
 //' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
@@ -36,7 +35,7 @@ NumericMatrix simulator(NumericVector param_time,
   GetRNGstate();
   
   /* VARIABLES */
-  
+    
   // get parameter values from arguments
   timevector = param_time;
   calcium = param_calcium;

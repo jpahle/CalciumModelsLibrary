@@ -1,5 +1,5 @@
 # Set rng seed
-#set.seed(1)
+set.seed(1)
 
 # Define variables
 timestep <- 1

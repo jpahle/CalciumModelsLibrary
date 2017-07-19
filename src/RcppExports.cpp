@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // calmodulin_calculate_amu
 void calmodulin_calculate_amu();
-RcppExport SEXP CalciumModelsLibrary_calmodulin_calculate_amu() {
+RcppExport SEXP _CalciumModelsLibrary_calmodulin_calculate_amu() {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     calmodulin_calculate_amu();
@@ -16,7 +16,7 @@ END_RCPP
 }
 // calmodulin_update_system
 void calmodulin_update_system(unsigned int rIndex);
-RcppExport SEXP CalciumModelsLibrary_calmodulin_update_system(SEXP rIndexSEXP) {
+RcppExport SEXP _CalciumModelsLibrary_calmodulin_update_system(SEXP rIndexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< unsigned int >::type rIndex(rIndexSEXP);
@@ -26,7 +26,7 @@ END_RCPP
 }
 // camkii_calculate_amu
 void camkii_calculate_amu();
-RcppExport SEXP CalciumModelsLibrary_camkii_calculate_amu() {
+RcppExport SEXP _CalciumModelsLibrary_camkii_calculate_amu() {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     camkii_calculate_amu();
@@ -35,7 +35,7 @@ END_RCPP
 }
 // camkii_update_system
 void camkii_update_system(unsigned int rIndex);
-RcppExport SEXP CalciumModelsLibrary_camkii_update_system(SEXP rIndexSEXP) {
+RcppExport SEXP _CalciumModelsLibrary_camkii_update_system(SEXP rIndexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< unsigned int >::type rIndex(rIndexSEXP);
@@ -45,7 +45,7 @@ END_RCPP
 }
 // pkc_calculate_amu
 void pkc_calculate_amu();
-RcppExport SEXP CalciumModelsLibrary_pkc_calculate_amu() {
+RcppExport SEXP _CalciumModelsLibrary_pkc_calculate_amu() {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     pkc_calculate_amu();
@@ -54,7 +54,7 @@ END_RCPP
 }
 // pkc_update_system
 void pkc_update_system(unsigned int rIndex);
-RcppExport SEXP CalciumModelsLibrary_pkc_update_system(SEXP rIndexSEXP) {
+RcppExport SEXP _CalciumModelsLibrary_pkc_update_system(SEXP rIndexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< unsigned int >::type rIndex(rIndexSEXP);
@@ -64,7 +64,7 @@ END_RCPP
 }
 // simulator
 NumericMatrix simulator(NumericVector param_time, NumericVector param_calcium, double param_timestep, double param_vol, NumericVector param_init_conc);
-RcppExport SEXP CalciumModelsLibrary_simulator(SEXP param_timeSEXP, SEXP param_calciumSEXP, SEXP param_timestepSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP) {
+RcppExport SEXP _CalciumModelsLibrary_simulator(SEXP param_timeSEXP, SEXP param_calciumSEXP, SEXP param_timestepSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -79,13 +79,13 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"CalciumModelsLibrary_calmodulin_calculate_amu", (DL_FUNC) &CalciumModelsLibrary_calmodulin_calculate_amu, 0},
-    {"CalciumModelsLibrary_calmodulin_update_system", (DL_FUNC) &CalciumModelsLibrary_calmodulin_update_system, 1},
-    {"CalciumModelsLibrary_camkii_calculate_amu", (DL_FUNC) &CalciumModelsLibrary_camkii_calculate_amu, 0},
-    {"CalciumModelsLibrary_camkii_update_system", (DL_FUNC) &CalciumModelsLibrary_camkii_update_system, 1},
-    {"CalciumModelsLibrary_pkc_calculate_amu", (DL_FUNC) &CalciumModelsLibrary_pkc_calculate_amu, 0},
-    {"CalciumModelsLibrary_pkc_update_system", (DL_FUNC) &CalciumModelsLibrary_pkc_update_system, 1},
-    {"CalciumModelsLibrary_simulator", (DL_FUNC) &CalciumModelsLibrary_simulator, 5},
+    {"_CalciumModelsLibrary_calmodulin_calculate_amu", (DL_FUNC) &_CalciumModelsLibrary_calmodulin_calculate_amu, 0},
+    {"_CalciumModelsLibrary_calmodulin_update_system", (DL_FUNC) &_CalciumModelsLibrary_calmodulin_update_system, 1},
+    {"_CalciumModelsLibrary_camkii_calculate_amu", (DL_FUNC) &_CalciumModelsLibrary_camkii_calculate_amu, 0},
+    {"_CalciumModelsLibrary_camkii_update_system", (DL_FUNC) &_CalciumModelsLibrary_camkii_update_system, 1},
+    {"_CalciumModelsLibrary_pkc_calculate_amu", (DL_FUNC) &_CalciumModelsLibrary_pkc_calculate_amu, 0},
+    {"_CalciumModelsLibrary_pkc_update_system", (DL_FUNC) &_CalciumModelsLibrary_pkc_update_system, 1},
+    {"_CalciumModelsLibrary_simulator", (DL_FUNC) &_CalciumModelsLibrary_simulator, 5},
     {NULL, NULL, 0}
 };
 

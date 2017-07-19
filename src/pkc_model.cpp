@@ -3,9 +3,11 @@
 using namespace Rcpp;
 
 
-/* Global variables */
-static int nspecies = 11;
-static int nreactions = 20;
+/* Global default parameters */
+void pkc_init() {
+  nspecies = 11;
+  nreactions = 20;
+}
 static double k1 = 1;
 static double k2 = 50;
 static double k3 = 1.2e-7;
@@ -28,16 +30,6 @@ static double k19 = 1.8e-5;
 static double k20 = 2;
 static double AA = 11000;  // given as conc. remains fixed throughout the simulation
 static double DAG = 5000;  // given as conc. remains fixed throughout the simulation
-
-// Define (initialize) variables declared in header
-// Pointers *amu and *x are initialized with the adress of filler variables
-// (These values are overwritten by the simulation)
-static NumericVector calcium(1);
-static unsigned int ntimepoint = 0;
-static double amu_init_value = 0.1;
-static double *amu = &amu_init_value;
-static unsigned long long int x_init_value = 1000000;
-static unsigned long long int *x = &x_init_value; 
 
 
 //' Propensity Calculation

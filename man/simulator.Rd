@@ -2,30 +2,26 @@
 % Please edit documentation in R/RcppExports.R
 \name{simulator}
 \alias{simulator}
-\title{Stochastic Simulatior (Gillespie).}
+\title{Couple a simulated Ca-dependent protein to a given calcium time series.}
 \usage{
-simulator(time, calcium, init_conc, calc_props, provide_stM, dt, vol)
+simulator(param_time, param_calcium, param_timestep, param_vol, param_init_conc)
 }
 \arguments{
-\item{time}{A numeric vector: the times of the observations.}
+\item{param_time}{A numeric vector: the times of the observations.}
 
-\item{init_conc}{A numeric vector: the initial concentrations of the model species.}
+\item{param_calcium}{A numeric vector: the concentrations of cytosolic calcium [nmol/l].}
 
-\item{calc_props}{A function: calculates and returns the propensity of a selected reaction given a vector of current particle numbers.}
+\item{param_timestep}{A numeric, the time interval between two output samples.}
 
-\item{provide_stM}{A function: returns a matrix of the stoichiometric coefficients of the reaction system.}
+\item{param_vol}{A numeric, the volume of the system [l].}
 
-\item{dt}{A numeric, the time interval between two output samples.}
-
-\item{vol}{A numeric, the volume of the system [l].}
-
-\item{calcium_conc}{A numeric vector: the concentration of cytosolic calcium [nmol].}
+\item{param_init_conc}{A numeric vector: the initial concentrations of model species [nmol/l].}
 }
 \value{
-A dataframe with time, calcium and the active protein time series as columns.
+A dataframe with time and the active protein time series as columns.
 }
 \description{
-Simulate a model using an implementation of Gillespie's Direct Method Stochastic Simulation Algorithm.
+Takes a calcium time series and simulates the coupled Ca-dependent protein.
 }
 \examples{
 simulator()

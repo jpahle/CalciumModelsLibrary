@@ -11,7 +11,7 @@
 #' calculate_amu() 
 #' @export
 calmodulin_calculate_amu <- function() {
-    invisible(.Call('CalciumModelsLibrary_calmodulin_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
+    invisible(.Call('_CalciumModelsLibrary_calmodulin_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
 }
 
 #' System Update
@@ -24,7 +24,7 @@ calmodulin_calculate_amu <- function() {
 #' update_system() 
 #' @export
 calmodulin_update_system <- function(rIndex) {
-    invisible(.Call('CalciumModelsLibrary_calmodulin_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
+    invisible(.Call('_CalciumModelsLibrary_calmodulin_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
 }
 
 #' Propensity Calculation
@@ -37,7 +37,7 @@ calmodulin_update_system <- function(rIndex) {
 #' calculate_amu() 
 #' @export
 camkii_calculate_amu <- function() {
-    invisible(.Call('CalciumModelsLibrary_camkii_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
+    invisible(.Call('_CalciumModelsLibrary_camkii_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
 }
 
 #' System Update
@@ -50,7 +50,7 @@ camkii_calculate_amu <- function() {
 #' update_system() 
 #' @export
 camkii_update_system <- function(rIndex) {
-    invisible(.Call('CalciumModelsLibrary_camkii_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
+    invisible(.Call('_CalciumModelsLibrary_camkii_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
 }
 
 #' Propensity Calculation
@@ -63,7 +63,7 @@ camkii_update_system <- function(rIndex) {
 #' calculate_amu() 
 #' @export
 pkc_calculate_amu <- function() {
-    invisible(.Call('CalciumModelsLibrary_pkc_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
+    invisible(.Call('_CalciumModelsLibrary_pkc_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
 }
 
 #' System Update
@@ -76,7 +76,7 @@ pkc_calculate_amu <- function() {
 #' update_system() 
 #' @export
 pkc_update_system <- function(rIndex) {
-    invisible(.Call('CalciumModelsLibrary_pkc_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
+    invisible(.Call('_CalciumModelsLibrary_pkc_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
 }
 
 #' Couple a simulated Ca-dependent protein to a given calcium time series.
@@ -93,6 +93,6 @@ pkc_update_system <- function(rIndex) {
 #' simulator()
 #' @export
 simulator <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
-    .Call('CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
+    .Call('_CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
 }
 

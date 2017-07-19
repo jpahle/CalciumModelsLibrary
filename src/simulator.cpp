@@ -7,8 +7,14 @@ using namespace Rcpp;
 NumericVector timevector;
 double timestep;
 double vol;
-double PKCinact0_conc;
-double PKCbasal0_conc;
+
+NumericVector calcium;
+unsigned int ntimepoint;
+double *amu;
+unsigned long long int *x;
+
+int nspecies = 0;
+int nreactions = 0;
 
 
 //' Couple a simulated Ca-dependent protein to a given calcium time series.
@@ -63,6 +69,10 @@ NumericMatrix simulator(NumericVector param_time,
   endTime = timevector[timevector.length()-1];
   currentTime = startTime;
   outputTime = currentTime;
+  
+  // Placeholder
+  pkc_init();
+  
   // Return value
   int nintervals = (int)floor((endTime-startTime)/timestep+0.5)+1;
   NumericMatrix retval(nintervals, nspecies+2); // nspecies+2 because time and calcium
@@ -79,7 +89,7 @@ NumericMatrix simulator(NumericVector param_time,
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
     // calculate propensity amu for every reaction
-    calculate_amu();
+    pkc_calculate_amu();
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[nreactions-1];
     // check if reaction time exceeds time until the next observation
@@ -114,7 +124,7 @@ NumericMatrix simulator(NumericVector param_time,
         outputTime += timestep;
       }
       // update system state
-      update_system(rIndex);
+      pkc_update_system(rIndex);
     }
   }
   // update output

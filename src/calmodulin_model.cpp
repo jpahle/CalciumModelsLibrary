@@ -1,24 +1,17 @@
+#include "CaModLib_global_vars.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
 
-/* Global variables */
-static int nspecies = 2;
-static int nreactions = 2;
+/* Global default parameters */
+void calmodulin_init() {
+  nspecies = 2;
+  nreactions = 2;
+}
 static double k_on = 0.025;
 static double k_off = 0.005;
 static double Km = 1.0;
 static int h = 4;
-
-// Define (initialize) variables declared in header
-// Pointers *amu and *x are initialized with the adress of filler variables
-// (These values are overwritten by the simulation)
-static NumericVector calcium(1);
-static unsigned int ntimepoint = 0;
-static double amu_init_value = 0.1;
-static double *amu = &amu_init_value;
-static unsigned long long int x_init_value = 1000000;
-static unsigned long long int *x = &x_init_value; 
 
 
 //' Propensity Calculation

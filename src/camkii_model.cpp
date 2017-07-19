@@ -2,9 +2,11 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-/* Global variables */
-static int nspecies = 5;
-static int nreactions = 10;
+/* Global default parameters */
+void camkii_init() {
+  nspecies = 5;
+  nreactions = 10;
+}
 static double a = -0.22;
 static double b = 1.826;
 static double c = 0.1;
@@ -15,7 +17,6 @@ static double k_TP = 1e-12;
 static double k_TA = 0.0008;
 static double k_AT = 0.01;
 static double k_AA = 0.29;
-static double c_I = 0;
 static double c_B = 0.75;
 static double c_P = 1;
 static double c_T = 0.8;
@@ -26,16 +27,6 @@ static double Vm_phos = 0.005;
 static double Kd_phos = 0.3;
 static double totalC = 40;
 static int h = 4;
-
-// Define (initialize) variables declared in header
-// Pointers *amu and *x are initialized with the adress of filler variables
-// (These values are overwritten by the simulation)
-static NumericVector calcium(1);
-static unsigned int ntimepoint = 0;
-static double amu_init_value = 0.1;
-static double *amu = &amu_init_value;
-static unsigned long long int x_init_value = 1000000;
-static unsigned long long int *x = &x_init_value; 
 
 
 //' Propensity Calculation

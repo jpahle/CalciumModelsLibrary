@@ -26,6 +26,9 @@ int nreactions = 0;
 //' @param param_timestep A numeric, the time interval between two output samples.
 //' @param param_vol A numeric, the volume of the system [l].
 //' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
+//' @param param_init_func A function: provides default model parameter set.
+//' @param param_amu_func A function: calculated propensity values.
+//' @param param_stM_func A function: updates system state.
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
@@ -36,7 +39,9 @@ NumericMatrix simulator(NumericVector param_time,
                    double param_timestep,
                    double param_vol,
                    NumericVector param_init_conc,
-                   R_amu_ptr param_amu_func) {
+                   R_init_ptr param_init_func,
+                   R_amu_ptr param_amu_func,
+                   R_stM_ptr param_stM_func) {
 
   // get R random generator state
   GetRNGstate();
@@ -71,8 +76,9 @@ NumericMatrix simulator(NumericVector param_time,
   currentTime = startTime;
   outputTime = currentTime;
   
-  // Placeholder
-  pkc_init();
+  // Get default model parameter set
+  // pkc_init();
+  (*param_init_func)();
   
   // Return value
   int nintervals = (int)floor((endTime-startTime)/timestep+0.5)+1;
@@ -126,7 +132,8 @@ NumericMatrix simulator(NumericVector param_time,
         outputTime += timestep;
       }
       // update system state
-      pkc_update_system(rIndex);
+      // pkc_update_system(rIndex);
+      (*param_stM_func)(rIndex);
     }
   }
   // update output

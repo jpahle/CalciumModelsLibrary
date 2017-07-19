@@ -53,6 +53,11 @@ camkii_update_system <- function(rIndex) {
     invisible(.Call('_CalciumModelsLibrary_camkii_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
 }
 
+#' Global default parameters
+pkc_init <- function() {
+    invisible(.Call('_CalciumModelsLibrary_pkc_init', PACKAGE = 'CalciumModelsLibrary'))
+}
+
 #' Propensity Calculation
 #'
 #' Calculates the propensities of all PKC model reactions and stores them in the vector amu.
@@ -64,19 +69,6 @@ camkii_update_system <- function(rIndex) {
 #' @export
 pkc_calculate_amu <- function() {
     invisible(.Call('_CalciumModelsLibrary_pkc_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
-}
-
-#' Foo
-#'
-#' Bar
-#'
-#' @param
-#' @return
-#' @examples
-#' make_pkc_calculate_amu() 
-#' @export
-make_pkc_calculate_amu <- function() {
-    .Call('_CalciumModelsLibrary_make_pkc_calculate_amu', PACKAGE = 'CalciumModelsLibrary')
 }
 
 #' System Update
@@ -92,6 +84,18 @@ pkc_update_system <- function(rIndex) {
     invisible(.Call('_CalciumModelsLibrary_pkc_update_system', PACKAGE = 'CalciumModelsLibrary', rIndex))
 }
 
+make_pkc_init <- function() {
+    .Call('_CalciumModelsLibrary_make_pkc_init', PACKAGE = 'CalciumModelsLibrary')
+}
+
+make_pkc_calculate_amu <- function() {
+    .Call('_CalciumModelsLibrary_make_pkc_calculate_amu', PACKAGE = 'CalciumModelsLibrary')
+}
+
+make_pkc_update_system <- function() {
+    .Call('_CalciumModelsLibrary_make_pkc_update_system', PACKAGE = 'CalciumModelsLibrary')
+}
+
 #' Couple a simulated Ca-dependent protein to a given calcium time series.
 #'
 #' Takes a calcium time series and simulates the coupled Ca-dependent protein.
@@ -101,11 +105,14 @@ pkc_update_system <- function(rIndex) {
 #' @param param_timestep A numeric, the time interval between two output samples.
 #' @param param_vol A numeric, the volume of the system [l].
 #' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
+#' @param param_init_func A function: provides default model parameter set.
+#' @param param_amu_func A function: calculated propensity values.
+#' @param param_stM_func A function: updates system state.
 #' @return A dataframe with time and the active protein time series as columns.
 #' @examples
 #' simulator()
 #' @export
-simulator <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_amu_func) {
-    .Call('_CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_amu_func)
+simulator <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_init_func, param_amu_func, param_stM_func) {
+    .Call('_CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_init_func, param_amu_func, param_stM_func)
 }
 

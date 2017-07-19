@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 
-// Declare variables that are necessary for model files and simulator
+// Declare variables for model and simulator functions
 extern NumericVector calcium;
 extern unsigned int ntimepoint;
 extern double *amu;
@@ -12,12 +12,12 @@ extern unsigned long long int *x;
 extern int nspecies;
 extern int nreactions;
 
-// Declare variables and functions that are necessary only for simulator
-
-// void calculate_amu();
-// void update_system(unsigned int rIndex);
-
+// Declare functions for simulator function
 void pkc_init();
 void pkc_calculate_amu();
 void pkc_update_system(unsigned int rIndex);
-XPtr<void (*)()> make_pkc_calculate_amu();
+
+// Declare functions for R script calling the simulation function
+R_init_ptr make_pkc_init();
+R_amu_ptr make_pkc_calculate_amu();
+R_stM_ptr make_pkc_update_system();

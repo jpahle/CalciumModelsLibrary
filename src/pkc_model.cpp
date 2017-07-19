@@ -3,7 +3,8 @@
 using namespace Rcpp;
 
 
-/* Global default parameters */
+//' Global default parameters
+// [[Rcpp::export]]
 void pkc_init() {
   nspecies = 11;
   nreactions = 20;
@@ -66,22 +67,6 @@ void pkc_calculate_amu() {
   amu[19] = amu[18] + k20 * x[3];
 }
 
-
-//' Foo
-//'
-//' Bar
-//'
-//' @param
-//' @return
-//' @examples
-//' make_pkc_calculate_amu() 
-//' @export
-// [[Rcpp::export]]
-R_amu_ptr make_pkc_calculate_amu() {
-
-  return R_amu_ptr(new amu_ptr(pkc_calculate_amu));
-
-}
 
 //' System Update
 //'
@@ -180,3 +165,11 @@ void pkc_update_system(unsigned int rIndex) {
     exit(-1);
   }
 }
+
+// Generate R function pointers
+// [[Rcpp::export]]
+R_init_ptr make_pkc_init() {return R_init_ptr(new init_ptr(pkc_init));}
+// [[Rcpp::export]]
+R_amu_ptr make_pkc_calculate_amu() {return R_amu_ptr(new amu_ptr(pkc_calculate_amu));}
+// [[Rcpp::export]]
+R_stM_ptr make_pkc_update_system() {return R_stM_ptr(new stM_ptr(pkc_update_system));}

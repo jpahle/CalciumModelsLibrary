@@ -44,6 +44,15 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// pkc_init
+void pkc_init();
+RcppExport SEXP _CalciumModelsLibrary_pkc_init() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    pkc_init();
+    return R_NilValue;
+END_RCPP
+}
 // pkc_calculate_amu
 void pkc_calculate_amu();
 RcppExport SEXP _CalciumModelsLibrary_pkc_calculate_amu() {
@@ -51,16 +60,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     pkc_calculate_amu();
     return R_NilValue;
-END_RCPP
-}
-// make_pkc_calculate_amu
-R_amu_ptr make_pkc_calculate_amu();
-RcppExport SEXP _CalciumModelsLibrary_make_pkc_calculate_amu() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(make_pkc_calculate_amu());
-    return rcpp_result_gen;
 END_RCPP
 }
 // pkc_update_system
@@ -73,9 +72,39 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// make_pkc_init
+R_init_ptr make_pkc_init();
+RcppExport SEXP _CalciumModelsLibrary_make_pkc_init() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(make_pkc_init());
+    return rcpp_result_gen;
+END_RCPP
+}
+// make_pkc_calculate_amu
+R_amu_ptr make_pkc_calculate_amu();
+RcppExport SEXP _CalciumModelsLibrary_make_pkc_calculate_amu() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(make_pkc_calculate_amu());
+    return rcpp_result_gen;
+END_RCPP
+}
+// make_pkc_update_system
+R_stM_ptr make_pkc_update_system();
+RcppExport SEXP _CalciumModelsLibrary_make_pkc_update_system() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(make_pkc_update_system());
+    return rcpp_result_gen;
+END_RCPP
+}
 // simulator
-NumericMatrix simulator(NumericVector param_time, NumericVector param_calcium, double param_timestep, double param_vol, NumericVector param_init_conc, R_amu_ptr param_amu_func);
-RcppExport SEXP _CalciumModelsLibrary_simulator(SEXP param_timeSEXP, SEXP param_calciumSEXP, SEXP param_timestepSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP, SEXP param_amu_funcSEXP) {
+NumericMatrix simulator(NumericVector param_time, NumericVector param_calcium, double param_timestep, double param_vol, NumericVector param_init_conc, R_init_ptr param_init_func, R_amu_ptr param_amu_func, R_stM_ptr param_stM_func);
+RcppExport SEXP _CalciumModelsLibrary_simulator(SEXP param_timeSEXP, SEXP param_calciumSEXP, SEXP param_timestepSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP, SEXP param_init_funcSEXP, SEXP param_amu_funcSEXP, SEXP param_stM_funcSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -84,8 +113,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type param_timestep(param_timestepSEXP);
     Rcpp::traits::input_parameter< double >::type param_vol(param_volSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type param_init_conc(param_init_concSEXP);
+    Rcpp::traits::input_parameter< R_init_ptr >::type param_init_func(param_init_funcSEXP);
     Rcpp::traits::input_parameter< R_amu_ptr >::type param_amu_func(param_amu_funcSEXP);
-    rcpp_result_gen = Rcpp::wrap(simulator(param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_amu_func));
+    Rcpp::traits::input_parameter< R_stM_ptr >::type param_stM_func(param_stM_funcSEXP);
+    rcpp_result_gen = Rcpp::wrap(simulator(param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_init_func, param_amu_func, param_stM_func));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -95,10 +126,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_CalciumModelsLibrary_calmodulin_update_system", (DL_FUNC) &_CalciumModelsLibrary_calmodulin_update_system, 1},
     {"_CalciumModelsLibrary_camkii_calculate_amu", (DL_FUNC) &_CalciumModelsLibrary_camkii_calculate_amu, 0},
     {"_CalciumModelsLibrary_camkii_update_system", (DL_FUNC) &_CalciumModelsLibrary_camkii_update_system, 1},
+    {"_CalciumModelsLibrary_pkc_init", (DL_FUNC) &_CalciumModelsLibrary_pkc_init, 0},
     {"_CalciumModelsLibrary_pkc_calculate_amu", (DL_FUNC) &_CalciumModelsLibrary_pkc_calculate_amu, 0},
-    {"_CalciumModelsLibrary_make_pkc_calculate_amu", (DL_FUNC) &_CalciumModelsLibrary_make_pkc_calculate_amu, 0},
     {"_CalciumModelsLibrary_pkc_update_system", (DL_FUNC) &_CalciumModelsLibrary_pkc_update_system, 1},
-    {"_CalciumModelsLibrary_simulator", (DL_FUNC) &_CalciumModelsLibrary_simulator, 6},
+    {"_CalciumModelsLibrary_make_pkc_init", (DL_FUNC) &_CalciumModelsLibrary_make_pkc_init, 0},
+    {"_CalciumModelsLibrary_make_pkc_calculate_amu", (DL_FUNC) &_CalciumModelsLibrary_make_pkc_calculate_amu, 0},
+    {"_CalciumModelsLibrary_make_pkc_update_system", (DL_FUNC) &_CalciumModelsLibrary_make_pkc_update_system, 0},
+    {"_CalciumModelsLibrary_simulator", (DL_FUNC) &_CalciumModelsLibrary_simulator, 8},
     {NULL, NULL, 0}
 };
 

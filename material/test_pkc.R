@@ -12,10 +12,12 @@ init_conc <- c(1000, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0)
 input <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
 # Get function pointer
+pkc_init <- make_pkc_init()
 pkc_props <- make_pkc_calculate_amu()
+pkc_stM <- make_pkc_update_system()
 
 # Simulate model
-output <- simulator(input$time, input$Ca/f, timestep, vol, init_conc, pkc_props)
+output <- simulator(input$time, input$Ca/f, timestep, vol, init_conc, pkc_init, pkc_props, pkc_stM)
 output <- as.data.frame(output)
 colnames(output) <- c("time",
                       "calcium",

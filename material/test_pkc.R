@@ -11,8 +11,11 @@ init_conc <- c(1000, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0)
 # Calcium input is expected to be in nM!
 input <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
+# Get function pointer
+pkc_props <- make_pkc_calculate_amu()
+
 # Simulate model
-output <- simulator(input$time, input$Ca/f, timestep, vol, init_conc)
+output <- simulator(input$time, input$Ca/f, timestep, vol, init_conc, pkc_props)
 output <- as.data.frame(output)
 colnames(output) <- c("time",
                       "calcium",

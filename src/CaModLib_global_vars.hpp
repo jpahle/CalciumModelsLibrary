@@ -1,5 +1,7 @@
+#include "CalciumModelsLibrary_types.h"
 #include <Rcpp.h>
 using namespace Rcpp;
+
 
 // Declare variables that are necessary for model files and simulator
 extern NumericVector calcium;
@@ -18,3 +20,4 @@ extern int nreactions;
 void pkc_init();
 void pkc_calculate_amu();
 void pkc_update_system(unsigned int rIndex);
+XPtr<void (*)()> make_pkc_calculate_amu();

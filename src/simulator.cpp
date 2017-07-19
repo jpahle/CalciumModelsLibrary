@@ -35,7 +35,8 @@ NumericMatrix simulator(NumericVector param_time,
                    NumericVector param_calcium,
                    double param_timestep,
                    double param_vol,
-                   NumericVector param_init_conc) {
+                   NumericVector param_init_conc,
+                   R_amu_ptr param_amu_func) {
 
   // get R random generator state
   GetRNGstate();
@@ -89,7 +90,8 @@ NumericMatrix simulator(NumericVector param_time,
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
     // calculate propensity amu for every reaction
-    pkc_calculate_amu();
+    (*param_amu_func)();
+    // pkc_calculate_amu();
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[nreactions-1];
     // check if reaction time exceeds time until the next observation

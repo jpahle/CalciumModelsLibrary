@@ -66,6 +66,19 @@ pkc_calculate_amu <- function() {
     invisible(.Call('_CalciumModelsLibrary_pkc_calculate_amu', PACKAGE = 'CalciumModelsLibrary'))
 }
 
+#' Foo
+#'
+#' Bar
+#'
+#' @param
+#' @return
+#' @examples
+#' make_pkc_calculate_amu() 
+#' @export
+make_pkc_calculate_amu <- function() {
+    .Call('_CalciumModelsLibrary_make_pkc_calculate_amu', PACKAGE = 'CalciumModelsLibrary')
+}
+
 #' System Update
 #'
 #' Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
@@ -92,7 +105,7 @@ pkc_update_system <- function(rIndex) {
 #' @examples
 #' simulator()
 #' @export
-simulator <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
-    .Call('_CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
+simulator <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_amu_func) {
+    .Call('_CalciumModelsLibrary_simulator', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc, param_amu_func)
 }
 

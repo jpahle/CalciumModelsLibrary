@@ -66,6 +66,23 @@ void pkc_calculate_amu() {
   amu[19] = amu[18] + k20 * x[3];
 }
 
+
+//' Foo
+//'
+//' Bar
+//'
+//' @param
+//' @return
+//' @examples
+//' make_pkc_calculate_amu() 
+//' @export
+// [[Rcpp::export]]
+R_amu_ptr make_pkc_calculate_amu() {
+
+  return R_amu_ptr(new amu_ptr(pkc_calculate_amu));
+
+}
+
 //' System Update
 //'
 //' Changes the system state (updates the particle numbers) by instantiating a chosen reaction.

@@ -1,5 +1,5 @@
 # Set rng seed
-#set.seed(1)
+set.seed(1)
 
 # Define variables
 timestep <- 1
@@ -12,7 +12,7 @@ init_conc <- c(1000, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0)
 input <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
 # Simulate model
-output <- simulator(input$time, input$Ca/f, timestep, vol, init_conc)
+output <- sim_pkc(input$time, input$Ca/f, timestep, vol, init_conc)
 output <- as.data.frame(output)
 colnames(output) <- c("time",
                       "calcium",

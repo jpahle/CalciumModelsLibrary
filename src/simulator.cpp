@@ -1,31 +1,36 @@
-#include "CaModLib_global_vars.hpp"
+#include "extern_simulator_func_prototype.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
-/* Global variables */
-NumericVector timevector;
-double timestep;
-double vol;
-double PKCinact0_conc;
-double PKCbasal0_conc;
+
+// Global shared variables
+extern NumericVector timevector;
+extern double timestep;
+extern double vol;
+extern NumericVector calcium;
+extern unsigned int ntimepoint;
+extern double *amu;
+extern unsigned long long int *x;
+extern int nspecies;
+extern int nreactions;
 
 
-//' Couple a simulated PKC protein to a given calcium time series.
+extern void calculate_amu();
+extern void update_system(unsigned int rIndex);
+
+
+//' Couple a simulated Ca-dependent protein to a given calcium time series.
 //'
-//' Takes a calcium time series and simulates the Ca-dependent protein PKC.
-//'
-//' Implementation based on the PKC Model by Manninnen (2006)
+//' Takes a calcium time series and simulates the coupled Ca-dependent protein.
 //'
 //' @param param_time A numeric vector: the times of the observations.
 //' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
-//' @param param_timestep A numeric, the time interval between two output samples.
-//' @param param_vol A numeric, the volume of the system [l].
+//' @param param_timestep A numeric: the time interval between two output samples.
+//' @param param_vol A numeric: the volume of the system [l].
 //' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
-//' @export
-// [[Rcpp::export]]
 NumericMatrix simulator(NumericVector param_time,
                    NumericVector param_calcium,
                    double param_timestep,
@@ -36,7 +41,7 @@ NumericMatrix simulator(NumericVector param_time,
   GetRNGstate();
   
   /* VARIABLES */
-  
+    
   // get parameter values from arguments
   timevector = param_time;
   calcium = param_calcium;
@@ -81,6 +86,7 @@ NumericMatrix simulator(NumericVector param_time,
     R_CheckUserInterrupt();
     // calculate propensity amu for every reaction
     calculate_amu();
+    // pkc_calculate_amu();
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[nreactions-1];
     // check if reaction time exceeds time until the next observation
@@ -115,6 +121,7 @@ NumericMatrix simulator(NumericVector param_time,
         outputTime += timestep;
       }
       // update system state
+      // pkc_update_system(rIndex);
       update_system(rIndex);
     }
   }

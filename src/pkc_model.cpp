@@ -1,56 +1,92 @@
-#include "CaModLib_global_vars.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
-/* Global variables */
-int nspecies = 11;
-int nreactions = 20;
-double k1 = 1;
-double k2 = 50;
-double k3 = 1.2e-7;
-double k4 = 0.1;
-double k5 = 1.2705;
-double k6 = 3.5026;
-double k7 = 1.2e-7;
-double k8 = 0.1;
-double k9 = 1;
-double k10 = 0.1;
-double k11 = 2;
-double k12 = 0.2;
-double k13 = 0.0006;
-double k14 = 0.5;
-double k15 = 7.998e-6;
-double k16 = 8.6348;
-double k17 = 6e-7;
-double k18 = 0.1;
-double k19 = 1.8e-5;
-double k20 = 2;
-double AA = 11000;  // given as conc. remains fixed throughout the simulation
-double DAG = 5000;  // given as conc. remains fixed throughout the simulation
-
-// Define (initialize) variables declared in header
-// Pointers *amu and *x are initialized with the adress of filler variables
-// (These values are overwritten by the simulation)
-NumericVector calcium(1);
-unsigned int ntimepoint = 0;
-double amu_init_value = 0.1;
-double *amu = &amu_init_value;
-unsigned long long int x_init_value = 1000000;
-unsigned long long int *x = &x_init_value; 
 
 
-//' Propensity Calculation
+//********************************/* R EXPORT OPTIONS */********************************
+
+// USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
+// Model description
+#define MODEL_NAME pkc
+
+// DON'T CHANGE THIS BLOCK!
+//#######################################################################################
+#define Map_helper(x,y) x##y
+#define Map(x,y) Map_helper(x,y)
+#define simulator Map(simulator_, MODEL_NAME)
+#define init Map(init_, MODEL_NAME)
+#define calculate_amu Map(calculate_amu_, MODEL_NAME)
+#define update_system Map(update_system_, MODEL_NAME)
+#include "simulator.cpp"
+// Placeholder init function since it is defined 
+// after the Wrapper Function tries to call it
+void init();
+//#######################################################################################
+
+// USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
+//' PKC Model Wrapper Function (exported to R)
 //'
-//' Calculates the propensities of all PKC model reactions and stores them in the vector amu.
-//'
-//' @param None
-//' @return None
+//' This function calls the internal C++ simulator function to simulate the PKC model. 
+//' @param
+//' @return
 //' @examples
-//' calculate_amu() 
+//' sim_pkc()
 //' @export
 // [[Rcpp::export]]
-void calculate_amu() {
+NumericMatrix sim_pkc(NumericVector param_time,
+                   NumericVector param_calcium,
+                   double param_timestep,
+                   double param_vol,
+                   NumericVector param_init_conc) {
+  
+  init_pkc();
+  return simulator_pkc(param_time,
+                   param_calcium,
+                   param_timestep,
+                   param_vol,
+                   param_init_conc);
+   
+}
 
+
+
+//********************************/* MODEL DEFINITION */********************************
+// USER INPUT for new models: define model parameters, number of species, 
+// number of reactions, propensity equations and update_system function 
+
+// Default Model Parameters
+static double k1 = 1;
+static double k2 = 50;
+static double k3 = 1.2e-7;
+static double k4 = 0.1;
+static double k5 = 1.2705;
+static double k6 = 3.5026;
+static double k7 = 1.2e-7;
+static double k8 = 0.1;
+static double k9 = 1;
+static double k10 = 0.1;
+static double k11 = 2;
+static double k12 = 0.2;
+static double k13 = 0.0006;
+static double k14 = 0.5;
+static double k15 = 7.998e-6;
+static double k16 = 8.6348;
+static double k17 = 6e-7;
+static double k18 = 0.1;
+static double k19 = 1.8e-5;
+static double k20 = 2;
+static double AA = 11000;  // given as conc. remains fixed throughout the simulation
+static double DAG = 5000;  // given as conc. remains fixed throughout the simulation
+
+// Model dimensions
+void init() {
+  nspecies = 11;
+  nreactions = 20;
+}
+
+// Propensity calculation:
+// Calculates the propensities of all PKC model reactions and stores them in the vector amu.
+void calculate_amu() {
   amu[0] = k1 * x[0];
   amu[1] = amu[0] + k2 * x[5];
   amu[2] = amu[1] + k3 * AA * (double)x[0]; /* AA given as conc., hence, no scaling */
@@ -73,18 +109,9 @@ void calculate_amu() {
   amu[19] = amu[18] + k20 * x[3];
 }
 
-//' System Update
-//'
-//' Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
-//'
-//' @param rIndex An unsigned integer: the id of the chosen reaction.
-//' @return void
-//' @examples
-//' update_system() 
-//' @export
-// [[Rcpp::export]]
+// System update:
+// Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
 void update_system(unsigned int rIndex) {
-  
   switch (rIndex) {
   case 0:   /* R1 */
     x[0]--;

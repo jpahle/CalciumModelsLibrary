@@ -11,9 +11,9 @@ simulator(param_time, param_calcium, param_timestep, param_vol, param_init_conc)
 
 \item{param_calcium}{A numeric vector: the concentrations of cytosolic calcium [nmol/l].}
 
-\item{param_timestep}{A numeric, the time interval between two output samples.}
+\item{param_timestep}{A numeric: the time interval between two output samples.}
 
-\item{param_vol}{A numeric, the volume of the system [l].}
+\item{param_vol}{A numeric: the volume of the system [l].}
 
 \item{param_init_conc}{A numeric vector: the initial concentrations of model species [nmol/l].}
 }

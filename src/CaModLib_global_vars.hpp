@@ -1,23 +1,24 @@
-#include "CalciumModelsLibrary_types.h"
 #include <Rcpp.h>
 using namespace Rcpp;
 
 
-// Declare variables for model and simulator functions
+// Declare shared variables
 extern NumericVector calcium;
 extern unsigned int ntimepoint;
 extern double *amu;
 extern unsigned long long int *x;
-
 extern int nspecies;
 extern int nreactions;
 
-// Declare functions for simulator function
-void pkc_init();
-void pkc_calculate_amu();
-void pkc_update_system(unsigned int rIndex);
 
-// Declare functions for R script calling the simulation function
-R_init_ptr make_pkc_init();
-R_amu_ptr make_pkc_calculate_amu();
-R_stM_ptr make_pkc_update_system();
+// Declare simulator function (prototyp)
+extern NumericMatrix simulator(NumericVector param_time,
+                   NumericVector param_calcium,
+                   double param_timestep,
+                   double param_vol,
+                   NumericVector param_init_conc);
+
+                   
+// Declare subfunctions used by simulatior
+extern void pkc_calculate_amu();
+extern void pkc_update_system(unsigned int rIndex);

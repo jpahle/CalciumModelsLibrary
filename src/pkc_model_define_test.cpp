@@ -1,14 +1,14 @@
-#include "CaModLib_global_vars.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
 
-//' Global default parameters
-// [[Rcpp::export]]
-void pkc_init() {
-  nspecies = 11;
-  nreactions = 20;
-}
+// Model description
+#define MODEL_NAME pkc
+int nspecies = 11;
+int nreactions = 20;
+
+
+// Default Model Parameters
 static double k1 = 1;
 static double k2 = 50;
 static double k3 = 1.2e-7;
@@ -33,18 +33,12 @@ static double AA = 11000;  // given as conc. remains fixed throughout the simula
 static double DAG = 5000;  // given as conc. remains fixed throughout the simulation
 
 
-//' Propensity Calculation
-//'
-//' Calculates the propensities of all PKC model reactions and stores them in the vector amu.
-//'
-//' @param None
-//' @return None
-//' @examples
-//' calculate_amu() 
-//' @export
-// [[Rcpp::export]]
-void pkc_calculate_amu() {
+#include "CaModLib_global_vars.hpp"
 
+
+// Propensity calculation:
+// Calculates the propensities of all PKC model reactions and stores them in the vector amu.
+void pkc_calculate_amu() {
   amu[0] = k1 * x[0];
   amu[1] = amu[0] + k2 * x[5];
   amu[2] = amu[1] + k3 * AA * (double)x[0]; /* AA given as conc., hence, no scaling */
@@ -68,18 +62,9 @@ void pkc_calculate_amu() {
 }
 
 
-//' System Update
-//'
-//' Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
-//'
-//' @param rIndex An unsigned integer: the id of the chosen reaction.
-//' @return void
-//' @examples
-//' update_system() 
-//' @export
-// [[Rcpp::export]]
+// System update:
+// Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
 void pkc_update_system(unsigned int rIndex) {
-  
   switch (rIndex) {
   case 0:   /* R1 */
     x[0]--;
@@ -166,10 +151,26 @@ void pkc_update_system(unsigned int rIndex) {
   }
 }
 
-// Generate R function pointers
+
+//' PKC Model Wrapper Function (exported to R)
+//'
+//' This function calls the internal C++ simulator function to simulate the PKC model. 
+//' @param
+//' @return
+//' @examples
+//' model_pkc()
+//' @export
 // [[Rcpp::export]]
-R_init_ptr make_pkc_init() {return R_init_ptr(new init_ptr(pkc_init));}
-// [[Rcpp::export]]
-R_amu_ptr make_pkc_calculate_amu() {return R_amu_ptr(new amu_ptr(pkc_calculate_amu));}
-// [[Rcpp::export]]
-R_stM_ptr make_pkc_update_system() {return R_stM_ptr(new stM_ptr(pkc_update_system));}
+NumericMatrix model_pkc(NumericVector param_time,
+                   NumericVector param_calcium,
+                   double param_timestep,
+                   double param_vol,
+                   NumericVector param_init_conc) {
+  
+  return simulator(param_time,
+                   param_calcium,
+                   param_timestep,
+                   param_vol,
+                   param_init_conc);
+   
+}

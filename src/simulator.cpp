@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 
-/* Global variables */
+// Global variables
 NumericVector timevector;
 double timestep;
 double vol;
@@ -13,9 +13,6 @@ unsigned int ntimepoint;
 double *amu;
 unsigned long long int *x;
 
-int nspecies = 0;
-int nreactions = 0;
-
 
 //' Couple a simulated Ca-dependent protein to a given calcium time series.
 //'
@@ -23,25 +20,17 @@ int nreactions = 0;
 //'
 //' @param param_time A numeric vector: the times of the observations.
 //' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
-//' @param param_timestep A numeric, the time interval between two output samples.
-//' @param param_vol A numeric, the volume of the system [l].
+//' @param param_timestep A numeric: the time interval between two output samples.
+//' @param param_vol A numeric: the volume of the system [l].
 //' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
-//' @param param_init_func A function: provides default model parameter set.
-//' @param param_amu_func A function: calculated propensity values.
-//' @param param_stM_func A function: updates system state.
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
-//' @export
-// [[Rcpp::export]]
 NumericMatrix simulator(NumericVector param_time,
                    NumericVector param_calcium,
                    double param_timestep,
                    double param_vol,
-                   NumericVector param_init_conc,
-                   R_init_ptr param_init_func,
-                   R_amu_ptr param_amu_func,
-                   R_stM_ptr param_stM_func) {
+                   NumericVector param_init_conc) {
 
   // get R random generator state
   GetRNGstate();
@@ -75,11 +64,6 @@ NumericMatrix simulator(NumericVector param_time,
   endTime = timevector[timevector.length()-1];
   currentTime = startTime;
   outputTime = currentTime;
-  
-  // Get default model parameter set
-  // pkc_init();
-  (*param_init_func)();
-  
   // Return value
   int nintervals = (int)floor((endTime-startTime)/timestep+0.5)+1;
   NumericMatrix retval(nintervals, nspecies+2); // nspecies+2 because time and calcium
@@ -96,7 +80,7 @@ NumericMatrix simulator(NumericVector param_time,
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
     // calculate propensity amu for every reaction
-    (*param_amu_func)();
+    pkc_calculate_amu();
     // pkc_calculate_amu();
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[nreactions-1];
@@ -133,7 +117,7 @@ NumericMatrix simulator(NumericVector param_time,
       }
       // update system state
       // pkc_update_system(rIndex);
-      (*param_stM_func)(rIndex);
+      pkc_update_system(rIndex);
     }
   }
   // update output

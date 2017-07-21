@@ -1,17 +1,22 @@
-#include "CaModLib_global_vars.hpp"
+#include "CaModLib_global_vars.hpp" // provide global function prototypes
 #include <Rcpp.h>
 using namespace Rcpp;
 
 
-// Global variables
-NumericVector timevector;
-double timestep;
-double vol;
+// Global shared variables
+extern NumericVector timevector;
+extern double timestep;
+extern double vol;
+extern NumericVector calcium;
+extern unsigned int ntimepoint;
+extern double *amu;
+extern unsigned long long int *x;
+extern int nspecies;
+extern int nreactions;
 
-NumericVector calcium;
-unsigned int ntimepoint;
-double *amu;
-unsigned long long int *x;
+
+extern void calculate_amu();
+extern void update_system(unsigned int rIndex);
 
 
 //' Couple a simulated Ca-dependent protein to a given calcium time series.
@@ -80,7 +85,7 @@ NumericMatrix simulator(NumericVector param_time,
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
     // calculate propensity amu for every reaction
-    pkc_calculate_amu();
+    calculate_amu();
     // pkc_calculate_amu();
     // calculate time step tau
     tau = - log(runif(1)[0])/amu[nreactions-1];
@@ -117,7 +122,7 @@ NumericMatrix simulator(NumericVector param_time,
       }
       // update system state
       // pkc_update_system(rIndex);
-      pkc_update_system(rIndex);
+      update_system(rIndex);
     }
   }
   // update output

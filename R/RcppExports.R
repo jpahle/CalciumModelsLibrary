@@ -13,3 +13,15 @@ model_pkc <- function(param_time, param_calcium, param_timestep, param_vol, para
     .Call('_CalciumModelsLibrary_model_pkc', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
 }
 
+#' test2 Model Wrapper Function (exported to R)
+#'
+#' This function calls the internal C++ simulator function to simulate the PKC model. 
+#' @param
+#' @return
+#' @examples
+#' model_test2()
+#' @export
+model_test2 <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
+    .Call('_CalciumModelsLibrary_model_test2', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
+}
+

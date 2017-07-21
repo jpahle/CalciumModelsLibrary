@@ -1,4 +1,4 @@
-#include "CaModLib_global_vars.hpp" // provide global function prototypes
+#include "extern_simulator_func_prototype.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 

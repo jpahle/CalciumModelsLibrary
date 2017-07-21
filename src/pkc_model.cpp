@@ -23,17 +23,17 @@ using namespace Rcpp;
 void init();
 //#######################################################################################
 
-// USER INPUT for new models: Change the name of the wrapper function to model_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
+// USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
 //' PKC Model Wrapper Function (exported to R)
 //'
 //' This function calls the internal C++ simulator function to simulate the PKC model. 
 //' @param
 //' @return
 //' @examples
-//' model_pkc()
+//' sim_pkc()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix model_pkc(NumericVector param_time,
+NumericMatrix sim_pkc(NumericVector param_time,
                    NumericVector param_calcium,
                    double param_timestep,
                    double param_vol,
@@ -51,6 +51,8 @@ NumericMatrix model_pkc(NumericVector param_time,
 
 
 //********************************/* MODEL DEFINITION */********************************
+// USER INPUT for new models: define model parameters, number of species, 
+// number of reactions, propensity equations and update_system function 
 
 // Default Model Parameters
 static double k1 = 1;

@@ -10,6 +10,3 @@ extern NumericMatrix simulator(NumericVector param_time,
                    NumericVector param_init_conc);
 
                    
-// Declare subfunctions used by simulatior
-// extern void calculate_amu();
-// extern void update_system(unsigned int rIndex);

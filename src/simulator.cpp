@@ -23,17 +23,15 @@ extern void update_system(unsigned int rIndex);
 //'
 //' Takes a calcium time series and simulates the coupled Ca-dependent protein.
 //'
-//' @param param_time A numeric vector: the times of the observations.
-//' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
-//' @param param_timestep A numeric: the time interval between two output samples.
+//' @param param_input_df A data frame: contains the times of the observations (column "time") and the cytosolic calcium concentration [nmol/l] (column "Ca").
+//' @param param_sim_params A numeric vector: contains all simulation parameters (timestep = the time interval between two output samples, endTime = the time at which to end the simulation).
 //' @param param_vol A numeric: the volume of the system [l].
 //' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
-NumericMatrix simulator(NumericVector param_time,
-                   NumericVector param_calcium,
-                   double param_timestep,
+NumericMatrix simulator(DataFrame param_input_df,
+                   NumericVector param_sim_params,
                    double param_vol,
                    NumericVector param_init_conc) {
 
@@ -41,14 +39,15 @@ NumericMatrix simulator(NumericVector param_time,
   GetRNGstate();
   
   /* VARIABLES */
-    
   // get parameter values from arguments
-  timevector = param_time;
-  calcium = param_calcium;
-  timestep = param_timestep;
+  // timevector = param_time;
+  // calcium = param_calcium;
+  timevector = param_input_df["time"];
+  calcium = param_input_df["Ca"];
+  timestep = param_sim_params["timestep"];
   vol = param_vol;
   NumericVector ic = param_init_conc;
-  // particle number to concentration (nmol/l) factor
+  // particle number <-> concentration (nmol/l) factor (n/f = c <=> c*f = n)
   double f;
   f = 6.0221415e14*vol;
   // Control variables
@@ -66,7 +65,8 @@ NumericMatrix simulator(NumericVector param_time,
   double currentTime;
   double outputTime;
   startTime = timevector[0];
-  endTime = timevector[timevector.length()-1];
+  //endTime = timevector[timevector.length()-1];
+  endTime = param_sim_params["endTime"];
   currentTime = startTime;
   outputTime = currentTime;
   // Return value
@@ -126,7 +126,7 @@ NumericMatrix simulator(NumericVector param_time,
     }
   }
   // update output
-  while (outputTime <= endTime) {
+  while (floor(outputTime*10000) <= floor(endTime*10000)) {
     retval(noutput, 0) = outputTime;
     retval(noutput, 1) = calcium[ntimepoint];
     for (xID=2; xID < 2+nspecies; xID++) {

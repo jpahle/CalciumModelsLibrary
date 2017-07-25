@@ -33,16 +33,14 @@ void init();
 //' sim_calmodulin()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix sim_calmodulin(NumericVector param_time,
-                   NumericVector param_calcium,
-                   double param_timestep,
+NumericMatrix sim_calmodulin(DataFrame param_input_df,
+                   NumericVector param_sim_params,
                    double param_vol,
                    NumericVector param_init_conc) {
   
   init_calmodulin();
-  return simulator_calmodulin(param_time,
-                   param_calcium,
-                   param_timestep,
+  return simulator_calmodulin(param_input_df,
+                   param_sim_params,
                    param_vol,
                    param_init_conc);
    

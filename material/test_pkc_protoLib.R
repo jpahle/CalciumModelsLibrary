@@ -1,18 +1,30 @@
 # Set rng seed
 set.seed(1)
 
-# Define variables
-timestep <- 1
-vol <- 1e-15
-f <- 6.0221415e14*vol
+# Simulation parameters
+sim_params <- c(timestep = 1,
+                endTime = 1000)
+# Model Parameters
+model_params <- c(vol = 1e-15,
+                  init_conc = c(PKC_inact = 1000,
+                                CaPKC = 0,
+                                DAGCaPKC = 0,
+                                AADAGPKC_inact = 0,
+                                AADAGPKC_act = 0,
+                                PKCbasal = 20,
+                                AAPKC = 0,
+                                CaPKCmemb = 0,
+                                AACaPKC = 0,
+                                DAGPKCmemb = 0,
+                                DAGPKC = 0))
 init_conc <- c(1000, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0)
+vol <- 1e-15
 
 # Read Ca timeseries
-# Calcium input is expected to be in nM!
-input <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
+input_df <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
 # Simulate model
-output <- sim_pkc(input$time, input$Ca/f, timestep, vol, init_conc)
+output <- sim_pkc(input_df, sim_params, vol, init_conc)
 output <- as.data.frame(output)
 colnames(output) <- c("time",
                       "calcium",

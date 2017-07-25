@@ -9,8 +9,8 @@
 #' @examples
 #' sim_calmodulin()
 #' @export
-sim_calmodulin <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
-    .Call('_CalciumModelsLibrary_sim_calmodulin', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
+sim_calmodulin <- function(param_input_df, param_sim_params, param_vol, param_init_conc) {
+    .Call('_CalciumModelsLibrary_sim_calmodulin', PACKAGE = 'CalciumModelsLibrary', param_input_df, param_sim_params, param_vol, param_init_conc)
 }
 
 #' CamKII Model Wrapper Function (exported to R)
@@ -21,8 +21,8 @@ sim_calmodulin <- function(param_time, param_calcium, param_timestep, param_vol,
 #' @examples
 #' sim_camkii()
 #' @export
-sim_camkii <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
-    .Call('_CalciumModelsLibrary_sim_camkii', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
+sim_camkii <- function(param_input_df, param_sim_params, param_vol, param_init_conc) {
+    .Call('_CalciumModelsLibrary_sim_camkii', PACKAGE = 'CalciumModelsLibrary', param_input_df, param_sim_params, param_vol, param_init_conc)
 }
 
 #' PKC Model Wrapper Function (exported to R)
@@ -33,7 +33,7 @@ sim_camkii <- function(param_time, param_calcium, param_timestep, param_vol, par
 #' @examples
 #' sim_pkc()
 #' @export
-sim_pkc <- function(param_time, param_calcium, param_timestep, param_vol, param_init_conc) {
-    .Call('_CalciumModelsLibrary_sim_pkc', PACKAGE = 'CalciumModelsLibrary', param_time, param_calcium, param_timestep, param_vol, param_init_conc)
+sim_pkc <- function(param_input_df, param_sim_params, param_vol, param_init_conc) {
+    .Call('_CalciumModelsLibrary_sim_pkc', PACKAGE = 'CalciumModelsLibrary', param_input_df, param_sim_params, param_vol, param_init_conc)
 }
 

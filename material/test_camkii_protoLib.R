@@ -1,22 +1,29 @@
 # Set rng seed
 set.seed(1)
 
-# Define variables
-timestep <- 0.5
+# Simulation parameters
+sim_params <- c(timestep = 0.5,
+                endTime = 400)
+# Model Parameters
+model_params <- c(vol = 5e-15,
+                  init_conc = c(W_I = 40,
+                                W_B = 0,
+                                W_P = 0,
+                                W_T = 0,
+                                W_A = 0))
 vol <- 5e-15
-f <- 6.0221415e14*vol
 init_conc <- c(40, 0, 0, 0, 0)
 
-# Create calcium input signal:
+# Create calcium input signal (unit: particle number nmol):
 # increase Ca from 50 to 600 at 100s, hold for 40s, then drop to 50 again
 # (from Dupont_camkii.cps)
 x <- seq(0, 400, 1)
-y <- append(rep(0, 99), rep(600*f, 41))
+y <- append(rep(0, 99), rep(600, 41))
 y <- append(y, rep(50, 261))
-input <- data.frame("time" = x, "Ca" = y)
+input_df <- data.frame("time" = x, "Ca" = y)
 
 # Simulate model
-output <- sim_camkii(input$time, input$Ca/f, timestep, vol, init_conc)
+output <- sim_camkii(input_df, sim_params, vol, init_conc)
 output <- as.data.frame(output)
 
 # Plot output

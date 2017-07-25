@@ -33,16 +33,14 @@ void init();
 //' sim_camkii()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix sim_camkii(NumericVector param_time,
-                   NumericVector param_calcium,
-                   double param_timestep,
+NumericMatrix sim_camkii(DataFrame param_input_df,
+                   NumericVector param_sim_params,
                    double param_vol,
                    NumericVector param_init_conc) {
   
   init_camkii();
-  return simulator_camkii(param_time,
-                   param_calcium,
-                   param_timestep,
+  return simulator_camkii(param_input_df,
+                   param_sim_params,
                    param_vol,
                    param_init_conc);
    

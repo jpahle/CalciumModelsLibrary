@@ -3,10 +3,7 @@ using namespace Rcpp;
 
 
 // Declare simulator function (prototyp)
-extern NumericMatrix simulator(NumericVector param_time,
-                   NumericVector param_calcium,
-                   double param_timestep,
+extern NumericMatrix simulator(DataFrame param_input_df,
+                   NumericVector param_sim_params,
                    double param_vol,
                    NumericVector param_init_conc);
-
-                   

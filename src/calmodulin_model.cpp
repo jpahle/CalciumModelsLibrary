@@ -35,14 +35,16 @@ void init();
 // [[Rcpp::export]]
 NumericMatrix sim_calmodulin(DataFrame param_input_df,
                    NumericVector param_sim_params,
-                   double param_vol,
-                   NumericVector param_init_conc) {
+                   List param_model_params) {
   
   init_calmodulin();
+  
+  // Use user-supplied model parameters over default values
+  
+  
   return simulator_calmodulin(param_input_df,
                    param_sim_params,
-                   param_vol,
-                   param_init_conc);
+                   param_model_params);
    
 }
 

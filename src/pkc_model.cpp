@@ -35,14 +35,12 @@ void init();
 // [[Rcpp::export]]
 NumericMatrix sim_pkc(DataFrame param_input_df,
                    NumericVector param_sim_params,
-                   double param_vol,
-                   NumericVector param_init_conc) {
+                   List param_model_params) {
   
   init_pkc();
   return simulator_pkc(param_input_df,
                    param_sim_params,
-                   param_vol,
-                   param_init_conc);
+                   param_model_params);
    
 }
 

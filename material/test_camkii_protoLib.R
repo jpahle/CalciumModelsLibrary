@@ -1,16 +1,16 @@
-# Set rng seed
+# Set rng seed for debugging tests
 set.seed(1)
 
-# Simulation parameters
+# Simulation parameters (Vector)
 sim_params <- c(timestep = 0.5,
                 endTime = 400)
-# Model Parameters
-model_params <- c(vol = 5e-15,
-                  init_conc = c(W_I = 40,
-                                W_B = 0,
-                                W_P = 0,
-                                W_T = 0,
-                                W_A = 0))
+# Model Parameters (List)
+model_params <- list(vol = 5e-15,
+                     init_conc = c(W_I = 40,
+                                   W_B = 0,
+                                   W_P = 0,
+                                   W_T = 0,
+                                   W_A = 0))
 vol <- 5e-15
 init_conc <- c(40, 0, 0, 0, 0)
 
@@ -23,7 +23,7 @@ y <- append(y, rep(50, 261))
 input_df <- data.frame("time" = x, "Ca" = y)
 
 # Simulate model
-output <- sim_camkii(input_df, sim_params, vol, init_conc)
+output <- sim_camkii(input_df, sim_params, model_params)
 output <- as.data.frame(output)
 
 # Plot output

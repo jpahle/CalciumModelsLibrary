@@ -1,30 +1,28 @@
-# Set rng seed
+# Set rng seed for debugging tests
 set.seed(1)
 
-# Simulation parameters
+# Simulation parameters (Vector)
 sim_params <- c(timestep = 1,
                 endTime = 1000)
-# Model Parameters
-model_params <- c(vol = 1e-15,
-                  init_conc = c(PKC_inact = 1000,
-                                CaPKC = 0,
-                                DAGCaPKC = 0,
-                                AADAGPKC_inact = 0,
-                                AADAGPKC_act = 0,
-                                PKCbasal = 20,
-                                AAPKC = 0,
-                                CaPKCmemb = 0,
-                                AACaPKC = 0,
-                                DAGPKCmemb = 0,
-                                DAGPKC = 0))
-init_conc <- c(1000, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0)
-vol <- 1e-15
+# Model Parameters (List)
+model_params <- list(vol = 1e-15,
+                     init_conc = c(PKC_inact = 1000,
+                                   CaPKC = 0,
+                                   DAGCaPKC = 0,
+                                   AADAGPKC_inact = 0,
+                                   AADAGPKC_act = 0,
+                                   PKCbasal = 20,
+                                   AAPKC = 0,
+                                   CaPKCmemb = 0,
+                                   AACaPKC = 0,
+                                   DAGPKCmemb = 0,
+                                   DAGPKC = 0))
 
 # Read Ca timeseries
 input_df <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
 # Simulate model
-output <- sim_pkc(input_df, sim_params, vol, init_conc)
+output <- sim_pkc(input_df, sim_params, model_params)
 output <- as.data.frame(output)
 colnames(output) <- c("time",
                       "calcium",

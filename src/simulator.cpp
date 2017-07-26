@@ -24,16 +24,14 @@ extern void update_system(unsigned int rIndex);
 //' Takes a calcium time series and simulates the coupled Ca-dependent protein.
 //'
 //' @param param_input_df A data frame: contains the times of the observations (column "time") and the cytosolic calcium concentration [nmol/l] (column "Ca").
-//' @param param_sim_params A numeric vector: contains all simulation parameters (timestep = the time interval between two output samples, endTime = the time at which to end the simulation).
-//' @param param_vol A numeric: the volume of the system [l].
-//' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
+//' @param param_sim_params A numeric vector: contains all simulation parameters ("timestep": the time interval between two output samples, "endTime": the time at which to end the simulation).
+//' @param param_model_params A list: contains all model parameters ("vol": the volume of the system [l], "init_conc": the initial concentrations of model species [nmol/l] and possibly other specific parameters that have been compared to the default parameter values in the C++ model file).
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
 NumericMatrix simulator(DataFrame param_input_df,
                    NumericVector param_sim_params,
-                   double param_vol,
-                   NumericVector param_init_conc) {
+                   List param_model_params) {
 
   // get R random generator state
   GetRNGstate();
@@ -45,8 +43,8 @@ NumericMatrix simulator(DataFrame param_input_df,
   timevector = param_input_df["time"];
   calcium = param_input_df["Ca"];
   timestep = param_sim_params["timestep"];
-  vol = param_vol;
-  NumericVector ic = param_init_conc;
+  vol = as<double>(param_model_params["vol"]);
+  NumericVector ic = as<NumericVector>(param_model_params["init_conc"]);
   // particle number <-> concentration (nmol/l) factor (n/f = c <=> c*f = n)
   double f;
   f = 6.0221415e14*vol;

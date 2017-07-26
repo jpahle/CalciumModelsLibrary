@@ -6,52 +6,49 @@
 using namespace Rcpp;
 
 // sim_calmodulin
-NumericMatrix sim_calmodulin(DataFrame param_input_df, NumericVector param_sim_params, double param_vol, NumericVector param_init_conc);
-RcppExport SEXP _CalciumModelsLibrary_sim_calmodulin(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP) {
+NumericMatrix sim_calmodulin(DataFrame param_input_df, NumericVector param_sim_params, List param_model_params);
+RcppExport SEXP _CalciumModelsLibrary_sim_calmodulin(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DataFrame >::type param_input_df(param_input_dfSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type param_sim_params(param_sim_paramsSEXP);
-    Rcpp::traits::input_parameter< double >::type param_vol(param_volSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type param_init_conc(param_init_concSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_calmodulin(param_input_df, param_sim_params, param_vol, param_init_conc));
+    Rcpp::traits::input_parameter< List >::type param_model_params(param_model_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_calmodulin(param_input_df, param_sim_params, param_model_params));
     return rcpp_result_gen;
 END_RCPP
 }
 // sim_camkii
-NumericMatrix sim_camkii(DataFrame param_input_df, NumericVector param_sim_params, double param_vol, NumericVector param_init_conc);
-RcppExport SEXP _CalciumModelsLibrary_sim_camkii(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP) {
+NumericMatrix sim_camkii(DataFrame param_input_df, NumericVector param_sim_params, List param_model_params);
+RcppExport SEXP _CalciumModelsLibrary_sim_camkii(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DataFrame >::type param_input_df(param_input_dfSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type param_sim_params(param_sim_paramsSEXP);
-    Rcpp::traits::input_parameter< double >::type param_vol(param_volSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type param_init_conc(param_init_concSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_camkii(param_input_df, param_sim_params, param_vol, param_init_conc));
+    Rcpp::traits::input_parameter< List >::type param_model_params(param_model_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_camkii(param_input_df, param_sim_params, param_model_params));
     return rcpp_result_gen;
 END_RCPP
 }
 // sim_pkc
-NumericMatrix sim_pkc(DataFrame param_input_df, NumericVector param_sim_params, double param_vol, NumericVector param_init_conc);
-RcppExport SEXP _CalciumModelsLibrary_sim_pkc(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_volSEXP, SEXP param_init_concSEXP) {
+NumericMatrix sim_pkc(DataFrame param_input_df, NumericVector param_sim_params, List param_model_params);
+RcppExport SEXP _CalciumModelsLibrary_sim_pkc(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DataFrame >::type param_input_df(param_input_dfSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type param_sim_params(param_sim_paramsSEXP);
-    Rcpp::traits::input_parameter< double >::type param_vol(param_volSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type param_init_conc(param_init_concSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_pkc(param_input_df, param_sim_params, param_vol, param_init_conc));
+    Rcpp::traits::input_parameter< List >::type param_model_params(param_model_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_pkc(param_input_df, param_sim_params, param_model_params));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_CalciumModelsLibrary_sim_calmodulin", (DL_FUNC) &_CalciumModelsLibrary_sim_calmodulin, 4},
-    {"_CalciumModelsLibrary_sim_camkii", (DL_FUNC) &_CalciumModelsLibrary_sim_camkii, 4},
-    {"_CalciumModelsLibrary_sim_pkc", (DL_FUNC) &_CalciumModelsLibrary_sim_pkc, 4},
+    {"_CalciumModelsLibrary_sim_calmodulin", (DL_FUNC) &_CalciumModelsLibrary_sim_calmodulin, 3},
+    {"_CalciumModelsLibrary_sim_camkii", (DL_FUNC) &_CalciumModelsLibrary_sim_camkii, 3},
+    {"_CalciumModelsLibrary_sim_pkc", (DL_FUNC) &_CalciumModelsLibrary_sim_pkc, 3},
     {NULL, NULL, 0}
 };
 

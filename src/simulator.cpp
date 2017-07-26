@@ -3,6 +3,20 @@
 using namespace Rcpp;
 
 
+// The general simulator file is included in every C++ model file -> if they provide a MODEL_NAME, all functions will be renamed in a model specific fashion
+#ifdef MODEL_NAME
+  #define Map_helper(x,y) x##y
+  #define Map(x,y) Map_helper(x,y)
+  #define simulator Map(simulator_, MODEL_NAME)
+  #define init Map(init_, MODEL_NAME)
+  #define calculate_amu Map(calculate_amu_, MODEL_NAME)
+  #define update_system Map(update_system_, MODEL_NAME)
+
+  // Placeholder init function since the R Wrapper Function tries to call it before its 'real' definition in the C++ model file
+  std::map <std::string, double> init();
+#endif
+
+
 // Global shared variables
 extern NumericVector timevector;
 extern double timestep;
@@ -13,42 +27,36 @@ extern double *amu;
 extern unsigned long long int *x;
 extern int nspecies;
 extern int nreactions;
-
-
+// Global shared functions
 extern void calculate_amu();
 extern void update_system(unsigned int rIndex);
 
 
-//' Couple a simulated Ca-dependent protein to a given calcium time series.
+//' Stochastic Simulator (Gillespie's Direct Method).
 //'
-//' Takes a calcium time series and simulates the coupled Ca-dependent protein.
+//' Simulate a calcium dependent protein coupled to an input calcium time series using an implementation of Gillespie's Direct Method SSA.
 //'
-//' @param param_time A numeric vector: the times of the observations.
-//' @param param_calcium A numeric vector: the concentrations of cytosolic calcium [nmol/l].
-//' @param param_timestep A numeric: the time interval between two output samples.
-//' @param param_vol A numeric: the volume of the system [l].
-//' @param param_init_conc A numeric vector: the initial concentrations of model species [nmol/l].
+//' @param user_input_df A data frame: contains the times of the observations (column "time") and the cytosolic calcium concentration [nmol/l] (column "Ca").
+//' @param user_sim_params A numeric vector: contains all simulation parameters ("timestep": the time interval between two output samples, "endTime": the time at which to end the simulation).
+//' @param user_model_params A list: contains all model parameters ("vol": the volume of the system [l], "init_conc": the initial concentrations of model species [nmol/l] and possibly other specific parameters that have been compared to the default parameter values in the C++ model file).
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
-NumericMatrix simulator(NumericVector param_time,
-                   NumericVector param_calcium,
-                   double param_timestep,
-                   double param_vol,
-                   NumericVector param_init_conc) {
+NumericMatrix simulator(DataFrame user_input_df,
+                   NumericVector user_sim_params,
+                   List user_model_params) {
 
   // get R random generator state
   GetRNGstate();
   
   /* VARIABLES */
-    
-  // get parameter values from arguments
-  timevector = param_time;
-  calcium = param_calcium;
-  timestep = param_timestep;
-  vol = param_vol;
-  NumericVector ic = param_init_conc;
-  // particle number to concentration (nmol/l) factor
+  // Get parameter values from arguments
+  timevector = user_input_df["time"];
+  calcium = user_input_df["Ca"];
+  timestep = user_sim_params["timestep"];
+  vol = as<double>(user_model_params["vol"]);
+  NumericVector ic = as<NumericVector>(user_model_params["init_conc"]);
+  // Particle number <-> concentration (nmol/l) factor (n/f = c <=> c*f = n)
   double f;
   f = 6.0221415e14*vol;
   // Control variables
@@ -66,7 +74,7 @@ NumericMatrix simulator(NumericVector param_time,
   double currentTime;
   double outputTime;
   startTime = timevector[0];
-  endTime = timevector[timevector.length()-1];
+  endTime = user_sim_params["endTime"];
   currentTime = startTime;
   outputTime = currentTime;
   // Return value
@@ -84,15 +92,15 @@ NumericMatrix simulator(NumericVector param_time,
   /* SIMULATION LOOP */
   while (currentTime < endTime) {
     R_CheckUserInterrupt();
-    // calculate propensity amu for every reaction
+    // Calculate propensity amu for every reaction
     calculate_amu();
-    // pkc_calculate_amu();
-    // calculate time step tau
+    // Calculate time step tau
     tau = - log(runif(1)[0])/amu[nreactions-1];
-    // check if reaction time exceeds time until the next observation
-    // and update output
-   if ((currentTime+tau)>=timevector[ntimepoint+1]) {
+    // Check if reaction time exceeds time until the next observation 
+    if ((currentTime+tau)>=timevector[ntimepoint+1]) {
+      // Set current simulation time to next timepoint in input calcium time series
       currentTime = timevector[ntimepoint+1];
+      // Update output
       while ((currentTime > outputTime)&&(outputTime < endTime)) {
         retval(noutput, 0) = outputTime;
         retval(noutput, 1) = calcium[ntimepoint];
@@ -104,13 +112,13 @@ NumericMatrix simulator(NumericVector param_time,
       }
       ntimepoint++;
     } else {
-      // select reaction to fire
+      // Select reaction to fire
       r2 = amu[nreactions-1] * runif(1)[0];
       rIndex = 0;
       for (rIndex=0; amu[rIndex] < r2; rIndex++);
-      // propagate time
+      // Propagate time
       currentTime += tau;
-     // update output
+     // Update output
       while ((currentTime > outputTime)&&(outputTime < endTime)) {
         retval(noutput, 0) = outputTime;
         retval(noutput, 1) = calcium[ntimepoint];
@@ -120,13 +128,12 @@ NumericMatrix simulator(NumericVector param_time,
         noutput++;
         outputTime += timestep;
       }
-      // update system state
-      // pkc_update_system(rIndex);
+      // Update system state
       update_system(rIndex);
     }
   }
-  // update output
-  while (outputTime <= endTime) {
+  // Update output
+  while (floor(outputTime*10000) <= floor(endTime*10000)) {
     retval(noutput, 0) = outputTime;
     retval(noutput, 1) = calcium[ntimepoint];
     for (xID=2; xID < 2+nspecies; xID++) {
@@ -140,7 +147,7 @@ NumericMatrix simulator(NumericVector param_time,
   Free(amu);
   Free(x);
   
-  /* send random generator state back to R*/
+  // Send random generator state back to R
   PutRNGstate();
   
   return retval;

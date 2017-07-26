@@ -5,26 +5,14 @@ using namespace Rcpp;
 
 //********************************/* R EXPORT OPTIONS */********************************
 
-// USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
-// Model description
+// 1. USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
 #define MODEL_NAME pkc
-
-// DON'T CHANGE THIS BLOCK!
-//#######################################################################################
-#define Map_helper(x,y) x##y
-#define Map(x,y) Map_helper(x,y)
-#define simulator Map(simulator_, MODEL_NAME)
-#define init Map(init_, MODEL_NAME)
-#define calculate_amu Map(calculate_amu_, MODEL_NAME)
-#define update_system Map(update_system_, MODEL_NAME)
+// include the simulation function with macros (#define statements) that make it model specific (based on MODEL_NAME)
 #include "simulator.cpp"
-// Placeholder init function since it is defined 
-// after the Wrapper Function tries to call it
-void init();
-//#######################################################################################
-
-// USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
-//' PKC Model Wrapper Function (exported to R)
+// Global variables
+static std::map <std::string, double> model_params;
+// 2. USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
+//' PKC Model R Wrapper Function (exported to R)
 //'
 //' This function calls the internal C++ simulator function to simulate the PKC model. 
 //' @param
@@ -33,80 +21,92 @@ void init();
 //' sim_pkc()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix sim_pkc(NumericVector param_time,
-                   NumericVector param_calcium,
-                   double param_timestep,
-                   double param_vol,
-                   NumericVector param_init_conc) {
-  
-  init_pkc();
-  return simulator_pkc(param_time,
-                   param_calcium,
-                   param_timestep,
-                   param_vol,
-                   param_init_conc);
+NumericMatrix sim_pkc(DataFrame user_input_df,
+                   NumericVector user_sim_params,
+                   List user_model_params) {
+
+  // Provide default model parameters
+  model_params = init_pkc();
+  // Model Parameter Check: replace model parameters with user-supplied values if necessary
+  List user_model_params_names = user_model_params.names();
+  for (int i=0; i < user_model_params_names.size(); i++) {
+    std::string current_name = user_model_params_names[i];
+    // the map.find("key") returns map.end() if it doesn't find the key 
+    if (model_params.find(current_name) != model_params.end()) {
+      model_params[current_name] = user_model_params[current_name];     
+    }
+  }
+  // Return result of the simulation
+  return simulator_pkc(user_input_df,
+                   user_sim_params,
+                   user_model_params);
    
 }
 
 
 
 //********************************/* MODEL DEFINITION */********************************
-// USER INPUT for new models: define model parameters, number of species, 
+// 3. USER INPUT for new models: define model parameters, number of species, 
 // number of reactions, propensity equations and update_system function 
 
-// Default Model Parameters
-static double k1 = 1;
-static double k2 = 50;
-static double k3 = 1.2e-7;
-static double k4 = 0.1;
-static double k5 = 1.2705;
-static double k6 = 3.5026;
-static double k7 = 1.2e-7;
-static double k8 = 0.1;
-static double k9 = 1;
-static double k10 = 0.1;
-static double k11 = 2;
-static double k12 = 0.2;
-static double k13 = 0.0006;
-static double k14 = 0.5;
-static double k15 = 7.998e-6;
-static double k16 = 8.6348;
-static double k17 = 6e-7;
-static double k18 = 0.1;
-static double k19 = 1.8e-5;
-static double k20 = 2;
-static double AA = 11000;  // given as conc. remains fixed throughout the simulation
-static double DAG = 5000;  // given as conc. remains fixed throughout the simulation
-
-// Model dimensions
-void init() {
+// Default model parameters
+std::map <std::string, double> init() {
+  // Model dimensions
   nspecies = 11;
   nreactions = 20;
+  
+  // Propensity equation parameters
+  std::map <std::string, double> default_params;
+  
+  default_params["k1"] = 1;
+  default_params["k2"] = 50;
+  default_params["k3"] = 1.2e-7;
+  default_params["k4"] = 0.1;
+  default_params["k5"] = 1.2705;
+  default_params["k6"] = 3.5026;
+  default_params["k7"] = 1.2e-7;
+  default_params["k8"] = 0.1;
+  default_params["k9"] = 1;
+  default_params["k10"] = 0.1;
+  default_params["k11"] = 2;
+  default_params["k12"] = 0.2;
+  default_params["k13"] = 0.0006;
+  default_params["k14"] = 0.5;
+  default_params["k15"] = 7.998e-6;
+  default_params["k16"] = 8.6348;
+  default_params["k17"] = 6e-7;
+  default_params["k18"] = 0.1;
+  default_params["k19"] = 1.8e-5;
+  default_params["k20"] = 2;
+  default_params["AA"] = 11000;  // given as conc. remains fixed throughout the simulation
+  default_params["DAG"] = 5000;  // given as conc. remains fixed throughout the simulation
+  
+  return default_params;
 }
 
 // Propensity calculation:
 // Calculates the propensities of all PKC model reactions and stores them in the vector amu.
 void calculate_amu() {
-  amu[0] = k1 * x[0];
-  amu[1] = amu[0] + k2 * x[5];
-  amu[2] = amu[1] + k3 * AA * (double)x[0]; /* AA given as conc., hence, no scaling */
-  amu[3] = amu[2] + k4 * x[6];
-  amu[4] = amu[3] + k5 * x[1];
-  amu[5] = amu[4] + k6 * x[7];
-  amu[6] = amu[5] + k7 * AA * (double)x[1];  /* AA given as conc., hence, no scaling */
-  amu[7] = amu[6] + k8 * x[8];
-  amu[8] = amu[7] + k9 * x[2];
-  amu[9] = amu[8] + k10 * x[9];
-  amu[10] = amu[9] + k11 * x[3];
-  amu[11] = amu[10] + k12 * x[4];
-  amu[12] = amu[11] + calcium[ntimepoint] * k13 * (double)x[0]; /* Ca given as conc., hence, no scaling */
-  amu[13] = amu[12] + k14 * x[1];
-  amu[14] = amu[13] + k15 * DAG * (double)x[1]; /* DAG given as conc., hence, no scaling */
-  amu[15] = amu[14] + k16 * x[2];
-  amu[16] = amu[15] + k17 * DAG * (double)x[0]; /* DAG given as conc., hence, no scaling */
-  amu[17] = amu[16] + k18 * x[10];
-  amu[18] = amu[17] + k19 * AA * (double)x[10];  /* AA given as conc., hence, no scaling */
-  amu[19] = amu[18] + k20 * x[3];
+  amu[0] = model_params["k1"] * x[0];
+  amu[1] = amu[0] + model_params["k2"] * x[5];
+  amu[2] = amu[1] + model_params["k3"] * model_params["AA"] * (double)x[0]; /* AA given as conc., hence, no scaling */
+  amu[3] = amu[2] + model_params["k4"] * x[6];
+  amu[4] = amu[3] + model_params["k5"] * x[1];
+  amu[5] = amu[4] + model_params["k6"] * x[7];
+  amu[6] = amu[5] + model_params["k7"] * model_params["AA"] * (double)x[1];  /* AA given as conc., hence, no scaling */
+  amu[7] = amu[6] + model_params["k8"] * x[8];
+  amu[8] = amu[7] + model_params["k9"] * x[2];
+  amu[9] = amu[8] + model_params["k10"] * x[9];
+  amu[10] = amu[9] + model_params["k11"] * x[3];
+  amu[11] = amu[10] + model_params["k12"] * x[4];
+  amu[12] = amu[11] + calcium[ntimepoint] * model_params["k13"] * (double)x[0]; /* Ca given as conc., hence, no scaling */
+  amu[13] = amu[12] + model_params["k14"] * x[1];
+  amu[14] = amu[13] + model_params["k15"] * model_params["DAG"] * (double)x[1]; /* DAG given as conc., hence, no scaling */
+  amu[15] = amu[14] + model_params["k16"] * x[2];
+  amu[16] = amu[15] + model_params["k17"] * model_params["DAG"] * (double)x[0]; /* DAG given as conc., hence, no scaling */
+  amu[17] = amu[16] + model_params["k18"] * x[10];
+  amu[18] = amu[17] + model_params["k19"] * model_params["AA"] * (double)x[10];  /* AA given as conc., hence, no scaling */
+  amu[19] = amu[18] + model_params["k20"] * x[3];
 }
 
 // System update:

@@ -5,26 +5,14 @@ using namespace Rcpp;
 
 //********************************/* R EXPORT OPTIONS */********************************
 
-// USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
-// Model description
+// 1. USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
 #define MODEL_NAME camkii
-
-// DON'T CHANGE THIS BLOCK!
-//#######################################################################################
-#define Map_helper(x,y) x##y
-#define Map(x,y) Map_helper(x,y)
-#define simulator Map(simulator_, MODEL_NAME)
-#define init Map(init_, MODEL_NAME)
-#define calculate_amu Map(calculate_amu_, MODEL_NAME)
-#define update_system Map(update_system_, MODEL_NAME)
+// include the simulation function with macros (#define statements) that make it model specific (based on MODEL_NAME)
 #include "simulator.cpp"
-// Placeholder init function since it is defined 
-// after the Wrapper Function tries to call it
-void init();
-//#######################################################################################
-
-// USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
-//' CamKII Model Wrapper Function (exported to R)
+// Global variables
+static std::map <std::string, double> model_params;
+// 2. USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
+//' CamKII Model R Wrapper Function (exported to R)
 //'
 //' This function calls the internal C++ simulator function to simulate the CamKII model. 
 //' @param
@@ -33,72 +21,84 @@ void init();
 //' sim_camkii()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix sim_camkii(NumericVector param_time,
-                   NumericVector param_calcium,
-                   double param_timestep,
-                   double param_vol,
-                   NumericVector param_init_conc) {
-  
-  init_camkii();
-  return simulator_camkii(param_time,
-                   param_calcium,
-                   param_timestep,
-                   param_vol,
-                   param_init_conc);
+NumericMatrix sim_camkii(DataFrame user_input_df,
+                   NumericVector user_sim_params,
+                   List user_model_params) {
+
+  // Provide default model parameters
+  model_params = init_camkii();
+  // Model Parameter Check: replace model parameters with user-supplied values if necessary
+  List user_model_params_names = user_model_params.names();
+  for (int i=0; i < user_model_params_names.size(); i++) {
+    std::string current_name = user_model_params_names[i];
+    // the map.find("key") returns map.end() if it doesn't find the key 
+    if (model_params.find(current_name) != model_params.end()) {
+      model_params[current_name] = user_model_params[current_name];     
+    }
+  }
+  // Return result of the simulation
+  return simulator_camkii(user_input_df,
+                   user_sim_params,
+                   user_model_params);
    
 }
 
 
 
 //********************************/* MODEL DEFINITION */********************************
-// USER INPUT for new models: define model parameters, number of species, 
+// 3. USER INPUT for new models: define model parameters, number of species, 
 // number of reactions, propensity equations and update_system function 
 
-// Default Model Parameters
-static double a = -0.22;
-static double b = 1.826;
-static double c = 0.1;
-static double k_IB = 0.01;
-static double k_BI = 0.8;
-static double k_PT = 1;
-static double k_TP = 1e-12;
-static double k_TA = 0.0008;
-static double k_AT = 0.01;
-static double k_AA = 0.29;
-static double c_B = 0.75;
-static double c_P = 1;
-static double c_T = 0.8;
-static double c_A = 0.8;
-static double camT = 1000;
-static double Kd = 1000;
-static double Vm_phos = 0.005;
-static double Kd_phos = 0.3;
-static double totalC = 40;
-static int h = 4;
-
-// Model dimensions
-void init() {
+// Default model parameters
+std::map <std::string, double> init() {
+  // Model dimensions
   nspecies = 5;
   nreactions = 10;
+  
+  // Propensity equation parameters
+  std::map <std::string, double> default_params;
+  
+  default_params["a"] = -0.22;
+  default_params["b"] = 1.826;
+  default_params["c"] = 0.1;
+  default_params["k_IB"] = 0.01;
+  default_params["k_BI"] = 0.8;
+  default_params["k_PT"] = 1;
+  default_params["k_TP"] = 1e-12;
+  default_params["k_TA"] = 0.0008;
+  default_params["k_AT"] = 0.01;
+  default_params["k_AA"] = 0.29;
+  default_params["c_B"] = 0.75;
+  default_params["c_P"] = 1;
+  default_params["c_T"] = 0.8;
+  default_params["c_A"] = 0.8;
+  default_params["camT"] = 1000;
+  default_params["Kd"] = 1000;
+  default_params["Vm_phos"] = 0.005;
+  default_params["Kd_phos"] = 0.3;
+  default_params["totalC"] = 40;
+  default_params["h"] = 4.0;
+  
+  return default_params;
 }
 
 // Propensity calculation:
 // Calculates the propensities of all CamKII model reactions and stores them in the vector amu.
 void calculate_amu() {
-  amu[0] = x[0] * ((k_IB * camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h)));
-  amu[1] = amu[0] + k_BI * x[1];
+  amu[0] = x[0] * ((model_params["k_IB"] * model_params["camT"] * pow((double)calcium[ntimepoint],(double)model_params["h"])) / (pow((double)calcium[ntimepoint],(double)model_params["h"]) + pow((double)model_params["Kd"],(double)model_params["h"])));
+  amu[1] = amu[0] + model_params["k_BI"] * x[1];
   
-  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / totalC;
-  double prob =  a * activeSubunits + b*(pow((double)activeSubunits,(double)2)) + c*(pow((double)activeSubunits,(double)3));
-  amu[2] = amu[1] +  totalC * k_AA * prob * ((c_B * x[1]) / pow((double)totalC,(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
+  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / model_params["totalC"];
+  double prob =  model_params["a"] * activeSubunits + model_params["b"]*(pow((double)activeSubunits,(double)2)) + model_params["c"]*(pow((double)activeSubunits,(double)3));
+  amu[2] = amu[1] +  model_params["totalC"] * model_params["k_AA"] * prob * ((model_params["c_B"] * x[1]) / pow((double)model_params["totalC"],(double)2)) * (2*model_params["c_B"]*x[1] + model_params["c_P"]*x[2] + model_params["c_T"]*x[3]+ model_params["c_A"]*x[4]);
   
-  amu[3] = amu[2] + k_PT * x[2];
-  amu[4] = amu[3] + k_TP * x[3] * pow((double)calcium[ntimepoint],(double)h);
-  amu[5] = amu[4] + k_TA * x[3];
-  amu[6] = amu[5] + k_AT * x[4] * (camT - ((camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h))));
-  amu[7] = amu[6] + ((Vm_phos * x[2]) / (Kd_phos + (x[2] / totalC)));
-  amu[8] = amu[7] + ((Vm_phos * x[3]) / (Kd_phos + (x[3] / totalC)));
-  amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / totalC)));
+  amu[3] = amu[2] + model_params["k_PT"] * x[2];
+  amu[4] = amu[3] + model_params["k_TP"] * x[3] * pow((double)calcium[ntimepoint],(double)model_params["h"]);
+  amu[5] = amu[4] + model_params["k_TA"] * x[3];
+  amu[6] = amu[5] + model_params["k_AT"] * x[4] * (model_params["camT"] - ((model_params["camT"] * pow((double)calcium[ntimepoint],(double)model_params["h"])) / (pow((double)calcium[ntimepoint],(double)model_params["h"]) + pow((double)model_params["Kd"],(double)model_params["h"]))));
+  amu[7] = amu[6] + ((model_params["Vm_phos"] * x[2]) / (model_params["Kd_phos"] + (x[2] / model_params["totalC"])));
+  amu[8] = amu[7] + ((model_params["Vm_phos"] * x[3]) / (model_params["Kd_phos"] + (x[3] / model_params["totalC"])));
+  amu[9] = amu[8] + ((model_params["Vm_phos"] * x[4]) / (model_params["Kd_phos"] + (x[4] / model_params["totalC"])));
 }
 
 // System update:

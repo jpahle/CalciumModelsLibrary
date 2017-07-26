@@ -6,41 +6,41 @@
 using namespace Rcpp;
 
 // sim_calmodulin
-NumericMatrix sim_calmodulin(DataFrame param_input_df, NumericVector param_sim_params, List param_model_params);
-RcppExport SEXP _CalciumModelsLibrary_sim_calmodulin(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_model_paramsSEXP) {
+NumericMatrix sim_calmodulin(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+RcppExport SEXP _CalciumModelsLibrary_sim_calmodulin(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type param_input_df(param_input_dfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type param_sim_params(param_sim_paramsSEXP);
-    Rcpp::traits::input_parameter< List >::type param_model_params(param_model_paramsSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_calmodulin(param_input_df, param_sim_params, param_model_params));
+    Rcpp::traits::input_parameter< DataFrame >::type user_input_df(user_input_dfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type user_sim_params(user_sim_paramsSEXP);
+    Rcpp::traits::input_parameter< List >::type user_model_params(user_model_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_calmodulin(user_input_df, user_sim_params, user_model_params));
     return rcpp_result_gen;
 END_RCPP
 }
 // sim_camkii
-NumericMatrix sim_camkii(DataFrame param_input_df, NumericVector param_sim_params, List param_model_params);
-RcppExport SEXP _CalciumModelsLibrary_sim_camkii(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_model_paramsSEXP) {
+NumericMatrix sim_camkii(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+RcppExport SEXP _CalciumModelsLibrary_sim_camkii(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type param_input_df(param_input_dfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type param_sim_params(param_sim_paramsSEXP);
-    Rcpp::traits::input_parameter< List >::type param_model_params(param_model_paramsSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_camkii(param_input_df, param_sim_params, param_model_params));
+    Rcpp::traits::input_parameter< DataFrame >::type user_input_df(user_input_dfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type user_sim_params(user_sim_paramsSEXP);
+    Rcpp::traits::input_parameter< List >::type user_model_params(user_model_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_camkii(user_input_df, user_sim_params, user_model_params));
     return rcpp_result_gen;
 END_RCPP
 }
 // sim_pkc
-NumericMatrix sim_pkc(DataFrame param_input_df, NumericVector param_sim_params, List param_model_params);
-RcppExport SEXP _CalciumModelsLibrary_sim_pkc(SEXP param_input_dfSEXP, SEXP param_sim_paramsSEXP, SEXP param_model_paramsSEXP) {
+NumericMatrix sim_pkc(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+RcppExport SEXP _CalciumModelsLibrary_sim_pkc(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type param_input_df(param_input_dfSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type param_sim_params(param_sim_paramsSEXP);
-    Rcpp::traits::input_parameter< List >::type param_model_params(param_model_paramsSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_pkc(param_input_df, param_sim_params, param_model_params));
+    Rcpp::traits::input_parameter< DataFrame >::type user_input_df(user_input_dfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type user_sim_params(user_sim_paramsSEXP);
+    Rcpp::traits::input_parameter< List >::type user_model_params(user_model_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_pkc(user_input_df, user_sim_params, user_model_params));
     return rcpp_result_gen;
 END_RCPP
 }

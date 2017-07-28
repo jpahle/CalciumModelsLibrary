@@ -28,7 +28,7 @@ output <- as.data.frame(output)
 
 # Plot output
 colnames(output) <- c("time", "calcium", "W_I", "W_B", "W_P", "W_T", "W_A")
-plot(output$time, output$calcium, col="blue", xlim=c(100, 160), ylim = c(0, 55), type="l", xlab="time", ylab="concentration")
+plot(output$time, output$calcium, col="blue", xlim=c(90, 160), ylim = c(0, 55), type="l", xlab="time", ylab="concentration")
 lines(output$time, output$W_I, col="black", type = "l")
 lines(output$time, output$W_B, col="red", type="l")
 lines(output$time, output$W_P, col="green", type="l")

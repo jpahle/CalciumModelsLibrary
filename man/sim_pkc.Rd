@@ -2,13 +2,13 @@
 % Please edit documentation in R/RcppExports.R
 \name{sim_pkc}
 \alias{sim_pkc}
-\title{PKC Model Wrapper Function (exported to R)}
+\title{PKC Model R Wrapper Function (exported to R)}
 \usage{
-sim_pkc(param_time, param_calcium, param_timestep, param_vol, param_init_conc)
+sim_pkc(user_input_df, user_sim_params, user_model_params)
 }
 \description{
 This function calls the internal C++ simulator function to simulate the PKC model.
 }
 \examples{
-model_pkc()
+sim_pkc()
 }

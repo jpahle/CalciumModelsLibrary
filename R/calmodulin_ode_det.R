@@ -2,7 +2,7 @@
 calmodulin_detSim <- function(input_df, sim_params, input_model_params) {
   
   # create calcium input function from Ca time series that can be evaluated at specific time points
-  Ca_input_fun <- approxfun(input_df$time, input_df$Ca)
+  Ca_input_fun <- approxfun(input_df$time, input_df$Ca, method = "linear")
   # create simulation output time vector
   times <- seq(input_df$time[1], sim_params[["endTime"]], sim_params[["timestep"]])
  

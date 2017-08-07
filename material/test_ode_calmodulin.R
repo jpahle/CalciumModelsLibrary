@@ -1,5 +1,5 @@
 # Define simulation parameters
-sim_params <- c(timestep = 0.05,
+sim_params <- c(timestep = 0.15,
                 endTime = 100)
 model_params <- list(vol = 5e-14,
                      init_conc = c(Cal_off = 5,

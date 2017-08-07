@@ -5,6 +5,19 @@
 
 using namespace Rcpp;
 
+// sim_ano
+NumericMatrix sim_ano(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+RcppExport SEXP _CalciumModelsLibrary_sim_ano(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type user_input_df(user_input_dfSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type user_sim_params(user_sim_paramsSEXP);
+    Rcpp::traits::input_parameter< List >::type user_model_params(user_model_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_ano(user_input_df, user_sim_params, user_model_params));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sim_calcineurin
 NumericMatrix sim_calcineurin(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
 RcppExport SEXP _CalciumModelsLibrary_sim_calcineurin(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
@@ -72,6 +85,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_CalciumModelsLibrary_sim_ano", (DL_FUNC) &_CalciumModelsLibrary_sim_ano, 3},
     {"_CalciumModelsLibrary_sim_calcineurin", (DL_FUNC) &_CalciumModelsLibrary_sim_calcineurin, 3},
     {"_CalciumModelsLibrary_sim_calmodulin", (DL_FUNC) &_CalciumModelsLibrary_sim_calmodulin, 3},
     {"_CalciumModelsLibrary_sim_camkii", (DL_FUNC) &_CalciumModelsLibrary_sim_camkii, 3},

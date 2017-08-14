@@ -11,9 +11,8 @@ model_params <- list(vol = 5e-15,
                                    W_P = 0,
                                    W_T = 0,
                                    W_A = 0))
-vol <- 5e-15
-init_conc <- c(40, 0, 0, 0, 0)
 
+                                   
 # Create calcium input signal (unit: particle number nmol):
 # increase Ca from 50 to 600 at 100s, hold for 40s, then drop to 50 again
 # (from Dupont_camkii.cps)

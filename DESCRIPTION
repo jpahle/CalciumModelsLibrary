@@ -3,7 +3,7 @@ Title: Library of Calcium-Sensitive Protein Models
 Date: 2013-11-09
 Version: 0.0.0.9000
 Authors@R: c(
-    person("JÃ¼rgen", "Pahle", role = c("aut", "cre", "cph"), email = "CalciumModelsLibrary@pahle.de"),
+    person("Jürgen", "Pahle", role = c("aut", "cre", "cph"), email = "CalciumModelsLibrary@pahle.de"),
     person("Clara", "Grundmann", role = "ctb"),
     person("Sarah", "Kaspar", role = "ctb"),
     person("Sonja", "Krausert",role = "ctb"),
@@ -25,4 +25,5 @@ LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 LinkingTo: Rcpp
-Imports: Rcpp
+Imports: Rcpp,
+    deSolve

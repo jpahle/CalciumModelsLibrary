@@ -87,26 +87,51 @@ std::map <std::string, double> init() {
 // Propensity calculation:
 // Calculates the propensities of all PKC model reactions and stores them in the vector amu.
 void calculate_amu() {
-  amu[0] = model_params["k1"] * x[0];
-  amu[1] = amu[0] + model_params["k2"] * x[5];
-  amu[2] = amu[1] + model_params["k3"] * model_params["AA"] * (double)x[0]; /* AA given as conc., hence, no scaling */
-  amu[3] = amu[2] + model_params["k4"] * x[6];
-  amu[4] = amu[3] + model_params["k5"] * x[1];
-  amu[5] = amu[4] + model_params["k6"] * x[7];
-  amu[6] = amu[5] + model_params["k7"] * model_params["AA"] * (double)x[1];  /* AA given as conc., hence, no scaling */
-  amu[7] = amu[6] + model_params["k8"] * x[8];
-  amu[8] = amu[7] + model_params["k9"] * x[2];
-  amu[9] = amu[8] + model_params["k10"] * x[9];
-  amu[10] = amu[9] + model_params["k11"] * x[3];
-  amu[11] = amu[10] + model_params["k12"] * x[4];
-  amu[12] = amu[11] + calcium[ntimepoint] * model_params["k13"] * (double)x[0]; /* Ca given as conc., hence, no scaling */
-  amu[13] = amu[12] + model_params["k14"] * x[1];
-  amu[14] = amu[13] + model_params["k15"] * model_params["DAG"] * (double)x[1]; /* DAG given as conc., hence, no scaling */
-  amu[15] = amu[14] + model_params["k16"] * x[2];
-  amu[16] = amu[15] + model_params["k17"] * model_params["DAG"] * (double)x[0]; /* DAG given as conc., hence, no scaling */
-  amu[17] = amu[16] + model_params["k18"] * x[10];
-  amu[18] = amu[17] + model_params["k19"] * model_params["AA"] * (double)x[10];  /* AA given as conc., hence, no scaling */
-  amu[19] = amu[18] + model_params["k20"] * x[3];
+  
+  // Look up model parameters in array 'double = model_params' initially
+  double k1 = model_params["k1"];
+  double k2 = model_params["k2"];
+  double k3 = model_params["k3"];
+  double k4 = model_params["k4"];
+  double k5 = model_params["k5"];
+  double k6 = model_params["k6"];
+  double k7 = model_params["k7"];
+  double k8 = model_params["k8"];
+  double k9 = model_params["k9"];
+  double k10 = model_params["k10"];
+  double k11 = model_params["k11"];
+  double k12 = model_params["k12"];
+  double k13 = model_params["k13"];
+  double k14 = model_params["k14"];
+  double k15 = model_params["k15"];
+  double k16 = model_params["k16"];
+  double k17 = model_params["k17"];
+  double k18 = model_params["k18"];
+  double k19 = model_params["k19"];
+  double k20 = model_params["k20"];
+  double AA = model_params["AA"];
+  double DAG = model_params["DAG"];
+  
+  amu[0] = k1 * x[0];
+  amu[1] = amu[0] + k2 * x[5];
+  amu[2] = amu[1] + k3 * AA * (double)x[0]; /* AA given as conc., hence, no scaling */
+  amu[3] = amu[2] + k4 * x[6];
+  amu[4] = amu[3] + k5 * x[1];
+  amu[5] = amu[4] + k6 * x[7];
+  amu[6] = amu[5] + k7 * AA * (double)x[1];  /* AA given as conc., hence, no scaling */
+  amu[7] = amu[6] + k8 * x[8];
+  amu[8] = amu[7] + k9 * x[2];
+  amu[9] = amu[8] + k10 * x[9];
+  amu[10] = amu[9] + k11 * x[3];
+  amu[11] = amu[10] + k12 * x[4];
+  amu[12] = amu[11] + calcium[ntimepoint] * k13 * (double)x[0]; /* Ca given as conc., hence, no scaling */
+  amu[13] = amu[12] + k14 * x[1];
+  amu[14] = amu[13] + k15 * DAG * (double)x[1]; /* DAG given as conc., hence, no scaling */
+  amu[15] = amu[14] + k16 * x[2];
+  amu[16] = amu[15] + k17 * DAG * (double)x[0]; /* DAG given as conc., hence, no scaling */
+  amu[17] = amu[16] + k18 * x[10];
+  amu[18] = amu[17] + k19 * AA * (double)x[10];  /* AA given as conc., hence, no scaling */
+  amu[19] = amu[18] + k20 * x[3];
 }
 
 // System update:

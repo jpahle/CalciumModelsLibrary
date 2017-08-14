@@ -69,8 +69,14 @@ std::map <std::string, double> init() {
 // Propensity calculation:
 // Calculates the propensities of all Calcineurin model reactions and stores them in the vector amu.
 void calculate_amu() {
-  amu[0] = model_params["k_on"] * pow((double)calcium[ntimepoint],(double)model_params["p"]) * x[0];
-  amu[1] = amu[0] + model_params["k_off"] * x[1];
+  
+  // Look up model parameters in array 'model_params' initially
+  double k_on = model_params["k_on"];
+  double k_off = model_params["k_off"];
+  double p = model_params["p"];  
+  
+  amu[0] = k_on * pow((double)calcium[ntimepoint],(double)p) * x[0];
+  amu[1] = amu[0] + k_off * x[1];
 }
 
 // System update:

@@ -78,11 +78,25 @@ std::map <std::string, double> init() {
 // Propensity calculation:
 // Calculates the propensities of all glycogen phosphorylase model reactions and stores them in the vector amu.
 void calculate_amu() {
+  
+  // Look up model parameters in array 'double = model_params' initially
+  double VpM1 = model_params["VpM1"];
+  double VpM2 = model_params["VpM2"];
+  double alpha = model_params["alpha"];
+  double gamma = model_params["gamma"];
+  double K11 = model_params["K11"];
+  double Kp2 = model_params["Kp2"];
+  double Ka1_conc = model_params["Ka1_conc"];
+  double Ka2_conc = model_params["Ka2_conc"];
+  double Ka5_conc = model_params["Ka5_conc"];
+  double Ka6_conc = model_params["Ka6_conc"];
+  double gluc_conc = model_params["gluc_conc"];
+  
   double activeFraction = x[1]/(x[0]+x[1]);
   
   // divide VpM1 and VpM2 by 60 to convert the units from min^-1 to s^-1
-  amu[0] = (model_params["VpM1"] / 60.0 * (1.0 + model_params["gamma"] * pow((double)calcium[ntimepoint],4) / (pow(model_params["Ka5_conc"],4) + pow((double)calcium[ntimepoint],4))) * ( 1.0 - activeFraction)) / ((model_params["K11"] / (1.0 + pow((double)calcium[ntimepoint],4) / pow(model_params["Ka6_conc"],4))) + 1.0 - activeFraction) * (x[0]+x[1]);
-  amu[1] = amu[0] + ((model_params["VpM2"] / 60.0 * (1.0 + model_params["alpha"] * (model_params["gluc_conc"]) / (model_params["Ka1_conc"] + model_params["gluc_conc"])) * activeFraction) / (model_params["Kp2"] / (1 + model_params["gluc_conc"] / model_params["Ka2_conc"]) + activeFraction) * (x[0]+x[1]));
+  amu[0] = (VpM1 / 60.0 * (1.0 + gamma * pow((double)calcium[ntimepoint],4) / (pow(Ka5_conc,4) + pow((double)calcium[ntimepoint],4))) * ( 1.0 - activeFraction)) / ((K11 / (1.0 + pow((double)calcium[ntimepoint],4) / pow(Ka6_conc,4))) + 1.0 - activeFraction) * (x[0]+x[1]);
+  amu[1] = amu[0] + ((VpM2 / 60.0 * (1.0 + alpha * (gluc_conc) / (Ka1_conc + gluc_conc)) * activeFraction) / (Kp2 / (1 + gluc_conc / Ka2_conc) + activeFraction) * (x[0]+x[1]));
 }
 
 // System update:

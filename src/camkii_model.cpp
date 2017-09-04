@@ -85,20 +85,43 @@ std::map <std::string, double> init() {
 // Propensity calculation:
 // Calculates the propensities of all CamKII model reactions and stores them in the vector amu.
 void calculate_amu() {
-  amu[0] = x[0] * ((model_params["k_IB"] * model_params["camT"] * pow((double)calcium[ntimepoint],(double)model_params["h"])) / (pow((double)calcium[ntimepoint],(double)model_params["h"]) + pow((double)model_params["Kd"],(double)model_params["h"])));
-  amu[1] = amu[0] + model_params["k_BI"] * x[1];
   
-  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / model_params["totalC"];
-  double prob =  model_params["a"] * activeSubunits + model_params["b"]*(pow((double)activeSubunits,(double)2)) + model_params["c"]*(pow((double)activeSubunits,(double)3));
-  amu[2] = amu[1] +  model_params["totalC"] * model_params["k_AA"] * prob * ((model_params["c_B"] * x[1]) / pow((double)model_params["totalC"],(double)2)) * (2*model_params["c_B"]*x[1] + model_params["c_P"]*x[2] + model_params["c_T"]*x[3]+ model_params["c_A"]*x[4]);
+  // Look up model parameters in array 'model_params' initially
+  double a = model_params["a"];
+  double b = model_params["b"];
+  double c = model_params["c"];
+  double k_IB = model_params["k_IB"];
+  double k_BI = model_params["k_BI"];
+  double k_PT = model_params["k_PT"];
+  double k_TP = model_params["k_TP"];
+  double k_TA = model_params["k_TA"];
+  double k_AT = model_params["k_AT"];
+  double k_AA = model_params["k_AA"];
+  double c_B = model_params["c_B"];
+  double c_P = model_params["c_P"];
+  double c_T = model_params["c_T"];
+  double c_A = model_params["c_A"];
+  double camT = model_params["camT"];
+  double Kd = model_params["Kd"];
+  double Vm_phos = model_params["Vm_phos"];
+  double Kd_phos = model_params["Kd_phos"];
+  double totalC = model_params["totalC"];
+  double h = model_params["h"];
   
-  amu[3] = amu[2] + model_params["k_PT"] * x[2];
-  amu[4] = amu[3] + model_params["k_TP"] * x[3] * pow((double)calcium[ntimepoint],(double)model_params["h"]);
-  amu[5] = amu[4] + model_params["k_TA"] * x[3];
-  amu[6] = amu[5] + model_params["k_AT"] * x[4] * (model_params["camT"] - ((model_params["camT"] * pow((double)calcium[ntimepoint],(double)model_params["h"])) / (pow((double)calcium[ntimepoint],(double)model_params["h"]) + pow((double)model_params["Kd"],(double)model_params["h"]))));
-  amu[7] = amu[6] + ((model_params["Vm_phos"] * x[2]) / (model_params["Kd_phos"] + (x[2] / model_params["totalC"])));
-  amu[8] = amu[7] + ((model_params["Vm_phos"] * x[3]) / (model_params["Kd_phos"] + (x[3] / model_params["totalC"])));
-  amu[9] = amu[8] + ((model_params["Vm_phos"] * x[4]) / (model_params["Kd_phos"] + (x[4] / model_params["totalC"])));
+  amu[0] = x[0] * ((k_IB * camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h)));
+  amu[1] = amu[0] + k_BI * x[1];
+  
+  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / totalC;
+  double prob =  a * activeSubunits + b*(pow((double)activeSubunits,(double)2)) + c*(pow((double)activeSubunits,(double)3));
+  amu[2] = amu[1] +  totalC * k_AA * prob * ((c_B * x[1]) / pow((double)totalC,(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
+  
+  amu[3] = amu[2] + k_PT * x[2];
+  amu[4] = amu[3] + k_TP * x[3] * pow((double)calcium[ntimepoint],(double)h);
+  amu[5] = amu[4] + k_TA * x[3];
+  amu[6] = amu[5] + k_AT * x[4] * (camT - ((camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h))));
+  amu[7] = amu[6] + ((Vm_phos * x[2]) / (Kd_phos + (x[2] / totalC)));
+  amu[8] = amu[7] + ((Vm_phos * x[3]) / (Kd_phos + (x[3] / totalC)));
+  amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / totalC)));
 }
 
 // System update:

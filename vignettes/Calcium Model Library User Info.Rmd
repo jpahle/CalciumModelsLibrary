@@ -1,0 +1,72 @@
+---
+title: "Calcium Model Library - User Information"
+author: "Nicolas Huber"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Calcium Model Library - User Information}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(CalciumModelsLibrary)
+```
+
+## Introduction
+
+This package contains stochastic and deterministic model files of proteins which are differentially regulated by calcium. 
+All implemented models can be simulated via an intuitive interface which allows the user to define both simulation and model-specific parameters as well as the visualization of the simulation output. 
+
+## About Simulations
+
+Stochastic model files are implemented in C++ and are accessed by R via functions provided by the Rcpp package (<https://cran.r-project.org/web/packages/Rcpp/index.html>). The simulation of stochastic model files is handled by a custom implementation of Gillespie's Direct Method (Gillespie, 1977). Therefore, stochastic model files provide propensity equations for all reactions.
+
+Deterministic model files are implemented in R and contain differential equations. They are simulated by the LSODA algorithm (Hindmarsh, 1983) as it is implemented in the deSolve package (<https://cran.r-project.org/web/packages/deSolve/index.html>).
+
+## Model Information
+
+The following models are part of this library:
+
+- Ano1, Jonas Förster
+- Calcineurin, Martin Zauser
+- Calmodulin, Dr. Jürgen Pahle
+- CamKII, Sarah Kaspar
+- Glycogen Phosphorylase, Martin Zauser
+- PKC, Arne Schoch
+
+Add more information! (cite publications, add info on relevant changes, etc.)
+
+## Example Use Cases
+
+1.) Simulation the Calmodulin model stochastically and plot the results:
+
+```{r}
+# Supply simulation parameters as vector
+sim_params <- c(timestep = 0.05,
+                endTime = 100)
+# Supply model parameters as list
+model_params <- list(vol = 5e-14,
+                     init_conc = c(Prot_inact = 5,
+                                   Prot_act = 0))
+
+# Supply a calcium input timeseries file
+input_df <- read.table(system.file("extdata/ca5e-14_2.85_1000_0.05s.out", package = "CalciumModelsLibrary"), col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
+f <- 6.0221415e14*model_params[["vol"]]
+input_df["Ca"] <- input_df["Ca"]/f
+
+# Stochastically simulate the model
+output <- sim_calmodulin(input_df, sim_params, model_params)
+output <- as.data.frame(output)
+
+# Plot the output
+colnames(output) <- c("time", "calcium", "Prot_inact", "Prot_act")
+plot(output$time, output$calcium, col="blue", xlim=c(0, 100), ylim=c(0,15), type="l", xlab="time", ylab="concentration")
+lines(output$time, output$Prot_act, col="red", type="l")
+legend("topright", legend=c("calcium", "Prot_act"), col=c("blue", "red"), lty=c(1,1))
+```
+

@@ -22,7 +22,7 @@ library(CalciumModelsLibrary)
 This R package contains mathematical models of proteins which are differentially regulated by calcium. 
 All implemented models can be simulated stochastically and deterministically via an intuitive interface which allows the user to define both simulation and model-specific parameters as well as the visualization of the simulation output. 
 
-## Model Simulation
+## Simulation
 
 Stochastic model files are implemented in C++ and are accessed by R via functions provided by the [Rcpp package](https://cran.r-project.org/web/packages/Rcpp/index.html). The stochastic simulation is handled by a custom implementation of Gillespie's Direct Method (Gillespie, 1977). Therefore, stochastic model files provide propensity equations for all reactions.
 
@@ -33,20 +33,27 @@ Deterministic model files are implemented in R and contain sets of differential 
 
 The following models are part of this library:
 
-- Ano1, Jonas Förster
-- Calcineurin, Martin Zauser
-- Calmodulin, Dr. Jürgen Pahle
-- CamKII, Sarah Kaspar
-- Glycogen Phosphorylase, Martin Zauser
-- PKC, Arne Schoch
+```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+tabl <- "
+|Name           | Reference    |
+|:------------- | :------------|
+|ano            | Jonas Förster.....................................................................................................................|        
+|calcineurin    | Fisher, W. G., Yang, P.-C., Medikonduri, R. K. & Jafri, M. S. (2006). **NFAT and NFkB Activation in T Lymphocytes: A Model of Diﬀerential Activation of Gene Expression**. Annals of Biomedical Engineering 34, 1712–1728.|
+|calmodulin     | Dr. Jürgen Pahle......................................................................................................................|
+|camkii         | Sarah Kaspar.....................................................................................................................|
+|glycphos       | Gall, D., Baus, E. and Dupont, G. (2000). **Activation of the liver glycogen phosphorylase by Ca(2+)oscillations: a theoretical study**. Journal of Theoretical Biology 207, 445–454.|
+|pkc            | Bhalla, U.S. and R. Iyengar. (1999). **Emergent properties of networks of biological signaling pathways**. Science 283(5400), 381-387.|
+"
+cat(tabl) # output the table in a format good for HTML/PDF/docx conversion
+```
 
 Add more information! (cite publications, add info on relevant changes, etc.)
 
-## Example Use Cases
+## Use Cases
 
 ### 1. Stochastic Simulation of the Calmodulin Model
 
-```{r}
+```{r fig1, fig.height = 5, fig.width = 7, fig.align = "center"}
 # Supply simulation parameters as vector
 sim_params <- c(timestep = 0.05,
                 endTime = 100)

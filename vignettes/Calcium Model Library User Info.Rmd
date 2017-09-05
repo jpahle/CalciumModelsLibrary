@@ -19,14 +19,15 @@ library(CalciumModelsLibrary)
 
 ## Introduction
 
-This package contains stochastic and deterministic model files of proteins which are differentially regulated by calcium. 
-All implemented models can be simulated via an intuitive interface which allows the user to define both simulation and model-specific parameters as well as the visualization of the simulation output. 
+This R package contains mathematical models of proteins which are differentially regulated by calcium. 
+All implemented models can be simulated stochastically and deterministically via an intuitive interface which allows the user to define both simulation and model-specific parameters as well as the visualization of the simulation output. 
 
-## About Simulations
+## Model Simulation
 
-Stochastic model files are implemented in C++ and are accessed by R via functions provided by the Rcpp package (<https://cran.r-project.org/web/packages/Rcpp/index.html>). The simulation of stochastic model files is handled by a custom implementation of Gillespie's Direct Method (Gillespie, 1977). Therefore, stochastic model files provide propensity equations for all reactions.
+Stochastic model files are implemented in C++ and are accessed by R via functions provided by the [Rcpp package](https://cran.r-project.org/web/packages/Rcpp/index.html). The stochastic simulation is handled by a custom implementation of Gillespie's Direct Method (Gillespie, 1977). Therefore, stochastic model files provide propensity equations for all reactions.
 
-Deterministic model files are implemented in R and contain differential equations. They are simulated by the LSODA algorithm (Hindmarsh, 1983) as it is implemented in the deSolve package (<https://cran.r-project.org/web/packages/deSolve/index.html>).
+Deterministic model files are implemented in R and contain sets of differential equations. They are simulated by the LSODA algorithm (Hindmarsh, 1983) as it is implemented in the [deSolve package](https://cran.r-project.org/web/packages/deSolve/index.html).
+
 
 ## Model Information
 
@@ -43,7 +44,7 @@ Add more information! (cite publications, add info on relevant changes, etc.)
 
 ## Example Use Cases
 
-1.) Simulation the Calmodulin model stochastically and plot the results:
+### 1. Stochastic Simulation of the Calmodulin Model
 
 ```{r}
 # Supply simulation parameters as vector
@@ -70,3 +71,35 @@ lines(output$time, output$Prot_act, col="red", type="l")
 legend("topright", legend=c("calcium", "Prot_act"), col=c("blue", "red"), lty=c(1,1))
 ```
 
+**Detailed Description**
+
+It is mandatory to provide all simulation parameters (timestep and end time) as well as a volume of the model since these parameters have no associated default values in the source code.
+Model parameters (reaction rate constants, initial conditions, etc.) on the other hand can be supplied if the user whishes to overwrite the model specific default values which are defined in the model files.  
+
+Since all implemented models are dependent on calcium as regulator it is necessary to provide a calcium time series as input which can either be a smooth function or a discrete set of (experimentally measured) points. 
+In this specific example the number of calcium particles at discrete time points is supplied as a table. Since all simulation functions expect calcium concentration values as input the respective column is divided by the factor $f = volume*N_A$ where $N_A$ is the Avogadro constant.
+
+Every model is implemented in a stochastic function and a deterministic function. The names of the stochastic functions follow the convention sim_*[MODEL_NAME]*. The deterministic functions are called *[MODEL_NAME]*_detSim (for the Calmodulin model: "sim_calmodulin" and "calmodulin_detSim"). 
+In all cases the simulation output needs to be converted to a data frame object before it can be plotted in typical R fashion.
+
+
+## Code Structure
+
+There is a fundamental difference in the implementation of stochstic model files compared to deterministic model files. 
+
+**Stochastic Model Files**
+
+All stochastic model files are written in C++ and contain two blocks: the R export options and the model description. 
+
+The R export options consist of macros which define the model name and include the stochastic simulation function. Additionally a function is defined which checks user supplied parameters and runs the simulation. This wrapper function is always named sim_*[MODEL_NAME]* and is exported to R via Rcpp.
+
+The model description includes three functions which define model specific properties: 
+
+- *init*: defines and returns an array of default values for all model parameters 
+- *calculate_amu*: contains all propensity equations and saves the cumulative propensities in a vector 
+- *update_system*: given a reaction index (rIndex) updates the system state by instantiating the chosen reaction according to the stoichiometry
+
+**Deterministic Model Files**
+
+The deterministic model files are written in R exclusively and contain a function which is always named *[MODEL_NAME]*_detSim. 
+This function describes the model by defining the set of differential equations, prepares the calcium input by converting it to events and runs the simulation by calling the lsoda function of the deSolve package. 

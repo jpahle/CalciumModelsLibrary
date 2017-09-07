@@ -1,153 +1,13 @@
 ---
-title: "Calcium Model Library - User Information"
-author: "Nicolas Huber"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Calcium Model Library - User Information}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: "General PKC-model"
+author: "Arne Schoch"
+date: "6. April 2016"
+output:
+  pdf_document: default
+  html_document:
+    fig_caption: yes
 ---
-
-```{r, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
-```
-
-```{r setup, echo = FALSE}
-library(CalciumModelsLibrary)
-```
-
-## Introduction
-
-This R package contains mathematical models of proteins which are differentially regulated by calcium. 
-All implemented models can be simulated stochastically and deterministically via an intuitive interface which allows the user to define both simulation and model-specific parameters as well as the visualization of the simulation output. 
-
-## Simulation Information
-
-Stochastic model files are implemented in C++ and are accessed by R via functions provided by the [Rcpp package](https://cran.r-project.org/web/packages/Rcpp/index.html). The stochastic simulation is handled by a custom implementation of Gillespie's Direct Method (Gillespie, 1977). Therefore, stochastic model files provide propensity equations for all reactions.
-
-Deterministic model files are implemented in R and contain sets of differential equations. They are simulated by the LSODA algorithm (Hindmarsh, 1983) as it is implemented in the [deSolve package](https://cran.r-project.org/web/packages/deSolve/index.html).
-
-
-## Model Overview {#modeloverview}
-
-The following table provides a quick overview of all models that are implemented in this library. Additional details about each of the models can be found in section [Model Information](#modelinformation)). The model keys can be used to select specific simulation functions: stochastic simulation functions are named "sim_*[MODEL_KEY]*", deterministic simulation functions "*[MODEL_KEY]*_detSim" 
-
-+---------------+---------------+
-| Model Key     | References    |
-+===============+===============+
-| ano           | Jonas Förster\   |
-|               | .....................................................................................................................     |
-+---------------+---------------+
-| calcineurin   | Fisher, W. G., Yang, P.-C., Medikonduri, R. K., and Jafri, M. S. (2006). **NFAT and NFkB Activation in T Lymphocytes: A Model of Diﬀerential Activation of Gene Expression**. Annals of Biomedical Engineering 34, 1712–1728.\   |
-+---------------+---------------+
-| calmodulin    | generic, simple two state test model with non-linear activation (Hill kinetics) and linear deactivation   |
-+---------------+---------------+
-| camkii        | Dupont, G., Houart, G., and De Koninck, P. (2003). **Sensitivity of CaM kinase II to the frequency of Ca2+ oscillations: a simple model**. Cell Calcium 34(6), 485-497.\   |
-+---------------+---------------+
-| glycphos      | Gall, D., Baus, E., and Dupont, G. (2000). **Activation of the liver glycogen phosphorylase by Ca(2+)oscillations: a theoretical study**. Journal of Theoretical Biology 207, 445–454.\   |
-+---------------+---------------+
-| pkc           | Manninen, T., Linne, M.L., and Ruohonen, K. (2006). **Developing Ito stochastic differential equation models for neuronal signal transduction pathways**. Comput Biol Chem 30(4), 280-291.\   |
-|               | Intosalmi, J., Manninen, T., Ruohonen, K., and Linne, M. L. (2009). **Modeling protein kinase C activation in the presence of calcium ion fluctuations**. At the Sixth International Workshop on Computational Systems Biology, WCSB 2009, June 10-12, in Aarhus, Denmark. p. 75-78.\     |
-|               | Bhalla, U.S. and R. Iyengar. (1999). **Emergent properties of networks of biological signaling pathways**. Science 283(5400), 381-387.     |
-+---------------+---------------+
-
-
-## Use Cases
-
-### 1. Stochastic Simulation of the Calmodulin Model
-
-```{r fig1, fig.height = 5, fig.width = 7, fig.align = "center"}
-# Supply simulation parameters as vector
-sim_params <- c(timestep = 0.05,
-                endTime = 100)
-# Supply model parameters as list
-model_params <- list(vol = 5e-14,
-                     init_conc = c(Prot_inact = 5,
-                                   Prot_act = 0))
-
-# Supply a calcium input timeseries file
-input_df <- read.table(system.file("extdata/ca5e-14_2.85_1000_0.05s.out", package = "CalciumModelsLibrary"), col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
-f <- 6.0221415e14*model_params[["vol"]]
-input_df["Ca"] <- input_df["Ca"]/f
-
-# Stochastically simulate the model
-output <- sim_calmodulin(input_df, sim_params, model_params)
-output <- as.data.frame(output)
-
-# Plot the output
-colnames(output) <- c("time", "calcium", "Prot_inact", "Prot_act")
-plot(output$time, output$calcium, col="blue", xlim=c(0, 100), ylim=c(0,15), type="l", xlab="time", ylab="concentration")
-lines(output$time, output$Prot_act, col="red", type="l")
-legend("topright", legend=c("calcium", "Prot_act"), col=c("blue", "red"), lty=c(1,1))
-```
-
-**Detailed Description**
-
-It is mandatory to provide all simulation parameters (timestep and end time), some initial conditions as well as a volume of the model since these parameters have no associated default values in the source code.
-Model parameters (reaction rate constants, affinities, etc.) on the other hand can be supplied if the user whishes to overwrite the model specific default values which are defined in the model files.  
-
-Since all implemented models are dependent on calcium as regulator it is necessary to provide a calcium time series as input which can either be a smooth function or a discrete set of (experimentally measured) points. 
-In this specific example the number of calcium particles at discrete time points is supplied as a table. Since all simulation functions expect calcium concentration values as input the respective column is divided by the factor $f = volume*N_A$ where $N_A$ is the Avogadro constant.
-
-Folowing the naming convention described above (section [Model Overview](#modeloverview)) the stochastic simulation of the calmodulin model is executed by calling "sim_calmodulin". Afterwards, the simulation output needs to be converted to a data frame object before it can be plotted in typical R fashion.
-
-
-## Code Structure
-
-There is a fundamental difference in the implementation of stochstic model files compared to deterministic model files. 
-
-**Stochastic Model Files**
-
-All stochastic model files are written in C++ and contain two blocks: the R export options and the model description. 
-
-The R export options section consist of macros which define the model name and include the stochastic simulation function. Additionally a function is defined which checks user supplied parameters and runs the simulation. This wrapper function is named sim_*[MODEL_KEY]* for all models and is exported to R via Rcpp.
-
-The model description includes three functions which define model specific properties: 
-
-- *init*: defines and returns an array of default values for all model parameters 
-- *calculate_amu*: contains all propensity equations and saves the cumulative propensities in a vector 
-- *update_system*: given a reaction index (rIndex) updates the system state by instantiating the chosen reaction according to the stoichiometry
-
-**Deterministic Model Files**
-
-The deterministic model files are written in R exclusively and contain a function which is named *[MODEL_KEY]*_detSim for all models. 
-This function describes the model by defining the set of differential equations, prepares the calcium input by converting it to events and runs the simulation by calling the lsoda function of the deSolve package. 
-
-
-## Model Information {#modelinformation}
-
-### Ano1 ()
-
-Parameter Values (with references):
-
-### Calcineurin
-
-No changes from source paper.
-
-Parameter Values (with references):
-
-### Calmodulin
-
-generic two-state model created by Dr. Jürgen Pahle, BIOQUANT, University of Heidelberg
-
-### CamKII (Ca^2+^-calmodulin kinase II)
-
-Changes from source paper?
-
-Parameter Values (with references):
-
-### Glycogen Phosphorylase
-
-No changes from source paper.
-
-Parameter Values (with references):
-
-### PKC (Protein Kinase C)
-
-Additional information about the pkc model can be found in this vignette, written by Arne Schoch.
-
-#### <a name="General_header"></a> General information
+### <a name="General_header"></a> General information
 The presented model is a reproduction of the PKC-model presented in [1] and [2]. In turn, the mentioned publications refer to an older publication by Bhalla and Iyengar [3] in which the model was outlined and who originally defined it. Most parameters including initial concentrations of biochemical species that were used in all of the indicated publications can be found in the DOQCS-database (Database of Quantitative Cellular Signaling) [4]. 
 
 The model displays the activation of protein kinase C via complexation with three effector molecules: $AA$, $Ca_{cyt}$ and $DAG$ (the inputs). As a result different active complexes arise. Besides these complexes there is also a basal PKC-fraction modelled that represents a PKC-activity independent of complexation. Importantly, the model is not specific for a certain PKC-isoform but describes the activation of all available PKC-isoforms in a hippocampal neuron [3]. 
@@ -156,17 +16,15 @@ The output of the model ($PKC_{act}$) is composed of the summed up concentration
 
 By default, a simple sine input is defined for $Ca_{cyt}$ with a baseline concentration level of 200 nM, a peak concentration level of 1000 nM and a period length of 100 s. The other two input species ($AA$ and $DAG$) are set to fixed concentrations as previously shown in [2]. In another publication sine curves were assigned for $AA$ and $DAG$ [1].
 
-```{r, out.width = "700px", echo = FALSE}
-knitr::include_graphics("Manninen.png")
-```
+![](C:\Users\Arne\Documents\PhD\General_PKC_Model\Manninen.png)
 *PKC activation model according to [3]. The model consists of ten reversible reactions with three input species (red circles). The summed up concentrations of the species in rectangles without round corners (active PKC-forms) equal the model output PKCact.*    
 
-#### <a name="Limitations-header"></a> Model limitations and assumptions
+### <a name="Limitations-header"></a> Model limitations and assumptions
 As mentioned before, it has to be kept in mind that the presented PKC-model does not distinguish between specific PKC-isoforms. Therefore, it has to be understood as a general PKC-model.                                                                                       
 The model was fitted to experimental concentration-effect curves found in two publications [5. 6]. Hence, adaptions of single parameters to a modified version of the PKC-model have to be handled with care due to possible parameter non-identifiabilities. 
 
 
-#### <a name="Reactions&kinetics_header"></a> Reactions and kinetics
+### <a name="Reactions&kinetics_header"></a> Reactions and kinetics
 |  | Reaction                                      | Reaction formula |
 |----------|--------------------------------------------------|------------------|
 | $R_1$       | $PKC_{inact} \rightarrow PKC_{basal}$       |  $v_1 = \ k_1 * [PKC_{inact}]$               |
@@ -190,7 +48,7 @@ The model was fitted to experimental concentration-effect curves found in two pu
 | $R_{19}$      | $DAGPKC + AA \rightarrow AADAGPKC$                    | $v_{19} = \ k_{19} * [DAGPKC] * [AA]$                 |
 | $R_{20}$      | $AADAGPKC \rightarrow DAGPKC + AA$             | $v_{20} = \ k_{20} * [AADAGPKC]$                |
 
-#### <a name="Parameters_header"></a> Default Parameters
+### <a name="Parameters_header"></a> Default Parameters
 | Parameter             |   Value  |   Unit   |                                         Comment                                        | Source |
 |-----------------------|:--------:|:--------:|:--------------------------------------------------------------------------------------:|:------:|
 | $k_1$                    |     $1$    |   $s^{-1}$   | rate constant for $R_1$ (transformation of $PKC_{inact}$ to $PKC_{basal}$)                        |   [4]  |
@@ -228,7 +86,7 @@ The model was fitted to experimental concentration-effect curves found in two pu
 | $[PKC_{inact}]_0$      |   $1000$   |    $nM$    | initial concentration for $PKC_{inact}$                                                    |   [4]  |
 | $vol$                   | $1 * 10^{-15}$ |     $L$    | cytosol volume value was used for simulations in the indicated paper                   |   [1]  |
 
-#### <a name="Glossary_header"></a> Glossary
+### <a name="Glossary_header"></a> Glossary
 | Term           | Explanation                                                                                                                        |
 |----------------|------------------------------------------------------------------------------------------------------------------------------------|
 | $AA$             | Arachidonic acid                                                                                                                   |
@@ -248,7 +106,7 @@ The model was fitted to experimental concentration-effect curves found in two pu
 | $PKC_{inact}$      | Inactive protein kinase C that can be transformed to an active form                                                                |
 
 
-#### <a name="References_header"></a> References
+### <a name="References_header"></a> References
 
 * [1] Manninen, T., M.L. Linne, and K. Ruohonen, __Developing Ito stochastic differential equation models for neuronal signal transduction pathways.__ Comput Biol Chem, 2006. 30(4): p. 280-91.                  
 *http://www.ncbi.nlm.nih.gov/pubmed/16880117*
@@ -267,7 +125,6 @@ The model was fitted to experimental concentration-effect curves found in two pu
 
 * [6] Shinomura, T., et al., __Synergistic action of diacylglycerol and unsaturated fatty acid for protein kinase C activation: its possible implications.__ Proc Natl Acad Sci U S A, 1991. 88(12): p. 5149-53.                         
 *http://www.ncbi.nlm.nih.gov/pmc/articles/PMC51829/*
-
 
 
 

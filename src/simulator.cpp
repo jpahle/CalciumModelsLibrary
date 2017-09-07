@@ -44,7 +44,8 @@ extern void update_system(unsigned int rIndex);
 //' simulator()
 NumericMatrix simulator(DataFrame user_input_df,
                    NumericVector user_sim_params,
-                   List user_model_params) {
+                   List user_model_params,
+                   std::map <std::string, double> model_params) {
 
   // get R random generator state
   GetRNGstate();
@@ -55,7 +56,35 @@ NumericMatrix simulator(DataFrame user_input_df,
   calcium = user_input_df["Ca"];
   timestep = user_sim_params["timestep"];
   vol = as<double>(user_model_params["vol"]);
-  NumericVector ic = as<NumericVector>(user_model_params["init_conc"]);
+  // identify initial conditions in model_params map:
+  // they are always at the end of the map
+  // and there are as many initial conditions as there are species
+  // => the initial conditions start at map.size()-nspecies
+  size_t map_pos = 0;
+  int ic_index = 0;
+  NumericVector ic(nspecies);
+  for (std::map<std::string, double>::iterator iter = model_params.begin(); 
+       iter != model_params.end(); ++iter) {
+    
+    std::string curr_key = iter->first;
+    Rcout << "Current Map Key: " << curr_key << std::endl;
+    Rcout << "Current Map Element: " << model_params[curr_key] << std::endl;
+    
+    if (map_pos >= model_params.size()-nspecies && map_pos < model_params.size()) {
+      std::string key = iter->first;
+      ic[ic_index] = model_params[key];
+      ic_index++;
+    }
+    map_pos++;
+  }
+  
+  
+  Rcout << "MAP Prot_inact: " << model_params["Prot_inact"] << std::endl;
+  Rcout << "MAP Prot_act: " << model_params["Prot_act"] << std::endl;
+
+  Rcout << "IC Prot_inact: " << ic[0] << std::endl;
+  Rcout << "IC Prot_act: " << ic[1] << std::endl;  
+  
   // Particle number <-> concentration (nmol/l) factor (n/f = c <=> c*f = n)
   double f;
   f = 6.0221415e14*vol;
@@ -88,6 +117,9 @@ NumericMatrix simulator(DataFrame user_input_df,
   for (i=0; i < ic.length(); i++) {
     x[i] = (unsigned long long int)floor(ic[i]*f);  
   }
+  
+  Rcout << "X Prot_inact: " << x[0] << std::endl;
+  Rcout << "X Prot_act: " << x[1] << std::endl;
   
   /* SIMULATION LOOP */
   while (currentTime < endTime) {

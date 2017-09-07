@@ -3,7 +3,6 @@
 using namespace Rcpp;
 
 
-
 //********************************/* R EXPORT OPTIONS */********************************
 
 // 1. USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
@@ -40,7 +39,8 @@ NumericMatrix sim_calmodulin(DataFrame user_input_df,
   // Return result of the simulation
   return simulator_calmodulin(user_input_df,
                    user_sim_params,
-                   user_model_params);
+                   user_model_params,
+                   model_params);
    
 }
 
@@ -55,7 +55,7 @@ std::map <std::string, double> init() {
   // Model dimensions
   nspecies = 2;
   nreactions = 2;
-  
+    
   // Propensity equation parameters
   std::map <std::string, double> default_params;
   
@@ -63,6 +63,10 @@ std::map <std::string, double> init() {
   default_params["k_off"] = 0.005;
   default_params["Km"] = 1.0;
   default_params["h"] = 4.0;
+  
+  // Default initial conditions (always last entries in default params array)
+  default_params["Prot_inact"] = 5.0;
+  default_params["Prot_act"] = 0;
   
   return default_params;
 }

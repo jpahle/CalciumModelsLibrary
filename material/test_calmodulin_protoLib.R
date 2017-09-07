@@ -6,8 +6,8 @@ sim_params <- c(timestep = 0.05,
                 endTime = 100)
 # Model Parameters (List)
 model_params <- list(vol = 5e-14,
-                     init_conc = c(Prot_inact = 5,
-                                   Prot_act = 0))
+                     Prot_inact = 5,
+                     Prot_act = 0)
 
 # Read Ca timeseries
 input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))

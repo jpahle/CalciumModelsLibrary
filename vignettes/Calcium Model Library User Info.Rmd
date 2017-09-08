@@ -24,7 +24,7 @@ All implemented models can be simulated stochastically and deterministically via
 
 ## Simulation Information
 
-Stochastic model files are implemented in C++ and are accessed by R via functions provided by the [Rcpp package](https://cran.r-project.org/web/packages/Rcpp/index.html). The stochastic simulation is handled by a custom implementation of Gillespie's Direct Method (Gillespie, 1977). Therefore, stochastic model files provide propensity equations for all reactions.
+Stochastic model files are implemented in C++ and are accessed by R via functions provided by the [Rcpp package](https://cran.r-project.org/web/packages/Rcpp/index.html). The stochastic simulation is handled by a custom implementation of Gillespie's Direct Method (Gillespie, 1976). Therefore, stochastic model files provide propensity equations for all reactions.
 
 Deterministic model files are implemented in R and contain sets of differential equations. They are simulated by the LSODA algorithm (Hindmarsh, 1983) as it is implemented in the [deSolve package](https://cran.r-project.org/web/packages/deSolve/index.html).
 

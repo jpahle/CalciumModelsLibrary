@@ -62,12 +62,12 @@ NumericMatrix sim_calmodulin(DataFrame user_input_df,
   }
   // Put propensity reaction parameters in a map (for function calculate_amu)
   // (take params from vector default_params which contains the updated values after check)
-  std::map <std::string, double> prop_params_map;
   CharacterVector default_params_names = default_params.names();
   for (int n = 0; n < default_params.length(); n++) {
     std::string current_param_name = as<std::string>(default_params_names[n]);
     prop_params_map[current_param_name] = default_params[current_param_name];  
   }
+  
   // Return result of the simulation
   return simulator_calmodulin(user_input_df,
                    user_sim_params,
@@ -123,9 +123,10 @@ void calculate_amu() {
   double k_off = prop_params_map["k_off"];
   double Km = prop_params_map["Km"];
   double h = prop_params_map["h"];
-    
+  
   amu[0] = ((k_on * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)Km,(double)h) + pow((double)calcium[ntimepoint],(double)h))) * x[0];
   amu[1] = amu[0] + k_off * x[1];
+    
 }
 
 // System update:

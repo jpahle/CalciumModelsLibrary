@@ -19,8 +19,19 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _CalciumModelsLibrary_sim_ano(SEXP, SEXP, SEXP);
+RcppExport SEXP _CalciumModelsLibrary_sim_calcineurin(SEXP, SEXP, SEXP);
+RcppExport SEXP _CalciumModelsLibrary_sim_camkii(SEXP, SEXP, SEXP);
+RcppExport SEXP _CalciumModelsLibrary_sim_glycphos(SEXP, SEXP, SEXP);
+RcppExport SEXP _CalciumModelsLibrary_sim_pkc(SEXP, SEXP, SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
     {"_CalciumModelsLibrary_sim_calmodulin", (DL_FUNC) &_CalciumModelsLibrary_sim_calmodulin, 3},
+    {"_CalciumModelsLibrary_sim_ano",         (DL_FUNC) &_CalciumModelsLibrary_sim_ano,         3},
+    {"_CalciumModelsLibrary_sim_calcineurin", (DL_FUNC) &_CalciumModelsLibrary_sim_calcineurin, 3},
+    {"_CalciumModelsLibrary_sim_camkii",      (DL_FUNC) &_CalciumModelsLibrary_sim_camkii,      3},
+    {"_CalciumModelsLibrary_sim_glycphos",    (DL_FUNC) &_CalciumModelsLibrary_sim_glycphos,    3},
+    {"_CalciumModelsLibrary_sim_pkc",         (DL_FUNC) &_CalciumModelsLibrary_sim_pkc,         3},
     {NULL, NULL, 0}
 };
 

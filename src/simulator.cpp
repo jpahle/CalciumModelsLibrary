@@ -13,7 +13,7 @@ using namespace Rcpp;
   #define update_system Map(update_system_, MODEL_NAME)
 
   // Placeholder init function since the R Wrapper Function tries to call it before its 'real' definition in the C++ model file
-  std::map <std::string, double> init();
+  List init();
 #endif
 
 
@@ -38,13 +38,15 @@ extern void update_system(unsigned int rIndex);
 //'
 //' @param user_input_df A data frame: contains the times of the observations (column "time") and the cytosolic calcium concentration [nmol/l] (column "Ca").
 //' @param user_sim_params A numeric vector: contains all simulation parameters ("timestep": the time interval between two output samples, "endTime": the time at which to end the simulation).
-//' @param user_model_params A list: contains all model parameters ("vol": the volume of the system [l], "init_conc": the initial concentrations of model species [nmol/l] and possibly other specific parameters that have been compared to the default parameter values in the C++ model file).
+//' @param default_vols A numeric vector: contains updated default values of all volumes [l].
+//' @param default_init_conc A numeric vector: contains updated default values of all initial concentrations [nmol/l].
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
 NumericMatrix simulator(DataFrame user_input_df,
                    NumericVector user_sim_params,
-                   List user_model_params) {
+                   NumericVector default_vols,
+                   NumericVector default_init_conc) {
 
   // get R random generator state
   GetRNGstate();
@@ -54,8 +56,10 @@ NumericMatrix simulator(DataFrame user_input_df,
   timevector = user_input_df["time"];
   calcium = user_input_df["Ca"];
   timestep = user_sim_params["timestep"];
-  vol = as<double>(user_model_params["vol"]);
-  NumericVector ic = as<NumericVector>(user_model_params["init_conc"]);
+  // currently only works with ONE volume!
+  // (code takes only first volume entry)
+  vol = default_vols[0];
+  NumericVector ic = default_init_conc; 
   // Particle number <-> concentration (nmol/l) factor (n/f = c <=> c*f = n)
   double f;
   f = 6.0221415e14*vol;

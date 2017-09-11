@@ -6,30 +6,30 @@ using namespace Rcpp;
 //********************************/* R EXPORT OPTIONS */********************************
 
 // 1. USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
-#define MODEL_NAME calmodulin
+#define MODEL_NAME glycphos
 // include the simulation function with macros (#define statements) that make it model specific (based on MODEL_NAME)
 #include "simulator.cpp"
 // Global variables
 static std::map <std::string, double> prop_params_map;
 // 2. USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
-//' Calmodulin Model R Wrapper Function (exported to R)
+//' Glycphos Model R Wrapper Function (exported to R)
 //'
-//' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the Calmodulin model.
+//' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the glycphos model.
 //' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
-//' sim_calmodulin()
+//' sim_glycphos()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix sim_calmodulin(DataFrame user_input_df,
+NumericMatrix sim_glycphos(DataFrame user_input_df,
                    NumericVector user_sim_params,
                    List user_model_params) {
 
   // READ INPUT
   // Provide default model parameters list
-  List default_model_params = init_calmodulin();
+  List default_model_params = init_glycphos();
   // Extract default vectors from list
   NumericVector default_vols = default_model_params["vols"];
   NumericVector default_init_conc = default_model_params["init_conc"];
@@ -86,7 +86,7 @@ NumericMatrix sim_calmodulin(DataFrame user_input_df,
   }
   // RUN SIMULATION
   // Return result of the included, model-specific copy of the function "simulator" 
-  return simulator_calmodulin(user_input_df,
+  return simulator_glycphos(user_input_df,
                    user_sim_params,
                    default_vols,
                    default_init_conc);
@@ -104,7 +104,7 @@ List init() {
   // Model dimensions
   nspecies = 2;
   nreactions = 2;
-    
+  
   // Default volume(s)
   NumericVector vols = NumericVector::create(
     _["vol"] = 5e-14
@@ -116,10 +116,19 @@ List init() {
   );
   // Default propensity equation parameters
   NumericVector params = NumericVector::create(
-    _["k_on"] = 0.025,
-    _["k_off"] = 0.005,
-    _["Km"] = 1.0,
-    _["h"] = 4.0
+    
+    _["VpM1"] = 1.5,
+    _["VpM2"] = 0.6,
+    _["alpha"] = 9,
+    _["gamma"] = 9,
+    _["K11"] = 0.1,
+    _["Kp2"] = 0.2,
+    // it is not necessary to convert glucose, Ka1, Ka2, Ka5 and Ka6 into particle numbers because the units cancel
+    _["Ka1_conc"] = 1e-7,
+    _["Ka2_conc"] = 1e-7,
+    _["Ka5_conc"] = 500,
+    _["Ka6_conc"] = 600,
+    _["gluc_conc"] = 1e-7 // in Gall 2000 model fixed at 10mM
   );
     
   // Combine and return all vectors in a default_params list
@@ -128,33 +137,42 @@ List init() {
     _["init_conc"] = init_conc,
     _["params"] = params
   );
+  
 }
 
 // Propensity calculation:
-// Calculates the propensities of all Calmodulin model reactions and stores them in the vector amu.
+// Calculates the propensities of all glycogen phosphorylase model reactions and stores them in the vector amu.
 void calculate_amu() {
   
-  // Look up model parameters in array 'prop_params_map' initially
-  // (contains updated default parameters from vector default_params)
-  double k_on = prop_params_map["k_on"];
-  double k_off = prop_params_map["k_off"];
-  double Km = prop_params_map["Km"];
-  double h = prop_params_map["h"];
+  // Look up model parameters in array 'double = model_params' initially
+  double VpM1 = prop_params_map["VpM1"];
+  double VpM2 = prop_params_map["VpM2"];
+  double alpha = prop_params_map["alpha"];
+  double gamma = prop_params_map["gamma"];
+  double K11 = prop_params_map["K11"];
+  double Kp2 = prop_params_map["Kp2"];
+  double Ka1_conc = prop_params_map["Ka1_conc"];
+  double Ka2_conc = prop_params_map["Ka2_conc"];
+  double Ka5_conc = prop_params_map["Ka5_conc"];
+  double Ka6_conc = prop_params_map["Ka6_conc"];
+  double gluc_conc = prop_params_map["gluc_conc"];
   
-  amu[0] = ((k_on * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)Km,(double)h) + pow((double)calcium[ntimepoint],(double)h))) * x[0];
-  amu[1] = amu[0] + k_off * x[1];
-    
+  double activeFraction = x[1]/(x[0]+x[1]);
+  
+  // divide VpM1 and VpM2 by 60 to convert the units from min^-1 to s^-1
+  amu[0] = (VpM1 / 60.0 * (1.0 + gamma * pow((double)calcium[ntimepoint],4) / (pow(Ka5_conc,4) + pow((double)calcium[ntimepoint],4))) * ( 1.0 - activeFraction)) / ((K11 / (1.0 + pow((double)calcium[ntimepoint],4) / pow(Ka6_conc,4))) + 1.0 - activeFraction) * (x[0]+x[1]);
+  amu[1] = amu[0] + ((VpM2 / 60.0 * (1.0 + alpha * (gluc_conc) / (Ka1_conc + gluc_conc)) * activeFraction) / (Kp2 / (1 + gluc_conc / Ka2_conc) + activeFraction) * (x[0]+x[1]));
 }
 
 // System update:
 // Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
 void update_system(unsigned int rIndex) {
   switch (rIndex) {
-  case 0:   // Activation
+  case 0:   // Forward: glycogen phosphorylase kinase, regulated by calcium
     x[0]--;
     x[1]++;
     break;
-  case 1:   // Deactivation
+  case 1:   // Backward: phosphatase, regulated by glucose
     x[0]++;
     x[1]--;
     break;

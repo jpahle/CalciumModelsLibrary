@@ -5,7 +5,7 @@ set.seed(1)
 sim_params <- c(timestep = 1,
                 endTime = 1000)
 # Model Parameters (List)
-model_params <- list(vol = 1e-15,
+model_params <- list(vols      = c(vol = 1e-15),
                      init_conc = c(PKC_inact = 1000,
                                    CaPKC = 0,
                                    DAGCaPKC = 0,

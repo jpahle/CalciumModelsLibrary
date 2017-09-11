@@ -5,7 +5,7 @@ set.seed(1)
 sim_params <- c(timestep = 1,
                 endTime = 100)
 # Model Parameters (List)
-model_params <- list(vol = 1e-11,
+model_params <- list(vols      = c(vol = 1e-11),
                      init_conc = c(Cl_ext = 300,
                                    C = 100,
                                    C_c = 0,
@@ -24,7 +24,7 @@ model_params <- list(vol = 1e-11,
 # Read Ca timeseries
 input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
 # convert Ca concentration from input table to particle number (c*f=n since f = Avogadro*Vol)
-f <- 6.0221415e14*model_params[["vol"]]
+f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 
 # Simulate model

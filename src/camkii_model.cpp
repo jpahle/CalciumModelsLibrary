@@ -6,30 +6,30 @@ using namespace Rcpp;
 //********************************/* R EXPORT OPTIONS */********************************
 
 // 1. USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
-#define MODEL_NAME calmodulin
+#define MODEL_NAME camkii
 // include the simulation function with macros (#define statements) that make it model specific (based on MODEL_NAME)
 #include "simulator.cpp"
 // Global variables
 static std::map <std::string, double> prop_params_map;
 // 2. USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
-//' Calmodulin Model R Wrapper Function (exported to R)
+//' CamKII Model R Wrapper Function (exported to R)
 //'
-//' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the Calmodulin model.
+//' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the camkii model.
 //' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
-//' sim_calmodulin()
+//' sim_camkii()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix sim_calmodulin(DataFrame user_input_df,
+NumericMatrix sim_camkii(DataFrame user_input_df,
                    NumericVector user_sim_params,
                    List user_model_params) {
 
   // READ INPUT
   // Provide default model parameters list
-  List default_model_params = init_calmodulin();
+  List default_model_params = init_camkii();
   // Extract default vectors from list
   NumericVector default_vols = default_model_params["vols"];
   NumericVector default_init_conc = default_model_params["init_conc"];
@@ -86,7 +86,7 @@ NumericMatrix sim_calmodulin(DataFrame user_input_df,
   }
   // RUN SIMULATION
   // Return result of the included, model-specific copy of the function "simulator" 
-  return simulator_calmodulin(user_input_df,
+  return simulator_camkii(user_input_df,
                    user_sim_params,
                    default_vols,
                    default_init_conc);
@@ -102,23 +102,42 @@ NumericMatrix sim_calmodulin(DataFrame user_input_df,
 // Default model parameters
 List init() {
   // Model dimensions
-  nspecies = 2;
-  nreactions = 2;
-    
+  nspecies = 5;
+  nreactions = 10;
+  
   // Default volume(s)
   NumericVector vols = NumericVector::create(
-    _["vol"] = 5e-14
+    _["vol"] = 5e-15
   );
   // Default initial conditions
   NumericVector init_conc = NumericVector::create(
-    _["Prot_inact"] = 5.0,
-    _["Prot_act"] = 0
+    _["W_I"] = 40,
+    _["W_B"] = 0,
+    _["W_P"] = 0,
+    _["W_T"] = 0,
+    _["W_A"]= 0
   );
   // Default propensity equation parameters
   NumericVector params = NumericVector::create(
-    _["k_on"] = 0.025,
-    _["k_off"] = 0.005,
-    _["Km"] = 1.0,
+    _["a"] = -0.22,
+    _["b"] = 1.826,
+    _["c"] = 0.1,
+    _["k_IB"] = 0.01,
+    _["k_BI"] = 0.8,
+    _["k_PT"] = 1,
+    _["k_TP"] = 1e-12,
+    _["k_TA"] = 0.0008,
+    _["k_AT"] = 0.01,
+    _["k_AA"] = 0.29,
+    _["c_B"] = 0.75,
+    _["c_P"] = 1,
+    _["c_T"] = 0.8,
+    _["c_A"] = 0.8,
+    _["camT"] = 1000,
+    _["Kd"] = 1000,
+    _["Vm_phos"] = 0.005,
+    _["Kd_phos"] = 0.3,
+    _["totalC"] = 40,
     _["h"] = 4.0
   );
     
@@ -128,35 +147,94 @@ List init() {
     _["init_conc"] = init_conc,
     _["params"] = params
   );
+  
 }
 
 // Propensity calculation:
-// Calculates the propensities of all Calmodulin model reactions and stores them in the vector amu.
+// Calculates the propensities of all CamKII model reactions and stores them in the vector amu.
 void calculate_amu() {
   
-  // Look up model parameters in array 'prop_params_map' initially
-  // (contains updated default parameters from vector default_params)
-  double k_on = prop_params_map["k_on"];
-  double k_off = prop_params_map["k_off"];
-  double Km = prop_params_map["Km"];
+  // Look up model parameters in array 'model_params' initially
+  double a = prop_params_map["a"];
+  double b = prop_params_map["b"];
+  double c = prop_params_map["c"];
+  double k_IB = prop_params_map["k_IB"];
+  double k_BI = prop_params_map["k_BI"];
+  double k_PT = prop_params_map["k_PT"];
+  double k_TP = prop_params_map["k_TP"];
+  double k_TA = prop_params_map["k_TA"];
+  double k_AT = prop_params_map["k_AT"];
+  double k_AA = prop_params_map["k_AA"];
+  double c_B = prop_params_map["c_B"];
+  double c_P = prop_params_map["c_P"];
+  double c_T = prop_params_map["c_T"];
+  double c_A = prop_params_map["c_A"];
+  double camT = prop_params_map["camT"];
+  double Kd = prop_params_map["Kd"];
+  double Vm_phos = prop_params_map["Vm_phos"];
+  double Kd_phos = prop_params_map["Kd_phos"];
+  double totalC = prop_params_map["totalC"];
   double h = prop_params_map["h"];
   
-  amu[0] = ((k_on * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)Km,(double)h) + pow((double)calcium[ntimepoint],(double)h))) * x[0];
-  amu[1] = amu[0] + k_off * x[1];
-    
+  amu[0] = x[0] * ((k_IB * camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h)));
+  amu[1] = amu[0] + k_BI * x[1];
+  
+  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / totalC;
+  double prob =  a * activeSubunits + b*(pow((double)activeSubunits,(double)2)) + c*(pow((double)activeSubunits,(double)3));
+  amu[2] = amu[1] +  totalC * k_AA * prob * ((c_B * x[1]) / pow((double)totalC,(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
+  
+  amu[3] = amu[2] + k_PT * x[2];
+  amu[4] = amu[3] + k_TP * x[3] * pow((double)calcium[ntimepoint],(double)h);
+  amu[5] = amu[4] + k_TA * x[3];
+  amu[6] = amu[5] + k_AT * x[4] * (camT - ((camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h))));
+  amu[7] = amu[6] + ((Vm_phos * x[2]) / (Kd_phos + (x[2] / totalC)));
+  amu[8] = amu[7] + ((Vm_phos * x[3]) / (Kd_phos + (x[3] / totalC)));
+  amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / totalC)));
 }
 
 // System update:
 // Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
 void update_system(unsigned int rIndex) {
   switch (rIndex) {
-  case 0:   // Activation
+  case 0:   // Ca-Cam binding
     x[0]--;
     x[1]++;
     break;
-  case 1:   // Deactivation
+  case 1:   // binding reverse
     x[0]++;
     x[1]--;
+    break;
+  case 2:   // phosphorylation
+    x[1]--;
+    x[2]++;
+    break;
+  case 3:   // trapping
+    x[2]--;
+    x[3]++;
+    break;
+  case 4:   // trapping reverse
+    x[2]++;
+    x[3]--;
+    break;
+  case 5:   // autonomous
+    x[3]--;
+    x[4]++;
+    break;
+  case 6:   // autonomous reverse
+    x[3]++;
+    x[4]--;
+    break;
+  case 7:   // phosphatase on W_P
+    x[1]++;
+    x[2]--;
+    break;
+  case 8:   // phosphatase on W_T
+    x[1]++;
+    x[3]--;
+    break;
+  case 9:   // phosphatase on W_A
+    x[0]++;
+    x[4]--;
     break;
     printf("\nError in updateSystem(): rIndex (%u) out of range!\n", rIndex);
     exit(-1);

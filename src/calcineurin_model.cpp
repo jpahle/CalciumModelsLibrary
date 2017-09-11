@@ -6,30 +6,30 @@ using namespace Rcpp;
 //********************************/* R EXPORT OPTIONS */********************************
 
 // 1. USER INPUT for new models: Change value of the macro variable MODEL_NAME to the name of the new model.
-#define MODEL_NAME calmodulin
+#define MODEL_NAME calcineurin
 // include the simulation function with macros (#define statements) that make it model specific (based on MODEL_NAME)
 #include "simulator.cpp"
 // Global variables
 static std::map <std::string, double> prop_params_map;
 // 2. USER INPUT for new models: Change the name of the wrapper function to sim_<MODEL_NAME> and the names of the internally called functions to init_<MODEL_NAME> and simulator_<MODEL_NAME>.
-//' Calmodulin Model R Wrapper Function (exported to R)
+//' Calcineurin Model R Wrapper Function (exported to R)
 //'
-//' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the Calmodulin model.
+//' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the calcineurin model.
 //' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
-//' sim_calmodulin()
+//' sim_calcineurin()
 //' @export
 // [[Rcpp::export]]
-NumericMatrix sim_calmodulin(DataFrame user_input_df,
+NumericMatrix sim_calcineurin(DataFrame user_input_df,
                    NumericVector user_sim_params,
                    List user_model_params) {
 
   // READ INPUT
   // Provide default model parameters list
-  List default_model_params = init_calmodulin();
+  List default_model_params = init_calcineurin();
   // Extract default vectors from list
   NumericVector default_vols = default_model_params["vols"];
   NumericVector default_init_conc = default_model_params["init_conc"];
@@ -86,7 +86,7 @@ NumericMatrix sim_calmodulin(DataFrame user_input_df,
   }
   // RUN SIMULATION
   // Return result of the included, model-specific copy of the function "simulator" 
-  return simulator_calmodulin(user_input_df,
+  return simulator_calcineurin(user_input_df,
                    user_sim_params,
                    default_vols,
                    default_init_conc);
@@ -104,7 +104,7 @@ List init() {
   // Model dimensions
   nspecies = 2;
   nreactions = 2;
-    
+  
   // Default volume(s)
   NumericVector vols = NumericVector::create(
     _["vol"] = 5e-14
@@ -116,10 +116,9 @@ List init() {
   );
   // Default propensity equation parameters
   NumericVector params = NumericVector::create(
-    _["k_on"] = 0.025,
-    _["k_off"] = 0.005,
-    _["Km"] = 1.0,
-    _["h"] = 4.0
+    _["k_on"] = 1,
+    _["k_off"] = 1,
+    _["p"] = 3.0
   );
     
   // Combine and return all vectors in a default_params list
@@ -131,30 +130,27 @@ List init() {
 }
 
 // Propensity calculation:
-// Calculates the propensities of all Calmodulin model reactions and stores them in the vector amu.
+// Calculates the propensities of all Calcineurin model reactions and stores them in the vector amu.
 void calculate_amu() {
   
-  // Look up model parameters in array 'prop_params_map' initially
-  // (contains updated default parameters from vector default_params)
+  // Look up model parameters in array 'model_params' initially
   double k_on = prop_params_map["k_on"];
   double k_off = prop_params_map["k_off"];
-  double Km = prop_params_map["Km"];
-  double h = prop_params_map["h"];
+  double p = prop_params_map["p"];  
   
-  amu[0] = ((k_on * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)Km,(double)h) + pow((double)calcium[ntimepoint],(double)h))) * x[0];
+  amu[0] = k_on * pow((double)calcium[ntimepoint],(double)p) * x[0];
   amu[1] = amu[0] + k_off * x[1];
-    
 }
 
 // System update:
 // Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
 void update_system(unsigned int rIndex) {
   switch (rIndex) {
-  case 0:   // Activation
+  case 0:   // Forward
     x[0]--;
     x[1]++;
     break;
-  case 1:   // Deactivation
+  case 1:   // Backward
     x[0]++;
     x[1]--;
     break;

@@ -25,17 +25,28 @@ NumericMatrix sim_calmodulin(DataFrame user_input_df,
                    NumericVector user_sim_params,
                    List user_model_params) {
 
-  // Extract vectors from user supplied list
-  NumericVector user_vols = user_model_params["vols"];
-  NumericVector user_init_conc = user_model_params["init_conc"];
-  NumericVector user_params = user_model_params["params"];
-  // Provide default model parameters list (Rcpp type)
+  // Provide default model parameters list
   List default_model_params = init_calmodulin();
-  // Extract default vectors
+  // Extract default vectors from list
   NumericVector default_vols = default_model_params["vols"];
   NumericVector default_init_conc = default_model_params["init_conc"];
   NumericVector default_params = default_model_params["params"];
+  // Extract vectors from user supplied list 
+  // If they exist they overwrite the definition with the default vector!
+  NumericVector user_vols = default_vols;
+  if (user_model_params.containsElementNamed("vols")) {
+    user_vols = user_model_params["vols"];
+  }
+  NumericVector user_init_conc = default_init_conc;
+  if (user_model_params.containsElementNamed("init_conc")) {
+    user_init_conc = user_model_params["init_conc"];
+  }
+  NumericVector user_params = default_params;
+  if (user_model_params.containsElementNamed("params")) {
+    user_params = user_model_params["params"];
+  }
   // Model Parameter Check: replace entries in default_model_params with user-supplied values if necessary
+  //
   // Volumes check:
   CharacterVector user_vols_names = user_vols.names();
   for (int i = 0; i < user_vols_names.length(); i++) {

@@ -117,18 +117,18 @@ List init() {
   // Default propensity equation parameters
   NumericVector params = NumericVector::create(
     
-    _["VpM1"] = 1.5,
-    _["VpM2"] = 0.6,
+    _["VpM1"] = 1.5, // in min^-1
+    _["VpM2"] = 0.6, // in min^-1
     _["alpha"] = 9,
     _["gamma"] = 9,
     _["K11"] = 0.1,
     _["Kp2"] = 0.2,
     // it is not necessary to convert glucose, Ka1, Ka2, Ka5 and Ka6 into particle numbers because the units cancel
-    _["Ka1_conc"] = 1e-7,
-    _["Ka2_conc"] = 1e-7,
+    _["Ka1_conc"] = 1e7,
+    _["Ka2_conc"] = 1e7,
     _["Ka5_conc"] = 500,
-    _["Ka6_conc"] = 600,
-    _["gluc_conc"] = 1e-7 // in Gall 2000 model fixed at 10mM
+    _["Ka6_conc"] = 500,
+    _["gluc_conc"] = 1e7 // in Gall 2000 model fixed at 10mM
   );
     
   // Combine and return all vectors in a default_params list
@@ -157,11 +157,17 @@ void calculate_amu() {
   double Ka6_conc = prop_params_map["Ka6_conc"];
   double gluc_conc = prop_params_map["gluc_conc"];
   
-  double activeFraction = x[1]/(x[0]+x[1]);
+  double total = x[0] + x[1];
+  double activeFraction = x[1]/total;
   
+  double Ca_conc_pow4 = calcium[ntimepoint] * calcium[ntimepoint] * calcium[ntimepoint] * calcium[ntimepoint];
+  
+  double Ka5_conc_pow4 = Ka5_conc * Ka5_conc * Ka5_conc * Ka5_conc;
+  double Ka6_conc_pow4 = Ka6_conc * Ka6_conc * Ka6_conc * Ka6_conc;   
+
   // divide VpM1 and VpM2 by 60 to convert the units from min^-1 to s^-1
-  amu[0] = (VpM1 / 60.0 * (1.0 + gamma * pow((double)calcium[ntimepoint],4) / (pow(Ka5_conc,4) + pow((double)calcium[ntimepoint],4))) * ( 1.0 - activeFraction)) / ((K11 / (1.0 + pow((double)calcium[ntimepoint],4) / pow(Ka6_conc,4))) + 1.0 - activeFraction) * (x[0]+x[1]);
-  amu[1] = amu[0] + ((VpM2 / 60.0 * (1.0 + alpha * (gluc_conc) / (Ka1_conc + gluc_conc)) * activeFraction) / (Kp2 / (1 + gluc_conc / Ka2_conc) + activeFraction) * (x[0]+x[1]));
+  amu[0] = (VpM1 / 60.0 * (1.0 + gamma * Ca_conc_pow4 / Ka5_conc_pow4 + Ca_conc_pow4)) * ( 1.0 - activeFraction) / ((K11 / (1.0 + Ca_conc_pow4 / Ka6_conc_pow4)) + 1.0 - activeFraction) * total;
+  amu[1] = amu[0] + ((VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * activeFraction) / (Kp2 / (1 + gluc_conc / Ka2_conc) + activeFraction) * total);
 }
 
 // System update:

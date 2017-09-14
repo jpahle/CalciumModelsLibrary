@@ -6,8 +6,8 @@ sim_params <- c(timestep = 0.05,
                 endTime = 100)
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 5e-14),
-                     init_conc = c(Prot_inact = 0,
-                                   Prot_act = 10),
+                     init_conc = c(Prot_inact = 5,
+                                   Prot_act = 0),
                      params    = c(k_on = 0.025))
 
 # Read Ca timeseries

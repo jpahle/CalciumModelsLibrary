@@ -45,11 +45,11 @@ The following table provides a quick overview of all models that are implemented
 +---------------+-------------------------------------------------------+-------------------------------+
 | camkii        | Calcium/Calmodulin-dependent Protein Kinase II        | Dupont et a.l (2003) [4]      |
 +---------------+-------------------------------------------------------+-------------------------------+
-| glycphos      | Liver Glycogen Phosphorylase                          | Gall et al. (2000) [5]        |
+| glycphos      | Liver Glycogen Phosphorylase                          | Gall et al. (2000) [6]        |
 +---------------+-------------------------------------------------------+-------------------------------+
-| pkc           | Protein  \                                            | Manninen et al. (2006) [6] \  |
-|               | Kinase C                                              | Intosalmi et al. (2009) [7] \ |
-|               |                                                       | Bhalla & Iyengar (1999) [8]   |
+| pkc           | Protein  \                                            | Manninen et al. (2006) [7] \  |
+|               | Kinase C                                              | Intosalmi et al. (2009) [8] \ |
+|               |                                                       | Bhalla & Iyengar (1999) [9]   |
 +---------------+-------------------------------------------------------+-------------------------------+
 
 
@@ -128,21 +128,52 @@ This function describes the model by defining the set of differential equations,
 #### Reactions and Kinetcis 
 
 include table of all reactions
+
++--+----------+------------------+
+|  | Reaction | Reaction formula |
++==+==========+==================+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+
 (columns: reaction name - symbolic equation - reaction formula)
 
 #### Default Parameters
 
 include table of all default parameters
+
++-----------+-------+------+---------+--------+
+| Parameter | Value | Unit | Comment | Source |
++===========+=======+======+=========+========+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+
 (columns: parameter name - value - unit - comment - source)
 
 #### Glossary
 include table of all model specific terms
+
++------+-------------+
+| Term | Explanation |
++======+=============+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+
 (columns: term - explanation)
 
 
 ### 2. Calcineurin
-
-No changes from source paper.
 
 #### General Information
 
@@ -151,21 +182,105 @@ No changes from source paper.
 #### Reactions and Kinetcis 
 
 include table of all reactions
+
++--+----------+------------------+
+|  | Reaction | Reaction formula |
++==+==========+==================+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+
 (columns: reaction name - symbolic equation - reaction formula)
 
 #### Default Parameters
 
 include table of all default parameters
+
++-----------+-------+------+---------+--------+
+| Parameter | Value | Unit | Comment | Source |
++===========+=======+======+=========+========+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+
 (columns: parameter name - value - unit - comment - source)
 
 #### Glossary
 include table of all model specific terms
+
++------+-------------+
+| Term | Explanation |
++======+=============+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+
 (columns: term - explanation)
 
 
 ### 3. Calmodulin
 
 generic two-state model created by Dr. Jürgen Pahle, BIOQUANT, University of Heidelberg
+
+#### General Information
+
+#### Model limitations and assumptions
+
+#### Reactions and Kinetcis 
+
+include table of all reactions
+
++--+----------+------------------+
+|  | Reaction | Reaction formula |
++==+==========+==================+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+
+(columns: reaction name - symbolic equation - reaction formula)
+
+#### Default Parameters
+
+include table of all default parameters
+
++-----------+-------+------+---------+--------+
+| Parameter | Value | Unit | Comment | Source |
++===========+=======+======+=========+========+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+
+(columns: parameter name - value - unit - comment - source)
+
+#### Glossary
+include table of all model specific terms
+
++------+-------------+
+| Term | Explanation |
++======+=============+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+
+(columns: term - explanation)
 
 
 ### 4. CamKII (Ca^2+^-calmodulin kinase II)
@@ -177,62 +292,151 @@ generic two-state model created by Dr. Jürgen Pahle, BIOQUANT, University of He
 #### Reactions and Kinetcis 
 
 include table of all reactions
+
++--+----------+------------------+
+|  | Reaction | Reaction formula |
++==+==========+==================+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+
 (columns: reaction name - symbolic equation - reaction formula)
 
 #### Default Parameters
 
 include table of all default parameters
+
++-----------+-------+------+---------+--------+
+| Parameter | Value | Unit | Comment | Source |
++===========+=======+======+=========+========+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+|           |       |      |         |        |
++-----------+-------+------+---------+--------+
+
 (columns: parameter name - value - unit - comment - source)
 
 #### Glossary
 include table of all model specific terms
+
++------+-------------+
+| Term | Explanation |
++======+=============+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+
 (columns: term - explanation)
 
 
 ### 5. Glycogen Phosphorylase
 
-No changes from source paper.
+Compiled and written by Martin Zauser.
 
 #### General Information
+The liver glycogen phosphorylase exists in hepatocytes in two diﬀerent forms: inactive and active. The purpose of activated glycogen phosphorylase is to mobilize energy by degrading glycogen into glucose. This is an important process for the body because it ensures the glucose supply between feeding. Therefore, precise and reliable regulation of this process is essential. 
+
+Activation of glycogen phosphorylase is assumed to be regulated by calcium oscillations. Based on an abstract investigation of frequency encoding of calcium oscillations [5] Gall et al. developed a model of calcium-dependent activation of glycogen phosphorylase in the liver [6]. 
+
+In this model calcium signaling aﬀects the dynamics of the phosphorylase kinase, which in turn activates the glycogen phosphorylase. The inactivation of glycogen phosphorylase is done by a glucose-dependent phosphatase.
 
 #### Model limitations and assumptions
+The model for glycogen phosphorylase was set up according to the equations and concentrations given
+by [5].
 
 #### Reactions and Kinetcis 
 
 include table of all reactions
+
++--+----------+------------------+
+|  | Reaction | Reaction formula |
++==+==========+==================+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+|  |          |                  |
++--+----------+------------------+
+
 (columns: reaction name - symbolic equation - reaction formula)
 
 #### Default Parameters
 
 include table of all default parameters
+
++-----------+-------+--------+-----------------------------------------------+--------+
+| Parameter | Value | Unit   | Comment                                       | Source |
++===========+=======+========+===============================================+========+
+| VpM1      | 1.5   | min^-1 |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| VpM2      | 0.6   | min^-1 |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| alpha     | 9     |        |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| gamma     | 9     |        |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| K11       | 0.1   |        |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| Kp2       | 0.2   |        |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| Ka1_conc  | 1e7   | nMol/l |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| Ka2_conc  | 1e7   | nMol/l |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| Ka5_conc  | 500   | nMol/l |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| Ka6_conc  | 500   | nMol/l |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+| gluc_conc | 1e7   | nMol/l |                                               | [6]    |
++-----------+-------+--------+-----------------------------------------------+--------+
+
 (columns: parameter name - value - unit - comment - source)
 
 #### Glossary
 include table of all model specific terms
+
++------+-------------+
+| Term | Explanation |
++======+=============+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+|      |             |
++------+-------------+
+
 (columns: term - explanation)
 
 
 ### 6. PKC (Protein Kinase C)
 
-Additional information about the pkc model can be found in this vignette, written by Arne Schoch.
+Compiled and written by Arne Schoch.
 
 #### <a name="General_header"></a> General information
-The presented model is a reproduction of the PKC-model presented in [6] and [7]. In turn, the mentioned publications refer to an older publication by Bhalla and Iyengar [8] in which the model was outlined and who originally defined it. Most parameters including initial concentrations of biochemical species that were used in all of the indicated publications can be found in the DOQCS-database (Database of Quantitative Cellular Signaling) [9]. 
+The presented model is a reproduction of the PKC-model presented in [7] and [8]. In turn, the mentioned publications refer to an older publication by Bhalla and Iyengar [9] in which the model was outlined and who originally defined it. Most parameters including initial concentrations of biochemical species that were used in all of the indicated publications can be found in the DOQCS-database (Database of Quantitative Cellular Signaling) [10]. 
 
-The model displays the activation of protein kinase C via complexation with three effector molecules: $AA$, $Ca_{cyt}$ and $DAG$ (the inputs). As a result different active complexes arise. Besides these complexes there is also a basal PKC-fraction modelled that represents a PKC-activity independent of complexation. Importantly, the model is not specific for a certain PKC-isoform but describes the activation of all available PKC-isoforms in a hippocampal neuron [8]. 
+The model displays the activation of protein kinase C via complexation with three effector molecules: $AA$, $Ca_{cyt}$ and $DAG$ (the inputs). As a result different active complexes arise. Besides these complexes there is also a basal PKC-fraction modelled that represents a PKC-activity independent of complexation. Importantly, the model is not specific for a certain PKC-isoform but describes the activation of all available PKC-isoforms in a hippocampal neuron [9]. 
 
 The output of the model ($PKC_{act}$) is composed of the summed up concentrations of all of the active species at a certain point in time. The species that are used for the calculation of $PKC_{act}$ are marked with an asterisk (*) in the publications [6, 7] and explicitly labelled in the attached [glossary](#Glossary_header).                                 
 
-By default, a simple sine input is defined for $Ca_{cyt}$ with a baseline concentration level of 200 nM, a peak concentration level of 1000 nM and a period length of 100 s. The other two input species ($AA$ and $DAG$) are set to fixed concentrations as previously shown in [7]. In another publication sine curves were assigned for $AA$ and $DAG$ [6].
+By default, a simple sine input is defined for $Ca_{cyt}$ with a baseline concentration level of 200 nM, a peak concentration level of 1000 nM and a period length of 100 s. The other two input species ($AA$ and $DAG$) are set to fixed concentrations as previously shown in [8]. In another publication sine curves were assigned for $AA$ and $DAG$ [7].
 
 ```{r, out.width = "700px", echo = FALSE}
 knitr::include_graphics("Manninen.png")
 ```
-*PKC activation model according to [8]. The model consists of ten reversible reactions with three input species (red circles). The summed up concentrations of the species in rectangles without round corners (active PKC-forms) equal the model output PKCact.*    
+*PKC activation model according to [9]. The model consists of ten reversible reactions with three input species (red circles). The summed up concentrations of the species in rectangles without round corners (active PKC-forms) equal the model output PKCact.*    
 
 #### <a name="Limitations-header"></a> Model limitations and assumptions
 As mentioned before, it has to be kept in mind that the presented PKC-model does not distinguish between specific PKC-isoforms. Therefore, it has to be understood as a general PKC-model.                                                                                       
-The model was fitted to experimental concentration-effect curves found in two publications [10. 11]. Hence, adaptions of single parameters to a modified version of the PKC-model have to be handled with care due to possible parameter non-identifiabilities. 
+The model was fitted to experimental concentration-effect curves found in two publications [11][12]. Hence, adaptions of single parameters to a modified version of the PKC-model have to be handled with care due to possible parameter non-identifiabilities. 
 
 
 #### <a name="Reactions&kinetics_header"></a> Reactions and kinetics
@@ -262,40 +466,40 @@ The model was fitted to experimental concentration-effect curves found in two pu
 #### <a name="Parameters_header"></a> Default Parameters
 | Parameter             |   Value  |   Unit   |                                         Comment                                        | Source |
 |-----------------------|:--------:|:--------:|:--------------------------------------------------------------------------------------:|:------:|
-| $k_1$                    |     $1$    |   $s^{-1}$   | rate constant for $R_1$ (transformation of $PKC_{inact}$ to $PKC_{basal}$)                        |   [9]  |
-| $k_2$                    |    $50$    |    $s^{-1}$   | rate constant for $R_2$ (transformation of $PKC_{basal}$ to ${PKC_inact}$)                        |   [9]  |
-| $k_3$                    | $1.2 * 10^{-7}$ | $nM^{-1} s^{-1}$ | rate constant for $R_3$ (complexation of $PKC_{inact}$ and $AA$)                                |   [9]  |
-| $k_4$                    |   $0.1$   |    $s^{-1}$   | rate constant for $R_4$ (collapse of $AAPKC$ into $PKC_{inact}$ and $AA$)                         |   [9]  |
-| $k_5$                    |  $1.2705$  |    $s^{-1}$   | rate constant for $R_5$ (transformation of $CaPKC$ to $CaPKC_{memb}$)                            |   [9]  |
-| $k_6$                   |  $3.5026$  |    $s^{-1}$   | rate constant for $R_6$ (transformation of $CaPKC_{memb}$ to $CaPKC$)                            |   [9]  |
-| $k_7$                    | $1.2 * 10^{-6}$ | $nM^{-1} s^{-1}$ | rate constant for $R_7$ (complexation of $CaPKC$ and $AA$)                                    |   [9]  |
-| $k_8$                    |    $0.1$   |    $s^{-1}$   | rate constant for $R_8$ (collapse of $AACaPKC$ into $CaPKC$ and $AA$)                           |   [9]  |
-| $k_9$                    |     $1$    |    $s^{-1}$   | rate constant for $R_9$ transformation of $DAGCaPKC$ to $DAGPKC_{memb}$)                         |   [9]  |
-| $k_{10}$                   |    $0.1$   |    $s^{-1}$   | rate constant for $R_{10}$ (transformation of $DAGPKC_{memb}$ to $DAGCaPKC$)                       |   [9]  |
-| $k_{11}$                   |     $2$    |    $s^{-1}$   | rate constant for $R_{11}$ (transformation of $AADAGPKC_{inact}$ to $AADAGPKC_{act}$)               |   [9]  |
-| $k_{12}$                   |    $0.2$   |    $s^{-1}$   | rate constant for $R_{12}$ (transformation of $AADAGPKC_{act}$ to $AADAGPKC_{inact}$)               |   [9]  |
-| $k_{13}$                   |  $0.0006$  | $nM^{-1} s^{-1}$ | rate constant for $R_{13}$ (complexation of $PKC_{inact}$ and $Ca_{cyt}$)                           |   [9]  |
-| $k_{14}$                   |    $0.5$   |    $s^{-1}$   | rate constant for $R_{14}$ (collapse of $CaPKC$ into $PKC_{inact}$ and $Ca_{cyt}$)                    |   [9]  |
-| $k_{15}$                   | $7.998 * 10^{-6}$ | $nM^{-1} s^{-1}$ | rate constant for $R_{15}$ (complexation of $CaPKC$ and $DAG$)                                  |   [9]  |
-| $k_{16}$                   |  $8.6348$  |    $s^{-1}$   | rate constant for $R_{16}$ (collapse of $DAGCaPKC$ into $CaPKC$ and $DAG$)                        |   [9]  |
-| $k_{17}$                   | $6 * 10^{-7}$ | $nM^{-1} s^{-1}$ | rate constant for $R_{17}$ (complexation of $PKC_{inact}$ and $DAG$)                              |   [9]  |
-| $k_{18}$                   |    $0.1$   |    $s^{-1}$   | rate constant for $R_{18}$ (collapse of $DAGPKC$ into $PKC_{inact}$ and $DAG$)                      |   [9]  |
-| $k_{19}$                   | $1.8 * 10^{-5}$ | $nM^{-1} s^{-1}$ | rate constant for $R_{19}$ (complexation of $DAGPKC$ and $AA$)                                  |   [9]  |
-| $k_{20}$                   |     $2$    |    $s^{-1}$   | rate constant for $R_{20}$ (collapse of $AADAGPKC$ into $DAGPKC$ and $AA$)                        |   [9]  |
-| $[AA]_0$             | $11000$ |    $nM$    | initial concentration for $AA$ (in this version $AA$ is set to a constant concentration)   |   [7]  |
-| $[AACaPKC]_0$        | $1.75 * 10^{-13}$ |    $nM$    | initial concentration for $AACaPKC$                                                      |   [9]  |
-| $[AADAGPKC_{inact}]_0$ | $2.5188 * 10^{-16}$ |    $nM$    | initial concentration for $AADAGPKC_{inact}$                                               |   [9]  |
-| $[AADAGPKC_{act}]_0$   | $4.9137 * 10^{-15}$ |    $nM$    | initial concentration for $AADAGPKC_{act}$                                                 |   [9]  |
-| $[AAPKC]_0$          | $1.8133 * 10^-{14}$ |    $nM$    | initial concentration for $AAPKC$                                                        |   [9]  |
-| $[CaPKC]_0$          | $3.7208 * 10^{-14}$ |    $nM$    | initial concentration for $CaPKC$                                                        |   [9]  |
-| $[CaPKC_{memb}]_0$      | $1.3896 * 10^{-14}$ |    $nM$    | initial concentration for $CaPKC_{memb}$                                                    |   [9]  |
-| $[DAG]_0$            |   $5000$   |    $nM$    | initial concentration for $DAG$ (in this version $DAG$ is set to a constant concentration) |   [7]  |
-| $[DAGCaPKC]_0$       | $8.4632 * 10^{-20}$ |    $nM$    | initial concentration for $DAGCaPKC$                                                     |   [9]  |
-| $[DAGPKC]_0$         | $1.161 * 10^{-13}$ |    $nM$    | initial concentration for $DAGPKC$                                                       |   [9]  |
-| $[DAGPKC_{memb}]_0$     | $9.4352 * 10^{-18}$ |    $nM$    | initial concentration for $DAGPKC_{memb}$                                                   |   [9]  |
-| $[PKC_{basal}]_0$      |    $20$    |    $nM$    | initial concentration for $PKC_{basal}$                                                    |   [9]  |
-| $[PKC_{inact}]_0$      |   $1000$   |    $nM$    | initial concentration for $PKC_{inact}$                                                    |   [9]  |
-| $vol$                   | $1 * 10^{-15}$ |     $L$    | cytosol volume value was used for simulations in the indicated paper                   |   [6]  |
+| $k_1$                    |     $1$    |   $s^{-1}$   | rate constant for $R_1$ (transformation of $PKC_{inact}$ to $PKC_{basal}$)                        |   [10]  |
+| $k_2$                    |    $50$    |    $s^{-1}$   | rate constant for $R_2$ (transformation of $PKC_{basal}$ to ${PKC_inact}$)                        |   [10]  |
+| $k_3$                    | $1.2 * 10^{-7}$ | $nM^{-1} s^{-1}$ | rate constant for $R_3$ (complexation of $PKC_{inact}$ and $AA$)                                |   [10]  |
+| $k_4$                    |   $0.1$   |    $s^{-1}$   | rate constant for $R_4$ (collapse of $AAPKC$ into $PKC_{inact}$ and $AA$)                         |   [10]  |
+| $k_5$                    |  $1.2705$  |    $s^{-1}$   | rate constant for $R_5$ (transformation of $CaPKC$ to $CaPKC_{memb}$)                            |   [10]  |
+| $k_6$                   |  $3.5026$  |    $s^{-1}$   | rate constant for $R_6$ (transformation of $CaPKC_{memb}$ to $CaPKC$)                            |   [10]  |
+| $k_7$                    | $1.2 * 10^{-6}$ | $nM^{-1} s^{-1}$ | rate constant for $R_7$ (complexation of $CaPKC$ and $AA$)                                    |   [10]  |
+| $k_8$                    |    $0.1$   |    $s^{-1}$   | rate constant for $R_8$ (collapse of $AACaPKC$ into $CaPKC$ and $AA$)                           |   [10]  |
+| $k_9$                    |     $1$    |    $s^{-1}$   | rate constant for $R_9$ transformation of $DAGCaPKC$ to $DAGPKC_{memb}$)                         |   [10]  |
+| $k_{10}$                   |    $0.1$   |    $s^{-1}$   | rate constant for $R_{10}$ (transformation of $DAGPKC_{memb}$ to $DAGCaPKC$)                       |   [10]  |
+| $k_{11}$                   |     $2$    |    $s^{-1}$   | rate constant for $R_{11}$ (transformation of $AADAGPKC_{inact}$ to $AADAGPKC_{act}$)               |   [10]  |
+| $k_{12}$                   |    $0.2$   |    $s^{-1}$   | rate constant for $R_{12}$ (transformation of $AADAGPKC_{act}$ to $AADAGPKC_{inact}$)               |   [10]  |
+| $k_{13}$                   |  $0.0006$  | $nM^{-1} s^{-1}$ | rate constant for $R_{13}$ (complexation of $PKC_{inact}$ and $Ca_{cyt}$)                           |   [10]  |
+| $k_{14}$                   |    $0.5$   |    $s^{-1}$   | rate constant for $R_{14}$ (collapse of $CaPKC$ into $PKC_{inact}$ and $Ca_{cyt}$)                    |   [10]  |
+| $k_{15}$                   | $7.998 * 10^{-6}$ | $nM^{-1} s^{-1}$ | rate constant for $R_{15}$ (complexation of $CaPKC$ and $DAG$)                                  |   [10]  |
+| $k_{16}$                   |  $8.6348$  |    $s^{-1}$   | rate constant for $R_{16}$ (collapse of $DAGCaPKC$ into $CaPKC$ and $DAG$)                        |   [10]  |
+| $k_{17}$                   | $6 * 10^{-7}$ | $nM^{-1} s^{-1}$ | rate constant for $R_{17}$ (complexation of $PKC_{inact}$ and $DAG$)                              |   [10]  |
+| $k_{18}$                   |    $0.1$   |    $s^{-1}$   | rate constant for $R_{18}$ (collapse of $DAGPKC$ into $PKC_{inact}$ and $DAG$)                      |   [10]  |
+| $k_{19}$                   | $1.8 * 10^{-5}$ | $nM^{-1} s^{-1}$ | rate constant for $R_{19}$ (complexation of $DAGPKC$ and $AA$)                                  |   [10]  |
+| $k_{20}$                   |     $2$    |    $s^{-1}$   | rate constant for $R_{20}$ (collapse of $AADAGPKC$ into $DAGPKC$ and $AA$)                        |   [10]  |
+| $[AA]_0$             | $11000$ |    $nM$    | initial concentration for $AA$ (in this version $AA$ is set to a constant concentration)   |   [8]  |
+| $[AACaPKC]_0$        | $1.75 * 10^{-13}$ |    $nM$    | initial concentration for $AACaPKC$                                                      |   [10]  |
+| $[AADAGPKC_{inact}]_0$ | $2.5188 * 10^{-16}$ |    $nM$    | initial concentration for $AADAGPKC_{inact}$                                               |   [10]  |
+| $[AADAGPKC_{act}]_0$   | $4.9137 * 10^{-15}$ |    $nM$    | initial concentration for $AADAGPKC_{act}$                                                 |   [10]  |
+| $[AAPKC]_0$          | $1.8133 * 10^-{14}$ |    $nM$    | initial concentration for $AAPKC$                                                        |   [10]  |
+| $[CaPKC]_0$          | $3.7208 * 10^{-14}$ |    $nM$    | initial concentration for $CaPKC$                                                        |   [10]  |
+| $[CaPKC_{memb}]_0$      | $1.3896 * 10^{-14}$ |    $nM$    | initial concentration for $CaPKC_{memb}$                                                    |   [10]  |
+| $[DAG]_0$            |   $5000$   |    $nM$    | initial concentration for $DAG$ (in this version $DAG$ is set to a constant concentration) |   [8]  |
+| $[DAGCaPKC]_0$       | $8.4632 * 10^{-20}$ |    $nM$    | initial concentration for $DAGCaPKC$                                                     |   [10]  |
+| $[DAGPKC]_0$         | $1.161 * 10^{-13}$ |    $nM$    | initial concentration for $DAGPKC$                                                       |   [10]  |
+| $[DAGPKC_{memb}]_0$     | $9.4352 * 10^{-18}$ |    $nM$    | initial concentration for $DAGPKC_{memb}$                                                   |   [10]  |
+| $[PKC_{basal}]_0$      |    $20$    |    $nM$    | initial concentration for $PKC_{basal}$                                                    |   [10]  |
+| $[PKC_{inact}]_0$      |   $1000$   |    $nM$    | initial concentration for $PKC_{inact}$                                                    |   [10]  |
+| $vol$                   | $1 * 10^{-15}$ |     $L$    | cytosol volume value was used for simulations in the indicated paper                   |   [7]  |
 
 #### <a name="Glossary_header"></a> Glossary
 | Term           | Explanation                                                                                                                        |
@@ -331,25 +535,29 @@ https://doi.org/10.1007/s10439-006-9179-4
 * [4] Dupont, G., Houart, G., and De Koninck, P. __Sensitivity of CaM kinase II to the frequency of Ca2+ oscillations: a simple model.__ Cell Calcium, 2003. 34(6): p. 485-97.
 https://doi.org/10.1016/S0143-4160(03)00152-0
 
-* [5] Gall, D., Baus, E., and Dupont, G. __Activation of the liver glycogen phosphorylase by Ca(2+)oscillations: a theoretical study.__ Journal of Theoretical Biology, 2000. 207: p. 445–54.
+* [5] Goldbeter, A., Dupont, G. and Berridge, M. J. __Minimal model for signal-induced Ca2+
+oscillations and for their frequency encoding through protein phosphorylation.__ Proceedings of the
+National Academy of Sciences of the United States of America, 1990. 87, 1461–65.
+
+* [6] Gall, D., Baus, E., and Dupont, G. __Activation of the liver glycogen phosphorylase by Ca(2+)oscillations: a theoretical study.__ Journal of Theoretical Biology, 2000. 207: p. 445–54.
 https://doi.org/10.1006/jtbi.2000.2139
 
-* [6] Manninen, T., M.L. Linne, and K. Ruohonen, __Developing Ito stochastic differential equation models for neuronal signal transduction pathways.__ Comput Biol Chem, 2006. 30(4): p. 280-91.
+* [7] Manninen, T., M.L. Linne, and K. Ruohonen, __Developing Ito stochastic differential equation models for neuronal signal transduction pathways.__ Comput Biol Chem, 2006. 30(4): p. 280-91.
 https://doi.org/10.1016/j.compbiolchem.2006.04.002
 
-* [7] Intosalmi, J., Manninen, T., Ruohonen, K., Linne, M. J., __Modeling protein kinase C activation in the presence of calcium ion fluctuations.__ At the Sixth International Workshop on Computational Systems Biology, WCSB 2009, June 10-12, 2009 in Aarhus, Denmark. p. 75-78.
+* [8] Intosalmi, J., Manninen, T., Ruohonen, K., Linne, M. J., __Modeling protein kinase C activation in the presence of calcium ion fluctuations.__ At the Sixth International Workshop on Computational Systems Biology, WCSB 2009, June 10-12, 2009 in Aarhus, Denmark. p. 75-78.
 http://www.cs.tut.fi/wcsb09/wcsb2009proceedings.pdf
 
-* [8] Bhalla, U.S. and R. Iyengar, __Emergent properties of networks of biological signaling pathways.__ Science, 1999. 283(5400): p. 381-7.
+* [9] Bhalla, U.S. and R. Iyengar, __Emergent properties of networks of biological signaling pathways.__ Science, 1999. 283(5400): p. 381-7.
 https://doi.org/10.1126/science.283.5400.381
 
-* [9] Sivakumaran, S., Hariharaputran, S., Mishra, J., Bhalla, U.S., 2003. __The Database of Quantitative Cellular Signaling: management and analysis of chemical kinetic models of signaling networks.__ Bioinformatics 19 (3), 408-415.
+* [10] Sivakumaran, S., Hariharaputran, S., Mishra, J., Bhalla, U.S., 2003. __The Database of Quantitative Cellular Signaling: management and analysis of chemical kinetic models of signaling networks.__ Bioinformatics 19 (3), 408-415.
 https://doi.org/10.1093/bioinformatics/btf860
 
-* [10] Schaechter, J.D. and L.I. Benowitz, __Activation of protein kinase C by arachidonic acid selectively enhances the phosphorylation of GAP-43 in nerve terminal membranes.__ J Neurosci, 1993. 13(10): p. 4361-71.
+* [11] Schaechter, J.D. and L.I. Benowitz, __Activation of protein kinase C by arachidonic acid selectively enhances the phosphorylation of GAP-43 in nerve terminal membranes.__ J Neurosci, 1993. 13(10): p. 4361-71.
 http://www.ncbi.nlm.nih.gov/pubmed/8410192
 
-* [11] Shinomura, T., et al., __Synergistic action of diacylglycerol and unsaturated fatty acid for protein kinase C activation: its possible implications.__ Proc Natl Acad Sci U S A, 1991. 88(12): p. 5149-53.
+* [12] Shinomura, T., et al., __Synergistic action of diacylglycerol and unsaturated fatty acid for protein kinase C activation: its possible implications.__ Proc Natl Acad Sci U S A, 1991. 88(12): p. 5149-53.
 https://doi.org/10.1073/pnas.88.12.5149
 
 

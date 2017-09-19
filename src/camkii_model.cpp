@@ -54,27 +54,33 @@ NumericMatrix sim_camkii(DataFrame user_input_df,
   CharacterVector user_vols_names = user_vols.names();
   for (int i = 0; i < user_vols_names.length(); i++) {
     std::string current_vol_name = as<std::string>(user_vols_names[i]);
-    if (user_vols.containsElementNamed((current_vol_name).c_str())) {
+    if (default_vols.containsElementNamed((current_vol_name).c_str())) {
       // update default values
       default_vols[current_vol_name] = user_vols[current_vol_name];    
+    } else {
+      Rcout << "No such index! Default values have been used. Check input parameter vectors." << std::endl;
     }
   }
   // 2.) Initial conditions update:
   CharacterVector user_init_conc_names = user_init_conc.names();
   for (int i = 0; i < user_init_conc_names.length(); i++) {
     std::string current_init_conc_name = as<std::string>(user_init_conc_names[i]);
-    if (user_init_conc.containsElementNamed((current_init_conc_name).c_str())) {
+    if (default_init_conc.containsElementNamed((current_init_conc_name).c_str())) {
       // update default values
       default_init_conc[current_init_conc_name] = user_init_conc[current_init_conc_name];    
+    } else {
+      Rcout << "No such index! Default values have been used. Check input parameter vectors." << std::endl;
     }
   }
   // 3.) Propensity equation parameters update:
   CharacterVector user_params_names = user_params.names();
   for (int i = 0; i < user_params_names.length(); i++) {
     std::string current_param_name = as<std::string>(user_params_names[i]);
-    if (user_params.containsElementNamed((current_param_name).c_str())) {
+    if (default_params.containsElementNamed((current_param_name).c_str())) {
       // update default values
       default_params[current_param_name] = user_params[current_param_name];    
+    } else {
+      Rcout << "No such index! Default values have been used. Check input parameter vectors." << std::endl;
     }
   }
   // Put propensity reaction parameters in a map (for function calculate_amu)

@@ -9,7 +9,8 @@ Authors@R: c(
     person("Sonja", "Krausert",role = "ctb"),
     person("Arne", "Schoch", role = "ctb"),
     person("Yujiang", "Wang", role = "ctb"),
-    person("Martin", "Zauser", role = "ctb"))
+    person("Martin", "Zauser", role = "ctb"),
+    person("Nicolas", "Huber", role = "ctb"))
 Description: This package contains different models of calcium oscillations
     and a library of models for calcium-binding proteins.
 License: Artistic-2.0

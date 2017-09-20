@@ -1,8 +1,76 @@
 # Specific wrapper function for calmodulin calling the LSODA simulation function (provided by package deSolve)
 calmodulin_detSim <- function(input_df, sim_params, input_model_params) {
 
+
+
+  ############################################################################
+  ################################# - Model - ################################
+  # USER INPUT 1 for new models: define default model parameters 
+
+  # define default model parameters
+  default_model_params <- list(vols      = c(vol = 5e-14),
+                               init_conc = c(Cal_off = 5,
+                                             Cal_on = 0),
+                               params    = c(k_on = 0.025,
+                                             k_off = 0.005,
+                                             Km = 1.0,
+                                             h = 4.0))
+  ################################# - Model - ################################
+  ############################################################################
+
+
+  
   # force input dataframe order (First column = time, second column = Ca)
   input_df <- data.frame(time = input_df$time, Ca = input_df$Ca)
+  # get default vectors and user supplied input vectors (if they exist)
+  # set user vectors to default first so that if user vectors don't exist: they just contain the default values 
+  default_vols <- as.list(default_model_params[["vols"]])
+  default_init_conc <- as.list(default_model_params[["init_conc"]]) 
+  default_params <- as.list(default_model_params[["params"]])
+  user_vols <- default_vols
+  if(exists("vols", where = input_model_params)) {
+    user_vols <- input_model_params[["vols"]]
+  } else {
+    print("Default volume(s) have been used.")
+  }
+  user_init_conc <- default_init_conc
+  if(exists("init_conc", where = input_model_params)) {
+    user_init_conc <- input_model_params[["init_conc"]] 
+  } else {
+    print("Default initial condition(s) have been used.")
+  }
+  user_params <- default_params
+  if(exists("params", where = input_model_params)) {
+    user_params <- input_model_params[["params"]]
+  } else {
+    print("Default reaction parameter(s) have been used.")
+  }
+  # UPDATE DEFAULTS 
+  # Replace entries in default_model_params with user-supplied values if necessary
+  # 1.) Volumes update: 
+  for (param_name in names(user_vols)){
+    if(exists(param_name, where = default_vols)){
+      default_vols[[param_name]] = user_vols[[param_name]]
+    } else {
+      stop("No such index! Check input parameter vectors.")
+    }
+  }
+  # 2.) Initial conditions update:
+  for (param_name in names(user_init_conc)){
+    if(exists(param_name, where = default_init_conc)){
+      default_init_conc[[param_name]] = user_init_conc[[param_name]]
+    } else {
+      stop("No such index! Check input parameter vectors.")
+    }
+  }
+  # 3.) Differential equation parameters update:
+  for (param_name in names(user_params)){
+    if(exists(param_name, where = default_params)){
+      default_params[[param_name]] = user_params[[param_name]]
+    } else {
+      stop("No such index! Check input parameter vectors.")
+    }
+  }  
   # cut off input_df$time to get only values that are lesser equal endTime (to have output that only goes to endTime)
   input_df_subset <- subset(input_df, time <= sim_params[["endTime"]], select = c(time, Ca))
   # create simulation output time vector
@@ -12,14 +80,7 @@ calmodulin_detSim <- function(input_df, sim_params, input_model_params) {
 
   ############################################################################
   ################################# - Model - ################################
-  # USER INPUT for new models: define model parameters
-  #                            and differential equations
-
-  # define default model parameters
-  default_params <- list(k_on = 0.025,
-                         k_off = 0.005,
-                         Km = 1.0,
-                         h = 4.0)
+  # USER INPUT 2 for new models: define differential equations  
 
   # model description function
   calmodulin_ode <- function(t, state, parameters) {
@@ -53,20 +114,13 @@ calmodulin_detSim <- function(input_df, sim_params, input_model_params) {
     # return the new state vector
     y
   }
-  # compare user supplied input model parameters with defaults:
-  # if new value for existing parameter is supplied -> overwrite defaults
-  for (param_name in names(input_model_params)){
-    if(exists(param_name, where = default_params)){
-      default_params[param_name] = input_model_params[param_name]
-    }
-  }
-  
+    
   
   
   ############################################################################
   ############################# - Simulation - ###############################
-  # USER INPUT for new models: adapt name of 'func' argument 
-  #                            (calmodulin_ode for calmodulin model, etc.)
+  # USER INPUT 3 for new models: adapt name of 'func' argument 
+  #                              (calmodulin_ode for calmodulin model, etc.)
   
   # simulate model with LSODA
   output <- deSolve::lsoda(y = c(Ca = input_df$Ca[[1]], input_model_params[["init_conc"]]),

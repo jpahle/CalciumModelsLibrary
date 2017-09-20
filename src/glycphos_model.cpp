@@ -39,14 +39,20 @@ NumericMatrix sim_glycphos(DataFrame user_input_df,
   NumericVector user_vols = default_vols;
   if (user_model_params.containsElementNamed("vols")) {
       user_vols = user_model_params["vols"];
+  } else {
+    Rcout << "Default volume(s) have been used." << std::endl;
   } 
   NumericVector user_init_conc = default_init_conc;
   if (user_model_params.containsElementNamed("init_conc")) {
     user_init_conc = user_model_params["init_conc"];
+  } else {
+    Rcout << "Default initial condition(s) have been used." << std::endl;
   }
   NumericVector user_params = default_params;
   if (user_model_params.containsElementNamed("params")) {
     user_params = user_model_params["params"];
+  } else {
+    Rcout << "Default reaction parameter(s) have been used." << std::endl;
   }
   // UPDATE DEFAULTS 
   // Replace entries in default_model_params with user-supplied values if necessary

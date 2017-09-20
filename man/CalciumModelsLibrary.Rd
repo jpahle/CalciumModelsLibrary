@@ -6,11 +6,19 @@
 \alias{CalciumModelsLibrary-package}
 \title{CalciumModelsLibrary: A package for calcium-sensitive protein models.}
 \description{
-The CalciumModelsLibrary package provides different models for
-calcium oscillations and a library of models for
+The CalciumModelsLibrary package provides a library of models for
 calcium-sensitive proteins.
 }
 \section{CalciumModelsLibrary functions}{
- ...
+
+\itemize{
+\item sim_ano()
+\item sim_calcineurin()
+\item sim_calmodulin()
+\item sim_camkii()
+\item sim_glycphos()
+\item sim_pkc()
+\item calmodulin_detSim()
+}
 }
 

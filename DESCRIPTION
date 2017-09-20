@@ -11,8 +11,7 @@ Authors@R: c(
     person("Yujiang", "Wang", role = "ctb"),
     person("Martin", "Zauser", role = "ctb"),
     person("Nicolas", "Huber", role = "ctb"))
-Description: This package contains different models of calcium oscillations
-    and a library of models for calcium-binding proteins.
+Description: This package contains a library of models for calcium-binding proteins.
 License: Artistic-2.0
 URL: https://github.com/jpahle/CalciumModelsLibrary
 BugReports: https://github.com/jpahle/CalciumModelsLibrary/issues

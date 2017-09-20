@@ -1,5 +1,5 @@
 # Set rng seed for debugging tests
-set.seed(1)
+#set.seed(1)
 
 # Simulation Parameters (Vector)
 sim_params <- c(timestep = 0.05,
@@ -7,8 +7,7 @@ sim_params <- c(timestep = 0.05,
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 5e-14),
                      init_conc = c(Prot_inact = 5,
-                                   Prot_act = 0),
-                     params    = c(k_on = 0.025))
+                                   Prot_act = 0))
 
 # Read Ca timeseries
 input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))

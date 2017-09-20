@@ -6,8 +6,18 @@
 \usage{
 sim_pkc(user_input_df, user_sim_params, user_model_params)
 }
+\arguments{
+\item{user_input_df}{A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).}
+
+\item{user_sim_params}{A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").}
+
+\item{user_model_params}{A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters).}
+}
+\value{
+the result of calling the model specific version of the function "simulator"
+}
 \description{
-This function calls the internal C++ simulator function to simulate the PKC model.
+This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the pkc model.
 }
 \examples{
 sim_pkc()

@@ -1,4 +1,12 @@
-# Specific wrapper function for calmodulin calling the LSODA simulation function (provided by package deSolve)
+#' Specific wrapper function for calmodulin calling the LSODA simulation function (provided by package deSolve)
+#'
+#' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
+#' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
+#' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
+#' @return the result of calling the lsoda simulation algorithm from deSolve 
+#' @examples
+#' calmodulin_detSim()
+#' @export
 calmodulin_detSim <- function(input_df, sim_params, input_model_params) {
 
 

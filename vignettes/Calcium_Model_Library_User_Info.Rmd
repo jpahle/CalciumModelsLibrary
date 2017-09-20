@@ -83,7 +83,7 @@ lines(output$time, output$Prot_act, col="red", type="l")
 legend("topright", legend=c("calcium", "Prot_act"), col=c("blue", "red"), lty=c(1,1))
 ```
 
-**Detailed Description**
+**Description**
 
 It is mandatory to provide values for both simulation parameters (timestep and end time) since they have no associated default values in the source code.
 Model parameters (volumes, initial conditions, reaction parameters etc.) however can be omitted. They only need to be supplied if the user whishes to overwrite the model specific default values defined in the model files. If only one of multiple parameters is defined by the user in the model parameters vector (in this example: "k_on") then all remaining parameters are directly taken from the internal defaults.  
@@ -94,6 +94,37 @@ In this specific example the number of calcium particles at discrete time points
 
 Following the naming convention described above (section [Model Overview](#modeloverview)) the stochastic simulation of the calmodulin model is executed by calling "sim_calmodulin". Afterwards, the simulation output needs to be converted to a data frame object before it can be plotted in typical R fashion.
 
+### 2. Deterministic Simulation of the Calmodulin Model
+
+```{r fig2, fig.height = 5, fig.width = 7, fig.align = "center"}
+# Supply simulation parameters as vector
+sim_params <- c(timestep = 0.05,
+                endTime = 100)
+# Supply model parameters as list
+model_params <- list(vols      = c(vol = 5e-14),
+                     init_conc = c(Cal_off = 5,
+                                   Cal_on = 0),
+                     params    = c(k_on = 0.025))
+
+# Supply a calcium input timeseries file
+input_df <- read.table(system.file("extdata/ca5e-14_2.85_1000_0.05s.out", package = "CalciumModelsLibrary"), col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
+f <- 6.0221415e14*model_params[["vols"]][["vol"]]
+input_df["Ca"] <- input_df["Ca"]/f
+
+# Deterministic simulation of the model
+output <- calmodulin_detSim(input_df,
+                            sim_params,
+                            model_params)
+# Plot output
+plot(output$time, output$Ca, col = "blue", type = "l", xlab = "time [s]", ylab = "concentration [nMol/l]")
+lines(output$time, output$Cal_on, col = "red", type = "l")
+legend("topright", legend=c("calcium", "Cal_act"), col=c("blue", "red"), lty=c(1,1))
+
+```
+
+**Description**
+
+The deterministic simulation functions take exactly the same arguments (input dataframe, simulation and model parameters) and return the same object as the stochastic simulation functions. It is therefore only necessary to change the name of the function from sim_*[MODEL_KEY]* (stoch.) to *[MODEL_KEY]*_detSim.
 
 ## Code Structure
 

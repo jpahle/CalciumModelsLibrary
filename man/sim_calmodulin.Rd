@@ -7,7 +7,7 @@
 sim_calmodulin(user_input_df, user_sim_params, user_model_params)
 }
 \arguments{
-\item{user_input_df}{A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).}
+\item{user_input_df}{A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).}
 
 \item{user_sim_params}{A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").}
 
@@ -19,6 +19,28 @@ the result of calling the model specific version of the function "simulator"
 \description{
 This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the Calmodulin model.
 }
+\section{Default Parameters of the Calmodulin Model}{
+
+Default Volumes:
+\itemize{
+\item vol = 5e-14
+}
+
+Default Initial Conditions:
+\itemize{
+\item Prot_inact = 5
+\item Prot_act = 0
+}
+
+Default Reaction Parameters:
+\itemize{
+\item k_on = 0.025
+\item k_off = 0.005
+\item Km = 1.0
+\item h = 4.0
+}
+}
+
 \examples{
 sim_calmodulin()
 }

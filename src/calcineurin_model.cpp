@@ -15,9 +15,22 @@ static std::map <std::string, double> prop_params_map;
 //' Calcineurin Model R Wrapper Function (exported to R)
 //'
 //' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the calcineurin model.
-//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
+//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
+//' @section Default Parameters of the Calcineurin Model:
+//' Default Volumes: 
+//' * vol = 5e-14
+//' 
+//' Default Initial Conditions:
+//' * Prot_inact = 5
+//' * Prot_act = 0
+//' 
+//' Default Reaction Parameters:
+//' * k_on = 1
+//' * k_off = 1
+//' * p = 3.0
+//' @md
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
 //' sim_calcineurin()

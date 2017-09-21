@@ -7,7 +7,7 @@
 sim_glycphos(user_input_df, user_sim_params, user_model_params)
 }
 \arguments{
-\item{user_input_df}{A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).}
+\item{user_input_df}{A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).}
 
 \item{user_sim_params}{A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").}
 
@@ -19,6 +19,35 @@ the result of calling the model specific version of the function "simulator"
 \description{
 This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the glycphos model.
 }
+\section{Default Parameters of the Glycogen Phosphorylase Model}{
+
+Default Volumes:
+\itemize{
+\item vol = 5e-14
+}
+
+Default Initial Conditions:
+\itemize{
+\item Prot_inact = 5
+\item Prot_act = 0
+}
+
+Default Reaction Parameters:
+\itemize{
+\item VpM1 = 1.5 (in min^-1)
+\item VpM2 = 0.6 (in min^-1)
+\item alpha = 9
+\item gamma = 9
+\item K11 = 0.1
+\item Kp2 = 0.2
+\item Ka1_conc = 1e7
+\item Ka2_conc = 1e7
+\item Ka5_conc = 500
+\item Ka6_conc = 500
+\item gluc_conc = 1e7 (in Gall 2000 model fixed at 10mM)
+}
+}
+
 \examples{
 sim_glycphos()
 }

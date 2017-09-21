@@ -15,9 +15,42 @@ static std::map <std::string, double> prop_params_map;
 //' CamKII Model R Wrapper Function (exported to R)
 //'
 //' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the camkii model.
-//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
+//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
+//' @section Default Parameters of the CamKII Model:
+//' Default Volumes: 
+//' * vol = 5e-15
+//' 
+//' Default Initial Conditions:
+//' * W_I = 40
+//' * W_B = 0
+//' * W_P = 0
+//' * W_T = 0
+//' * W_A = 0
+//' 
+//' Default Reaction Parameters:
+//' * a = -0.22
+//' * b = 1.826
+//' * c = 0.1
+//' * k_IB = 0.01
+//' * k_BI = 0.8
+//' * k_PT = 1
+//' * k_TP = 1e-12
+//' * k_TA = 0.0008
+//' * k_AT = 0.01
+//' * k_AA = 0.29
+//' * c_B = 0.75
+//' * c_P = 1
+//' * c_T = 0.8
+//' * c_A = 0.8
+//' * camT = 1000
+//' * Kd = 1000
+//' * Vm_phos = 0.005
+//' * Kd_phos = 0.3
+//' * totalC = 40
+//' * h = 4.0
+//' @md
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
 //' sim_camkii()

@@ -7,7 +7,7 @@
 sim_camkii(user_input_df, user_sim_params, user_model_params)
 }
 \arguments{
-\item{user_input_df}{A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).}
+\item{user_input_df}{A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).}
 
 \item{user_sim_params}{A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").}
 
@@ -19,6 +19,47 @@ the result of calling the model specific version of the function "simulator"
 \description{
 This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the camkii model.
 }
+\section{Default Parameters of the CamKII Model}{
+
+Default Volumes:
+\itemize{
+\item vol = 5e-15
+}
+
+Default Initial Conditions:
+\itemize{
+\item W_I = 40
+\item W_B = 0
+\item W_P = 0
+\item W_T = 0
+\item W_A = 0
+}
+
+Default Reaction Parameters:
+\itemize{
+\item a = -0.22
+\item b = 1.826
+\item c = 0.1
+\item k_IB = 0.01
+\item k_BI = 0.8
+\item k_PT = 1
+\item k_TP = 1e-12
+\item k_TA = 0.0008
+\item k_AT = 0.01
+\item k_AA = 0.29
+\item c_B = 0.75
+\item c_P = 1
+\item c_T = 0.8
+\item c_A = 0.8
+\item camT = 1000
+\item Kd = 1000
+\item Vm_phos = 0.005
+\item Kd_phos = 0.3
+\item totalC = 40
+\item h = 4.0
+}
+}
+
 \examples{
 sim_camkii()
 }

@@ -18,6 +18,47 @@ static std::map <std::string, double> prop_params_map;
 //' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
+//' @section Default Parameters of the Protein Kinase C Model:
+//' Default Volumes: 
+//' * vol = 1e-15
+//' 
+//' Default Initial Conditions:
+//' * PKC_inact = 1000
+//' * CaPKC = 0
+//' * DAGCaPKC = 0
+//' * AADAGPKC_inact = 0
+//' * AADAGPKC_act = 0
+//' * PKCbasal = 20
+//' * AAPKC = 0
+//' * CaPKCmemb = 0
+//' * AACaPKC = 0
+//' * DAGPKCmemb = 0
+//' * DAGPKC = 0
+//' 
+//' Default Reaction Parameters:
+//' * k1 = 1
+//' * k2 = 50
+//' * k3 = 1.2e-7
+//' * k4 = 0.1
+//' * k5 = 1.2705
+//' * k6 = 3.5026
+//' * k7 = 1.2e-7
+//' * k8 = 0.1
+//' * k9 = 1
+//' * k10 = 0.1
+//' * k11 = 2
+//' * k12 = 0.2
+//' * k13 = 0.0006
+//' * k14 = 0.5
+//' * k15 = 7.998e-6
+//' * k16 = 8.6348
+//' * k17 = 6e-7
+//' * k18 = 0.1
+//' * k19 = 1.8e-5
+//' * k20 = 2
+//' * AA = 11000
+//' * DAG = 5000
+//' @md
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
 //' sim_pkc()

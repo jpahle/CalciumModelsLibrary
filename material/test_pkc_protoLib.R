@@ -2,8 +2,8 @@
 set.seed(1)
 
 # Simulation parameters (Vector)
-sim_params <- c(timestep = 1,
-                endTime = 1000)
+sim_params <- c(timestep = 0.05,
+                endTime = 100)
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 1e-15),
                      init_conc = c(PKC_inact = 1000,
@@ -21,8 +21,16 @@ model_params <- list(vols      = c(vol = 1e-15),
 # Read Ca timeseries
 input_df <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
+start.time <- as.numeric(Sys.time())*1000
+
 # Simulate model
 output <- sim_pkc(input_df, sim_params, model_params)
+
+end.time <- as.numeric(Sys.time())*1000
+
+time.taken <- end.time - start.time
+cat(time.taken)
+
 output <- as.data.frame(output)
 colnames(output) <- c("time",
                       "calcium",

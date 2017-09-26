@@ -2,7 +2,7 @@
 set.seed(1)
 
 # Simulation parameters (Vector)
-sim_params <- c(timestep = 1,
+sim_params <- c(timestep = 0.05,
                 endTime = 100)
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 1e-11),
@@ -28,15 +28,16 @@ f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 
 # Simulate model
-start.time <- Sys.time()
+start.time <- as.numeric(Sys.time())*1000
 
 output <- sim_ano(input_df, sim_params, model_params)
+
+end.time <- as.numeric(Sys.time())*1000
+
 output <- as.data.frame(output)
 
-end.time <- Sys.time()
-
 time.taken <- end.time - start.time
-time.taken
+cat(time.taken)
 
 # Plot output
 colnames(output) <- c("time", "calcium", "Cl_ext", "C", "C_c", "C_1", "C_1c", "C_2", "C_2c", "O", "O_c", "O_1", "O_1c", "O_2", "O_2c")

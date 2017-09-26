@@ -116,7 +116,7 @@ output <- calmodulin_detSim(input_df,
                             sim_params,
                             model_params)
 # Plot output
-plot(output$time, output$Ca, col = "blue", type = "l", xlab = "time [s]", ylab = "concentration [nMol/l]")
+plot(output$time, output$Ca, col = "blue", type = "l", xlab = "time [s]", ylab = "concentration [nmol/l]")
 lines(output$time, output$Cal_on, col = "red", type = "l")
 legend("topright", legend=c("calcium", "Cal_act"), col=c("blue", "red"), lty=c(1,1))
 
@@ -171,7 +171,7 @@ The model displays the activation pathway of Anoctamin-1. As a result of activat
 #### Initial Conditions
 
 +--------+--------------------------------+
-| Name   | Initial Concentration [nMol/l] |
+| Name   | Initial Concentration [nmol/l] |
 +========+================================+
 | C      | 100                            |
 +--------+--------------------------------+
@@ -508,15 +508,15 @@ include table of all default parameters
 +-----------+-------+--------+-----------------------------------------------+--------+
 | Kp2       | 0.2   |        |                                               | [7]    |
 +-----------+-------+--------+-----------------------------------------------+--------+
-| Ka1_conc  | 1e7   | nMol/l |                                               | [7]    |
+| Ka1_conc  | 1e7   | nmol/l |                                               | [7]    |
 +-----------+-------+--------+-----------------------------------------------+--------+
-| Ka2_conc  | 1e7   | nMol/l |                                               | [7]    |
+| Ka2_conc  | 1e7   | nmol/l |                                               | [7]    |
 +-----------+-------+--------+-----------------------------------------------+--------+
-| Ka5_conc  | 500   | nMol/l |                                               | [7]    |
+| Ka5_conc  | 500   | nmol/l |                                               | [7]    |
 +-----------+-------+--------+-----------------------------------------------+--------+
-| Ka6_conc  | 500   | nMol/l |                                               | [7]    |
+| Ka6_conc  | 500   | nmol/l |                                               | [7]    |
 +-----------+-------+--------+-----------------------------------------------+--------+
-| gluc_conc | 1e7   | nMol/l |                                               | [7]    |
+| gluc_conc | 1e7   | nmol/l |                                               | [7]    |
 +-----------+-------+--------+-----------------------------------------------+--------+
 
 (columns: parameter name - value - unit - comment - source)

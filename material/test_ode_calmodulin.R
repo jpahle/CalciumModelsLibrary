@@ -17,4 +17,4 @@ output <- calmodulin_detSim(input_df,
 # Plot output
 plot(output$time, output$Ca, col = "blue", type = "l", xlab = "time [s]", ylab = "concentration [nMol/l]")
 lines(output$time, output$Cal_on, col = "red", type = "l")
-legend("topright", legend=c("calcium", "Cal_inact", "Cal_act"), col=c("blue", "grey", "red"), lty=c(1,1,1))
+legend("topright", legend=c("calcium", "Cal_act"), col=c("blue", "red"), lty=c(1,1))

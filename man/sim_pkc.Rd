@@ -19,6 +19,55 @@ the result of calling the model specific version of the function "simulator"
 \description{
 This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the pkc model.
 }
+\section{Default Parameters of the Protein Kinase C Model}{
+
+Default Volumes:
+\itemize{
+\item vol = 1e-15
+}
+
+Default Initial Conditions:
+\itemize{
+\item PKC_inact = 1000
+\item CaPKC = 0
+\item DAGCaPKC = 0
+\item AADAGPKC_inact = 0
+\item AADAGPKC_act = 0
+\item PKCbasal = 20
+\item AAPKC = 0
+\item CaPKCmemb = 0
+\item AACaPKC = 0
+\item DAGPKCmemb = 0
+\item DAGPKC = 0
+}
+
+Default Reaction Parameters:
+\itemize{
+\item k1 = 1
+\item k2 = 50
+\item k3 = 1.2e-7
+\item k4 = 0.1
+\item k5 = 1.2705
+\item k6 = 3.5026
+\item k7 = 1.2e-7
+\item k8 = 0.1
+\item k9 = 1
+\item k10 = 0.1
+\item k11 = 2
+\item k12 = 0.2
+\item k13 = 0.0006
+\item k14 = 0.5
+\item k15 = 7.998e-6
+\item k16 = 8.6348
+\item k17 = 6e-7
+\item k18 = 0.1
+\item k19 = 1.8e-5
+\item k20 = 2
+\item AA = 11000
+\item DAG = 5000
+}
+}
+
 \examples{
 sim_pkc()
 }

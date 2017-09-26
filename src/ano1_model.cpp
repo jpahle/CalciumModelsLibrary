@@ -15,9 +15,58 @@ static std::map <std::string, double> prop_params_map;
 //' Ano1 Model R Wrapper Function (exported to R)
 //'
 //' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the ano model.
-//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
+//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
+//' @section Default Parameters of the Ano1 Model:
+//' Default Volumes: 
+//' * vol = 1e-11
+//' 
+//' Default Initial Conditions:
+//' * Cl_ext = 300
+//' * C = 100
+//' * C_c = 0
+//' * C_1 = 0
+//' * C_1c = 0
+//' * C_2 = 0
+//' * C_2c = 0
+//' * O = 0
+//' * O_c = 0
+//' * O_1 = 0
+//' * O_1c = 0
+//' * O_2 = 0
+//' * O_2c = 0
+//' 
+//' Default Reaction Parameters:
+//' * Vm = -0.06
+//' * T = 293.15
+//' * a1 = 0.0077
+//' * b1 = 917.1288
+//' * k01 = 0.5979439
+//' * k02 = 2.853
+//' * acl1 = 1.8872
+//' * bcl1 = 5955.783
+//' * kccl1 = 1.143e-12
+//' * kccl2 = 0.0009
+//' * kocl1 = 1.1947e-06
+//' * kocl2 = 3.4987
+//' * za1 = 0
+//' * zb1 = 0.0064
+//' * zk01 = 0
+//' * zk02 = 0.1684
+//' * zacl1 = 0.1111
+//' * zbcl1 = 0.3291
+//' * zkccl1 = 0.1986
+//' * zkccl2 = 0.0427
+//' * zkocl1 = 0.6485 
+//' * zkocl2 = 0.03 
+//' * l = 41.6411 
+//' * L = 0.6485 
+//' * m = 0.0102 
+//' * M = 0.0632 
+//' * h = 0.3367 
+//' * H = 14.2956 
+//' @md
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
 //' sim_ano()

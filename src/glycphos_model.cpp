@@ -15,9 +15,30 @@ static std::map <std::string, double> prop_params_map;
 //' Glycphos Model R Wrapper Function (exported to R)
 //'
 //' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the glycphos model.
-//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
+//' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).
 //' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
+//' @section Default Parameters of the Glycogen Phosphorylase Model:
+//' Default Volumes: 
+//' * vol = 5e-14
+//' 
+//' Default Initial Conditions:
+//' * Prot_inact = 5
+//' * Prot_act = 0
+//' 
+//' Default Reaction Parameters:
+//' * VpM1 = 1.5 (in min^-1)
+//' * VpM2 = 0.6 (in min^-1)
+//' * alpha = 9
+//' * gamma = 9
+//' * K11 = 0.1
+//' * Kp2 = 0.2
+//' * Ka1_conc = 1e7
+//' * Ka2_conc = 1e7
+//' * Ka5_conc = 500
+//' * Ka6_conc = 500
+//' * gluc_conc = 1e7 (in Gall 2000 model fixed at 10mM)
+//' @md
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
 //' sim_glycphos()

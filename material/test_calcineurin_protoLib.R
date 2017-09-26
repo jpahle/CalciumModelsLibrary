@@ -17,8 +17,16 @@ input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("ti
 f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 
+starttime <- as.numeric(Sys.time())*1000
+
 # Simulate model
 output <- sim_calcineurin(input_df, sim_params, model_params)
+
+endtime <- as.numeric(Sys.time())*1000
+
+timetaken <- endtime - starttime
+cat(timetaken)
+
 output <- as.data.frame(output)
 
 # Plot output

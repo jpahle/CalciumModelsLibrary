@@ -2,8 +2,8 @@
 set.seed(1)
 
 # Simulation parameters (Vector)
-sim_params <- c(timestep = 0.5,
-                endTime = 400)
+sim_params <- c(timestep = 0.05,
+                endTime = 100)
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 5e-15),
                      init_conc = c(W_I = 40,
@@ -12,7 +12,7 @@ model_params <- list(vols      = c(vol = 5e-15),
                                    W_T = 0,
                                    W_A = 0))
 
-                                   
+
 # Create calcium input signal (unit: particle number nmol):
 # increase Ca from 50 to 600 at 100s, hold for 40s, then drop to 50 again
 # (from Dupont_camkii.cps)
@@ -21,8 +21,16 @@ y <- append(rep(0, 99), rep(600, 41))
 y <- append(y, rep(50, 261))
 input_df <- data.frame("time" = x, "Ca" = y)
 
+start.time <- as.numeric(Sys.time())*1000
+
 # Simulate model
 output <- sim_camkii(input_df, sim_params, model_params)
+
+end.time <- as.numeric(Sys.time())*1000
+
+time.taken <- end.time - start.time
+cat(time.taken)
+
 output <- as.data.frame(output)
 
 # Plot output

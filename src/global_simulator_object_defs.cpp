@@ -22,5 +22,5 @@ int nreactions;
 // These functions are never used since define statements in the model file rename the functions provided by the model file and expected in the included simulator by adding the "_MODEL_NAME" suffix.  
 void calculate_amu() {
 }
-void update_system(unsigned int rIndex) {
+void get_stM() {
 }

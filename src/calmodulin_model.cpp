@@ -137,7 +137,7 @@ List init() {
   );
   // Default initial conditions
   NumericVector init_conc = NumericVector::create(
-    _["Prot_inact"] = 5.0,
+    _["Prot_inact"] = 5,
     _["Prot_act"] = 0
   );
   // Default propensity equation parameters
@@ -156,7 +156,7 @@ List init() {
   );
 }
 
-// Propensity calculation:
+// Propensity calculation
 // Calculates the propensities of all Calmodulin model reactions and stores them in the vector amu.
 void calculate_amu() {
   
@@ -172,19 +172,20 @@ void calculate_amu() {
     
 }
 
-// System update:
-// Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
-void update_system(unsigned int rIndex) {
-  switch (rIndex) {
-  case 0:   // Activation
-    x[0]--;
-    x[1]++;
-    break;
-  case 1:   // Deactivation
-    x[0]++;
-    x[1]--;
-    break;
-    printf("\nError in updateSystem(): rIndex (%u) out of range!\n", rIndex);
-    exit(-1);
-  }
+
+// Stoichiometric matrix
+//              R1   R2
+// Prot_inact   -1    1
+// Prot_act      1   -1
+NumericMatrix get_stM() {
+  
+  // initialize stoich matrix (with zeroes)
+  NumericMatrix stM(nspecies, nreactions);
+  // fill stoich matrix rows
+  NumericVector stM_row1 = NumericVector::create(-1,  1);
+  NumericVector stM_row2 = NumericVector::create( 1, -1);
+  stM(0, _) = stM_row1;
+  stM(1, _) = stM_row2;
+  
+  return stM;  
 }

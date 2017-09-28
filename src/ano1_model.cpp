@@ -332,171 +332,53 @@ void calculate_amu() {
   
 }
 
-// System update:
-// Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
-void update_system(unsigned int rIndex) {
-  switch (rIndex) {
-    case 0: // C - O
-        x[1]--;
-        x[7]++;
-        break;
-    case 1:
-        x[7]--;
-        x[1]++;
-        break;
-    case 2: // C - Ca
-        x[1]--;
-        x[3]++;
-        break;
-    case 3:
-        x[3]--;
-        x[1]++;
-        break;
-    case 4: // C - Cl
-        x[1]--;
-        x[2]++;
-        break;
-    case 5:
-        x[2]--;
-        x[1]++;
-        break;
-    case 6: // C_c - O
-        x[2]--;
-        x[8]++;
-        break;
-    case 7:
-        x[8]--;
-        x[2]++;
-        break;
-    case 8: // C_c - Ca
-        x[2]--;
-        x[4]++;
-        break;
-    case 9:
-        x[4]--;
-        x[2]++;
-        break;
-    case 10: // C_1 - O
-        x[3]--;
-        x[9]++;
-        break;
-    case 11:
-        x[9]--;
-        x[3]++;
-        break;
-    case 12: // C_1 - Ca
-        x[3]--;
-        x[5]++;
-        break;
-    case 13:
-        x[5]--;
-        x[3]++;
-        break;
-    case 14: // C_1 - Cl
-        x[3]--;
-        x[4]++;
-        break;
-    case 15:
-        x[4]--;
-        x[3]++;
-        break;
-    case 16: // C_1c - O
-        x[4]--;
-        x[10]++;
-        break;
-    case 17:
-        x[10]--;
-        x[4]++;
-        break;
-    case 18: // C_1c - Ca
-        x[4]--;
-        x[6]++;
-        break;
-    case 19:
-        x[6]--;
-        x[4]++;
-        break;
-    case 20: // C_2 - O
-        x[5]--;
-        x[11]++;
-        break;
-    case 21:
-        x[11]--;
-        x[5]++;
-        break;
-    case 22: // C_2 - Cl
-        x[5]--;
-        x[6]++;
-        break;
-    case 23:
-        x[6]--;
-        x[5]++;
-        break;
-    case 24: // C_2c - O
-        x[6]--;
-        x[12]++;
-        break;
-    case 25:
-        x[12]--;
-        x[6]++;
-        break;
-    case 26: // O - Ca
-        x[7]--;
-        x[9]++;
-        break;
-    case 27:
-        x[9]--;
-        x[7]++;
-        break;
-    case 28: // O - Cl
-        x[7]--;
-        x[8]++;
-        break;
-    case 29:
-        x[8]--;
-        x[7]++;
-        break;
-    case 30: // O_c - Ca
-        x[8]--;
-        x[10]++;
-        break;
-    case 31:
-        x[10]--;
-        x[8]++;
-        break;
-    case 32: // O_1 - Ca
-        x[9]--;
-        x[11]++;
-        break;
-    case 33:
-        x[11]--;
-        x[9]++;
-        break;
-    case 34: // O_1 - Cl
-        x[9]--;
-        x[10]++;
-        break;
-    case 35:
-        x[10]--;
-        x[9]++;
-        break;
-    case 36: // O_1c - Ca
-        x[10]--;
-        x[12]++;
-        break;
-    case 37:
-        x[12]--;
-        x[10]++;
-        break;
-    case 38: // O_2 - Cl
-        x[11]--;
-        x[12]++;
-        break;
-    case 39:
-        x[12]--;
-        x[11]++;
-        break;
-        printf("\nError in updateSystem(): rIndex (%u) out of range!\n", rIndex);
-        exit(-1);
-    }
-}
+// How it would look like it Rcpp would support the creation of vectors with more than 20 entries...
+// (they don't: http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2011-November/003073.html
+/* NumericMatrix get_stM() {
+  
+  // initialize stoich matrix (with zeroes)
+  NumericMatrix stM(nspecies, nreactions);
+  // initialize row vectors
+  NumericVector stM_row1(nreactions);
+  NumericVector stM_row2(nreactions);
+  NumericVector stM_row3(nreactions);
+  NumericVector stM_row4(nreactions);
+  NumericVector stM_row5(nreactions);
+  NumericVector stM_row6(nreactions);
+  NumericVector stM_row7(nreactions);
+  NumericVector stM_row8(nreactions);
+  NumericVector stM_row9(nreactions);
+  NumericVector stM_row10(nreactions);
+  NumericVector stM_row11(nreactions);
+  NumericVector stM_row12(nreactions);
+  NumericVector stM_row13(nreactions);
+  // fill stoich matrix rows
+  NumericVector stM_row1  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row2  = NumericVector::create( -1, 1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row3  = NumericVector::create( 0, 0, 0, 0, 1, -1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row4  = NumericVector::create( 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row5  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 1, -1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row6  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row7  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row8  = NumericVector::create( 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row9  = NumericVector::create( 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+  NumericVector stM_row10 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0);
+  NumericVector stM_row11 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0);
+  NumericVector stM_row12 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 1);
+  NumericVector stM_row13 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 1, -1);
+  stM(0, _) = stM_row1;
+  stM(1, _) = stM_row2;
+  stM(2, _) = stM_row3;
+  stM(3, _) = stM_row4;
+  stM(4, _) = stM_row5;
+  stM(5, _) = stM_row6;
+  stM(6, _) = stM_row7;
+  stM(7, _) = stM_row8;
+  stM(8, _) = stM_row9;
+  stM(9, _) = stM_row10;
+  stM(10, _) = stM_row11;
+  stM(11, _) = stM_row12;
+  stM(12, _) = stM_row13;
+  
+  return stM;  
+} */

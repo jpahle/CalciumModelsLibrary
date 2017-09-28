@@ -3,10 +3,10 @@ set.seed(1)
 
 # Simulation parameters (Vector)
 sim_params <- c(timestep = 0.05,
-                endTime = 100)
+                endTime = 1000)
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 1e-15),
-                     init_conc = c(PKC_inact = 1000,
+                     init_conc = c(PK_inact = 1000,
                                    CaPKC = 0,
                                    DAGCaPKC = 0,
                                    AADAGPKC_inact = 0,

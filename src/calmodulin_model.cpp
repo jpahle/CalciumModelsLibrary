@@ -36,6 +36,7 @@ static std::map <std::string, double> prop_params_map;
 //' @examples
 //' sim_calmodulin()
 //' @export
+// [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
 NumericMatrix sim_calmodulin(DataFrame user_input_df,
                    NumericVector user_sim_params,
@@ -181,9 +182,10 @@ NumericMatrix get_stM() {
   
   // initialize stoich matrix (with zeroes)
   NumericMatrix stM(nspecies, nreactions);
-  // fill stoich matrix rows
-  NumericVector stM_row1 = NumericVector::create(-1,  1);
-  NumericVector stM_row2 = NumericVector::create( 1, -1);
+  // create stoich matrix row vectors
+  NumericVector stM_row1 = {-1,  1};
+  NumericVector stM_row2 = { 1, -1};
+  // fill rows of stoich matrix
   stM(0, _) = stM_row1;
   stM(1, _) = stM_row2;
   

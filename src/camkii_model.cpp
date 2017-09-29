@@ -55,6 +55,7 @@ static std::map <std::string, double> prop_params_map;
 //' @examples
 //' sim_camkii()
 //' @export
+// [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
 NumericMatrix sim_camkii(DataFrame user_input_df,
                    NumericVector user_sim_params,
@@ -237,51 +238,23 @@ void calculate_amu() {
   amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / totalC)));
 }
 
-// System update:
-// Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
-void update_system(unsigned int rIndex) {
-  switch (rIndex) {
-  case 0:   // Ca-Cam binding
-    x[0]--;
-    x[1]++;
-    break;
-  case 1:   // binding reverse
-    x[0]++;
-    x[1]--;
-    break;
-  case 2:   // phosphorylation
-    x[1]--;
-    x[2]++;
-    break;
-  case 3:   // trapping
-    x[2]--;
-    x[3]++;
-    break;
-  case 4:   // trapping reverse
-    x[2]++;
-    x[3]--;
-    break;
-  case 5:   // autonomous
-    x[3]--;
-    x[4]++;
-    break;
-  case 6:   // autonomous reverse
-    x[3]++;
-    x[4]--;
-    break;
-  case 7:   // phosphatase on W_P
-    x[1]++;
-    x[2]--;
-    break;
-  case 8:   // phosphatase on W_T
-    x[1]++;
-    x[3]--;
-    break;
-  case 9:   // phosphatase on W_A
-    x[0]++;
-    x[4]--;
-    break;
-    printf("\nError in updateSystem(): rIndex (%u) out of range!\n", rIndex);
-    exit(-1);
-  }
+// Stoichiometric matrix
+NumericMatrix get_stM() {
+  
+  // initialize stoich matrix (with zeroes)
+  NumericMatrix stM(nspecies, nreactions);
+  // create stoich matrix row vectors
+  NumericVector stM_row1 = {-1, 1, 0, 0, 0, 0, 0, 0, 0, 1};
+  NumericVector stM_row2 = {1, -1, -1, 0, 0, 0, 0, 1, 1, 0};
+  NumericVector stM_row3 = {0, 0, 1, -1, 1, 0, 0, -1, 0, 0};
+  NumericVector stM_row4 = {0, 0, 0, 1, -1, -1, 1, 0, -1, 0};
+  NumericVector stM_row5 = {0, 0, 0, 0, 0, 1, -1, 0, 0, -1};
+  // fill rows of stoich matrix
+  stM(0, _) = stM_row1;
+  stM(1, _) = stM_row2;
+  stM(2, _) = stM_row3;
+  stM(3, _) = stM_row4;
+  stM(4, _) = stM_row5;
+  
+  return stM;  
 }

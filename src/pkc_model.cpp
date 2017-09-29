@@ -63,6 +63,7 @@ static std::map <std::string, double> prop_params_map;
 //' @examples
 //' sim_pkc()
 //' @export
+// [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
 NumericMatrix sim_pkc(DataFrame user_input_df,
                    NumericVector user_sim_params,
@@ -263,91 +264,36 @@ void calculate_amu() {
   amu[19] = amu[18] + k20 * x[3];
 }
 
-// System update:
-// Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
-void update_system(unsigned int rIndex) {
-  switch (rIndex) {
-  case 0:   /* R1 */
-    x[0]--;
-    x[5]++;
-    break;
-  case 1:
-    x[5]--;
-    x[0]++;
-    break;
-  case 2:   /* R2 */
-    x[0]--;
-    x[6]++;
-    break;
-  case 3:
-    x[6]--;
-    x[0]++;
-    break;
-  case 4:  /* R3 */
-    x[1]--;
-    x[7]++;
-    break;
-  case 5:
-    x[7]--;
-    x[1]++;
-    break;
-  case 6:  /* R4 */
-    x[1]--;
-    x[8]++;
-    break;
-  case 7:
-    x[8]--;
-    x[1]++;
-    break;
-  case 8: /* R5 */
-    x[2]--;
-    x[9]++;
-    break;
-  case 9:
-    x[9]--;
-    x[2]++;
-    break;
-  case 10:/* R6 */
-    x[3]--;
-    x[4]++;
-    break;
-  case 11:
-    x[4]--;
-    x[3]++;
-    break;
-  case 12:/* R7 */
-    x[0]--;
-    x[1]++;
-    break;
-  case 13:
-    x[1]--;
-    x[0]++;
-    break;
-  case 14:/* R8 */
-    x[1]--;
-    x[2]++;
-    break;
-  case 15:
-    x[2]--;
-    x[1]++;
-    break;
-  case 16:/* R9 */
-    x[0]--;
-    x[10]++;
-    break;
-  case 17:
-    x[10]--;
-    x[0]++;
-    break;
-  case 18:/* R10 */
-    x[10]--;
-    x[3]++;
-    break;
-  case 19:
-    x[3]--;
-    x[10]++;
-    break;
-    printf("\nError in updateSystem(): rIndex (%u) out of range!\n", rIndex);
-    exit(-1);
-  }
+
+// Stoichiometric matrix
+NumericMatrix get_stM() {
+  
+  // initialize stoich matrix (with zeroes)
+  NumericMatrix stM(nspecies, nreactions);
+  // create stoich matrix row vectors
+  NumericVector stM_row1 = {-1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0};
+  NumericVector stM_row2 = {0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0};
+  NumericVector stM_row3 = {0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0};
+  NumericVector stM_row4 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 1, -1};
+  NumericVector stM_row5 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row6 = {1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row7 = {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row8 = {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row9 = {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row10 = {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row11 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1, 1};
+  // fill rows of stoich matrix
+  stM(0, _) = stM_row1;
+  stM(1, _) = stM_row2;
+  stM(2, _) = stM_row3;
+  stM(3, _) = stM_row4;
+  stM(4, _) = stM_row5;
+  stM(5, _) = stM_row6;
+  stM(6, _) = stM_row7;
+  stM(7, _) = stM_row8;
+  stM(8, _) = stM_row9;
+  stM(9, _) = stM_row10;
+  stM(10, _) = stM_row11;
+  
+  return stM;  
 }

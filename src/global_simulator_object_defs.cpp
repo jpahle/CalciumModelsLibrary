@@ -19,7 +19,7 @@ int nreactions;
 // Empty placeholder functions
 // Since the simulator function 'blueprint' in simulator.cpp is also compiled (Rcpp Issue, it doesn't need to be compiled) we create these placeholders to satisfy the compiler.
 // Necessary because excluding simulator.cpp from the compilation process is not possible with the general g++ compiler provided by Rtools.
-// These functions are never used since define statements in the model file rename the functions provided by the model file and expected in the included simulator by adding the "_MODEL_NAME" suffix.  
+// These functions are never used since '#define' macros in the model file rename the functions, which are provided by the model file and expected in the included simulator, by adding the "_MODEL_NAME" suffix.  
 void calculate_amu() {
 }
 void get_stM() {

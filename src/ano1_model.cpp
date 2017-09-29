@@ -71,6 +71,7 @@ static std::map <std::string, double> prop_params_map;
 //' @examples
 //' sim_ano()
 //' @export
+// [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
 NumericMatrix sim_ano(DataFrame user_input_df,
                    NumericVector user_sim_params,
@@ -332,40 +333,26 @@ void calculate_amu() {
   
 }
 
-// How it would look like it Rcpp would support the creation of vectors with more than 20 entries...
-// (they don't: http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2011-November/003073.html
-/* NumericMatrix get_stM() {
+// Stoichiometric matrix
+NumericMatrix get_stM() {
   
   // initialize stoich matrix (with zeroes)
   NumericMatrix stM(nspecies, nreactions);
-  // initialize row vectors
-  NumericVector stM_row1(nreactions);
-  NumericVector stM_row2(nreactions);
-  NumericVector stM_row3(nreactions);
-  NumericVector stM_row4(nreactions);
-  NumericVector stM_row5(nreactions);
-  NumericVector stM_row6(nreactions);
-  NumericVector stM_row7(nreactions);
-  NumericVector stM_row8(nreactions);
-  NumericVector stM_row9(nreactions);
-  NumericVector stM_row10(nreactions);
-  NumericVector stM_row11(nreactions);
-  NumericVector stM_row12(nreactions);
-  NumericVector stM_row13(nreactions);
-  // fill stoich matrix rows
-  NumericVector stM_row1  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row2  = NumericVector::create( -1, 1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row3  = NumericVector::create( 0, 0, 0, 0, 1, -1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row4  = NumericVector::create( 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row5  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 1, -1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row6  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row7  = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row8  = NumericVector::create( 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row9  = NumericVector::create( 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0);
-  NumericVector stM_row10 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0);
-  NumericVector stM_row11 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0);
-  NumericVector stM_row12 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 1);
-  NumericVector stM_row13 = NumericVector::create( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 1, -1);
+  // create stoich matrix row vectors
+  NumericVector stM_row1 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row2 = {-1, 1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row3 = {0, 0, 0, 0, 1, -1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row4 = {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row5 = {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 1, -1, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row6 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row7 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row8 = {1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row9 = {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+  NumericVector stM_row10 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0};
+  NumericVector stM_row11 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 1, -1, -1, 1, 0, 0};
+  NumericVector stM_row12 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 1};
+  NumericVector stM_row13 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 1, -1};
+  // fill rows of stoich matrix
   stM(0, _) = stM_row1;
   stM(1, _) = stM_row2;
   stM(2, _) = stM_row3;
@@ -381,4 +368,4 @@ void calculate_amu() {
   stM(12, _) = stM_row13;
   
   return stM;  
-} */
+}

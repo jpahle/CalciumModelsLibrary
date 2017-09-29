@@ -43,6 +43,7 @@ static std::map <std::string, double> prop_params_map;
 //' @examples
 //' sim_glycphos()
 //' @export
+// [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
 NumericMatrix sim_glycphos(DataFrame user_input_df,
                    NumericVector user_sim_params,
@@ -203,19 +204,17 @@ void calculate_amu() {
   amu[1] = amu[0] + ((VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * activeFraction) / (Kp2 / (1 + gluc_conc / Ka2_conc) + activeFraction) * total);
 }
 
-// System update:
-// Changes the system state (updates the particle numbers) by instantiating a chosen reaction.
-void update_system(unsigned int rIndex) {
-  switch (rIndex) {
-  case 0:   // Forward: glycogen phosphorylase kinase, regulated by calcium
-    x[0]--;
-    x[1]++;
-    break;
-  case 1:   // Backward: phosphatase, regulated by glucose
-    x[0]++;
-    x[1]--;
-    break;
-    printf("\nError in updateSystem(): rIndex (%u) out of range!\n", rIndex);
-    exit(-1);
-  }
+// Stoichiometric matrix
+NumericMatrix get_stM() {
+  
+  // initialize stoich matrix (with zeroes)
+  NumericMatrix stM(nspecies, nreactions);
+  // create stoich matrix row vectors
+  NumericVector stM_row1 = {-1,  1};
+  NumericVector stM_row2 = { 1, -1};
+  // fill rows of stoich matrix
+  stM(0, _) = stM_row1;
+  stM(1, _) = stM_row2;
+  
+  return stM;  
 }

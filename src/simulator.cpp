@@ -10,8 +10,8 @@ using namespace Rcpp;
   #define simulator Map(simulator_, MODEL_NAME)
   #define init Map(init_, MODEL_NAME)
   #define calculate_amu Map(calculate_amu_, MODEL_NAME)
-  #define update_system Map(update_system_, MODEL_NAME)
-
+  #define get_stM Map(get_stM_, MODEL_NAME)
+  
   // Placeholder init function since the R Wrapper Function tries to call it before its 'real' definition in the C++ model file
   List init();
 #endif
@@ -29,6 +29,7 @@ extern int nspecies;
 extern int nreactions;
 // Global shared functions
 extern void calculate_amu();
+extern NumericMatrix get_stM();
 extern void update_system(unsigned int rIndex);
 
 
@@ -133,7 +134,14 @@ NumericMatrix simulator(DataFrame user_input_df,
         outputTime += timestep;
       }
       // Update system state
-      update_system(rIndex);
+      // get stoich matrix
+      NumericMatrix stM = get_stM();
+      // get selected reaction (a stM column vector) 
+      NumericVector selected_re = stM(_, rIndex);
+      // add stoich coefficients (either -1, 0 or 1) of column vector to x
+      for (int k = 0; k < nspecies; k++) {
+        x[k] = x[k] + selected_re[k];
+      }
     }
   }
   // Update output

@@ -44,7 +44,7 @@ extern void update_system(unsigned int rIndex);
 //' @return A dataframe with time and the active protein time series as columns.
 //' @examples
 //' simulator()
-NumericMatrix simulator(DataFrame user_input_df,
+DataFrame simulator(DataFrame user_input_df,
                    NumericVector user_sim_params,
                    NumericVector default_vols,
                    NumericVector default_init_conc) {
@@ -162,5 +162,8 @@ NumericMatrix simulator(DataFrame user_input_df,
   // Send random generator state back to R
   PutRNGstate();
   
-  return retval;
+  // Convert NumericMatrix retval to DataFrame
+  DataFrame df_retval(retval);
+  
+  return df_retval;
 }

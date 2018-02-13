@@ -37,7 +37,7 @@ static std::map <std::string, double> prop_params_map;
 //' @export
 // [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
-NumericMatrix sim_calcineurin(DataFrame user_input_df,
+DataFrame sim_calcineurin(DataFrame user_input_df,
                    NumericVector user_sim_params,
                    List user_model_params) {
 

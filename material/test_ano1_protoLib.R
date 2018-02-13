@@ -34,8 +34,6 @@ output <- sim_ano(input_df, sim_params, model_params)
 
 end.time <- as.numeric(Sys.time())*1000
 
-output <- as.data.frame(output)
-
 time.taken <- end.time - start.time
 cat(time.taken)
 

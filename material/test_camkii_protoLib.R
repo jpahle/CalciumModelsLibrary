@@ -31,8 +31,6 @@ end.time <- as.numeric(Sys.time())*1000
 time.taken <- end.time - start.time
 cat(time.taken)
 
-output <- as.data.frame(output)
-
 # Plot output
 par(mar = c(5,5,2,5))
 colnames(output) <- c("time", "calcium", "W_I", "W_B", "W_P", "W_T", "W_A")

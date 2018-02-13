@@ -5,9 +5,9 @@
 #' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 #' @return the result of calling the lsoda simulation algorithm from deSolve 
 #' @examples
-#' calmodulin_detSim()
+#' detSim_calmodulin()
 #' @export
-calmodulin_detSim <- function(input_df, sim_params, input_model_params) {
+detSim_calmodulin <- function(input_df, sim_params, input_model_params) {
 
 
 

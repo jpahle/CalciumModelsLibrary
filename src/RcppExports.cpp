@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // sim_ano
-NumericMatrix sim_ano(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+DataFrame sim_ano(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
 RcppExport SEXP _CalciumModelsLibrary_sim_ano(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -19,7 +19,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_calcineurin
-NumericMatrix sim_calcineurin(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+DataFrame sim_calcineurin(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
 RcppExport SEXP _CalciumModelsLibrary_sim_calcineurin(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -32,7 +32,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_calmodulin
-NumericMatrix sim_calmodulin(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+DataFrame sim_calmodulin(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
 RcppExport SEXP _CalciumModelsLibrary_sim_calmodulin(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -45,7 +45,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_camkii
-NumericMatrix sim_camkii(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+DataFrame sim_camkii(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
 RcppExport SEXP _CalciumModelsLibrary_sim_camkii(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -58,7 +58,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_glycphos
-NumericMatrix sim_glycphos(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+DataFrame sim_glycphos(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
 RcppExport SEXP _CalciumModelsLibrary_sim_glycphos(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -71,7 +71,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_pkc
-NumericMatrix sim_pkc(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
+DataFrame sim_pkc(DataFrame user_input_df, NumericVector user_sim_params, List user_model_params);
 RcppExport SEXP _CalciumModelsLibrary_sim_pkc(SEXP user_input_dfSEXP, SEXP user_sim_paramsSEXP, SEXP user_model_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

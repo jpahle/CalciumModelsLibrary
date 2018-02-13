@@ -11,7 +11,7 @@ input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("ti
 f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 # Simulate Model
-output <- calmodulin_detSim(input_df,
+output <- detSim_calmodulin(input_df,
                             sim_params,
                             model_params)
 # Plot output

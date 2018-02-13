@@ -3,7 +3,7 @@ using namespace Rcpp;
 
 
 // Declare simulator function (prototyp)
-extern NumericMatrix simulator(DataFrame user_input_df,
-                   NumericVector user_sim_params,
-                   NumericVector default_vols,
-                   NumericVector default_init_conc);
+extern DataFrame simulator(DataFrame user_input_df,
+                 NumericVector user_sim_params,
+                 NumericVector default_vols,
+                 NumericVector default_init_conc);

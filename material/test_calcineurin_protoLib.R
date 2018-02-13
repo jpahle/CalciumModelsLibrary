@@ -27,8 +27,6 @@ endtime <- as.numeric(Sys.time())*1000
 timetaken <- endtime - starttime
 cat(timetaken)
 
-output <- as.data.frame(output)
-
 # Plot output
 colnames(output) <- c("time", "calcium", "Prot_inact", "Prot_act")
 par(mar = c(5,5,2,5))

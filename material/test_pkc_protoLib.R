@@ -31,7 +31,6 @@ end.time <- as.numeric(Sys.time())*1000
 time.taken <- end.time - start.time
 cat(time.taken)
 
-output <- as.data.frame(output)
 colnames(output) <- c("time",
                       "calcium",
                       "PKC_inact",

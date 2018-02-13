@@ -662,6 +662,7 @@ https://doi.org/10.1016/S0143-4160(03)00152-0
 * [6] Goldbeter, A., Dupont, G. and Berridge, M. J. __Minimal model for signal-induced Ca2+
 oscillations and for their frequency encoding through protein phosphorylation.__ Proceedings of the
 National Academy of Sciences of the United States of America, 1990. 87, 1461–65.
+http://www.pnas.org/content/87/4/1461.long
 
 * [7] Gall, D., Baus, E., and Dupont, G. __Activation of the liver glycogen phosphorylase by Ca(2+)oscillations: a theoretical study.__ Journal of Theoretical Biology, 2000. 207: p. 445–54.
 https://doi.org/10.1006/jtbi.2000.2139

@@ -11,7 +11,7 @@ model_params <- list(vols      = c(vol = 5e-14),
 
 # Read Ca timeseries
 input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
-# convert Ca concentration from input table to particle number (c*f=n since f = Avogadro*Vol)
+# convert part number from input table to concentration (c*f=n since f = Avogadro*Vol)
 f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 
@@ -29,7 +29,9 @@ output <- as.data.frame(output)
 
 # Plot output
 colnames(output) <- c("time", "calcium", "Prot_inact", "Prot_act")
-plot(output$time, output$calcium, col="blue", xlim=c(0, 100), ylim=c(0,15), type="l", xlab="time", ylab="concentration")
-lines(output$time, output$Prot_inact, col="grey", type="l")
+par(mar = c(5,5,2,5))
+plot(output$time, output$calcium, col="blue", xlim=c(0, 100), ylim=c(0,15), type="l", xlab="time [s]", ylab="glycogen phos. [nmol/l]")
 lines(output$time, output$Prot_act, col="red", type="l")
-legend("topright", legend=c("calcium", "Prot_inact", "Prot_act"), col=c("blue", "grey", "red"), lty=c(1,1,1))
+axis(side = 4)
+mtext(side = 4, line = 3, 'calcium [a.u]')
+legend("topright", legend=c("calcium", "glycogen phos."), col=c("blue", "red"), lty=c(1,1))

@@ -69,7 +69,7 @@ output$active_fraction <- with(output, (PKCbasal +
                                         PKC_inact))
 # Plot output
 par(mfrow = c(3,1))
-plot(output$time, output$calcium, col="blue",type="l", xlab="time", ylab="concentration", main = "Calcium")
-plot(output$time, output$PKC_act, col="red", type = "l", xlab="time", ylab="concentration", main = "sum of active PKC species")
-plot(output$time, output$active_fraction, col="orange", type="l", xlab="time", ylab="concentration", main = "active PKC fraction of total PKC")
+plot(output$time, output$calcium, col="blue",type="l", xlab="time [s]", ylab="concentration [a.u.]", main = "Calcium")
+plot(output$time, output$PKC_act, col="red", type = "l", xlab="time [s]", ylab="concentration [nmol/l]", main = "Sum of active PKC species")
+plot(output$time, output$active_fraction, col="orange", type="l", xlab="time [s]", ylab="concentration [nmol/l]", main = "Active PKC fraction of total PKC")
 par(mfrow = c(1,1))

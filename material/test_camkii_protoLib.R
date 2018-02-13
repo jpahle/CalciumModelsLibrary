@@ -13,7 +13,7 @@ model_params <- list(vols      = c(vol = 5e-15),
                                    W_A = 0))
 
 
-# Create calcium input signal (unit: particle number nmol):
+# Create calcium input signal (unit: concentration nmol/l):
 # increase Ca from 50 to 600 at 100s, hold for 40s, then drop to 50 again
 # (from Dupont_camkii.cps)
 x <- seq(0, 400, 1)
@@ -34,13 +34,16 @@ cat(time.taken)
 output <- as.data.frame(output)
 
 # Plot output
+par(mar = c(5,5,2,5))
 colnames(output) <- c("time", "calcium", "W_I", "W_B", "W_P", "W_T", "W_A")
-plot(output$time, output$calcium, col="blue", xlim=c(90, 160), ylim = c(0, 55), type="l", xlab="time", ylab="concentration")
+plot(output$time, output$calcium, col="blue", xlim=c(90, 160), ylim = c(0, 55), type="l", xlab="time [s]", ylab="CamKII [nmol/l]")
 lines(output$time, output$W_I, col="black", type = "l")
 lines(output$time, output$W_B, col="red", type="l")
 lines(output$time, output$W_P, col="green", type="l")
 lines(output$time, output$W_T, col="cyan", type="l")
 lines(output$time, output$W_A, col="orange", type="l")
+axis(side = 4)
+mtext(side = 4, line = 3, 'calcium [a.u]')
 legend("topright", legend=c("calcium", "W_I", "W_B", "W_P", "W_T", "W_A"),
                    col=c("blue", "black", "red", "green", "cyan", "orange"),
                    lty=c(1,1))

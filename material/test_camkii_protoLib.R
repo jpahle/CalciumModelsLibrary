@@ -2,8 +2,8 @@
 set.seed(1)
 
 # Simulation parameters (Vector)
-sim_params <- c(timestep = 0.05,
-                endTime = 1000)
+sim_params <- list(timestep = 0.1,
+                   endTime = 200)
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 5e-15),
                      init_conc = c(W_I = 40,

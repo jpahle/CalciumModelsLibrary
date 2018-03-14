@@ -16,7 +16,7 @@ static std::map <std::string, double> prop_params_map;
 //'
 //' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the calcineurin model.
 //' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).
-//' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
+//' @param user_sim_params A List: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 //' @section Default Parameters of the Calcineurin Model:
 //' Default Volumes: 
@@ -38,8 +38,8 @@ static std::map <std::string, double> prop_params_map;
 // [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
 DataFrame sim_calcineurin(DataFrame user_input_df,
-                   NumericVector user_sim_params,
-                   List user_model_params) {
+                          List user_sim_params,
+                          List user_model_params) {
 
   // READ INPUT
   // Provide default model parameters list
@@ -113,9 +113,9 @@ DataFrame sim_calcineurin(DataFrame user_input_df,
   // RUN SIMULATION
   // Return result of the included, model-specific copy of the function "simulator" 
   return simulator_calcineurin(user_input_df,
-                   user_sim_params,
-                   default_vols,
-                   default_init_conc);
+                               user_sim_params,
+                               default_vols,
+                               default_init_conc);
    
 }
 

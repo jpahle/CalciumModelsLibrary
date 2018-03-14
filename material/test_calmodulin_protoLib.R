@@ -2,8 +2,9 @@
 #set.seed(1)
 
 # Simulation Parameters (Vector)
-sim_params <- c(timestep = 0.05,
-                endTime = 100)
+#sim_params <- list(outputTimes = c(0,1,2,3,4,5,6,7,8,9,10))
+sim_params <- list(endTime = 100, timestep = 0.01)
+
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 5e-14),
                      init_conc = c(Prot_inact = 5,
@@ -15,15 +16,8 @@ input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("ti
 f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 
-start.time <- as.numeric(Sys.time())*1000
-
 # Simulate model
 output <- sim_calmodulin(input_df, sim_params, model_params)
-
-end.time <- as.numeric(Sys.time())*1000
-
-time.taken <- end.time - start.time
-cat(time.taken)
 
 # Plot output
 par(mar = c(5,5,2,5))

@@ -2,8 +2,8 @@
 using namespace Rcpp;
 
 
-// Declare simulator function (prototyp)
+// Declare simulator function (prototype)
 extern DataFrame simulator(DataFrame user_input_df,
-                 NumericVector user_sim_params,
-                 NumericVector default_vols,
-                 NumericVector default_init_conc);
+                           List user_sim_params,
+                           NumericVector default_vols,
+                           NumericVector default_init_conc);

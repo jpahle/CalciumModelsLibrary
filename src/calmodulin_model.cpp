@@ -16,7 +16,7 @@ static std::map <std::string, double> prop_params_map;
 //'
 //' This function compares user-supplied parameters to defaults parameter values, overwrites the defaults if neccessary, and calls the internal C++ simulation function for the Calmodulin model.
 //' @param user_input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nmol/l).
-//' @param user_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
+//' @param user_sim_params A List: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 //' @param user_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 //' @section Default Parameters of the Calmodulin Model:
 //' Default Volumes: 
@@ -39,7 +39,7 @@ static std::map <std::string, double> prop_params_map;
 // [[Rcpp::plugins("cpp11")]]
 // [[Rcpp::export]]
 DataFrame sim_calmodulin(DataFrame user_input_df,
-                   NumericVector user_sim_params,
+                   List user_sim_params,
                    List user_model_params) {
 
   // READ INPUT
@@ -53,7 +53,7 @@ DataFrame sim_calmodulin(DataFrame user_input_df,
   // If they exist: definition with the default vector gets overwritten
   NumericVector user_vols = default_vols;
   if (user_model_params.containsElementNamed("vols")) {
-      user_vols = user_model_params["vols"];
+    user_vols = user_model_params["vols"];
   } else {
     Rcout << "Default volume(s) have been used." << std::endl;
   }

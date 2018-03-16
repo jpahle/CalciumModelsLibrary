@@ -1,9 +1,10 @@
 # Set rng seed for debugging tests
-#set.seed(1)
+set.seed(1)
 
 # Simulation Parameters (Vector)
-#sim_params <- list(outputTimes = c(0,1,2,3,4,5,6,7,8,9,10))
-sim_params <- list(endTime = 100, timestep = 0.01)
+#sim_params <- list(outputTimes = c(seq(0,20,0.1),30,40,50,60,120))
+#sim_params <- list()
+sim_params <- list(endTime = 50, timestep = 2.6)
 
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 5e-14),

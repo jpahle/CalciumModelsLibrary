@@ -81,11 +81,12 @@ DataFrame simulator(DataFrame user_input_df,
     endTime_set = 1;
   }
   // 2.) sim output times can be supplied as vector by user (even or unevenly spaced) 
-  // set flag to use custom user supplied sim output time vector (if available)
-  NumericVector user_output_times_vector;
+  // initialize the sim output times vector (so that it and its length exist, even if its not used)
+  NumericVector user_output_times_vector(1);
   int user_output_times_set = 0;
   if (user_sim_params.containsElementNamed("outputTimes")) {
     user_output_times_vector = user_sim_params["outputTimes"];
+    // set flag to use custom user supplied sim output time vector (if available)
     user_output_times_set = 1;
   }
   // ------------ Memory allocation for propensity and particle number pointers ------------
@@ -119,46 +120,47 @@ DataFrame simulator(DataFrame user_input_df,
   currentTime = startTime;
   outputTime = currentTime;
   // ------------ Define return value (numeric matrix; no. of rows = no. of output time point; no. of cols. = time + ca + no. of species) ------------
-  // 1.) timestep and endTime are used to generate evenly spaced sim output times 
+  // 1.) timestep and endTime are used to generate a number (nintervals) of evenly spaced intervals 
   int nintervals = 0;
   if (timestep_set == 1 && endTime_set == 1) {
     nintervals = (int)floor((endTime-startTime)/timestep+0.5)+1;
   }
-  // 2.) define number of intervals for user supplied sim output times vector (can be unevenly spaced -> different timestep lengths)
+  // 2.) take number of intervals from user supplied sim output times vector (can be unevenly spaced -> different timestep lengths)
+  // define the timestep_vector outside of if statement so that it is available to the simulation loop
+  // since user_output_times_vector is initialized with length 1 earlier, both the vector and its length exist
+  // therefore: even if timestep_vector is not used, the definition does not fail (without init. of user_output_times_vector, length would be negative/undefined -> error!)
   NumericVector timestep_vector(user_output_times_vector.length());
   if (user_output_times_set == 1) {
-	
-	Rcout << "TEST outputTimes: vector = " << user_output_times_vector << std::endl;
-	Rcout << "TEST outputTimes: length of vector: " << user_output_times_vector.length() << std::endl;
-	
-    // no. of intervals is equal to the length of the sim output vector (intervals can be uneven)
+    // no. of intervals is equal to the length of the sim output vector (intervals can be of different sizes)
     nintervals = user_output_times_vector.length();
-	
-	Rcout << "TEST nintervals: " << nintervals << std::endl;
-	
-    // endTime derived from sim output times vector
+    // endTime taken from sim output times vector (indexing starts with 0 -> last entry: vector length - 1)
     endTime = user_output_times_vector[user_output_times_vector.length()-1];
-	
-	Rcout << "TEST endTime" << endTime << std::endl;
-	
     // vector with timesteps derived from sim output time vector
-    // For a vector a = [1,2,3,10,87,...], the absolute (non-negative) intervals between its items are given by abs(a[2:end] - a[1:(end-1)])
+    // For a vector a = [1,2,3,10,87,...], the intervals between its items are given by a[2:end] - a[1:(end-1)]
     int id;
-    for (id=0; id < user_output_times_vector.length()-1; id++) {
-	  
-	  Rcout << "TEST user_output_times_vector[id+1]: " << user_output_times_vector[id+1] << std::endl; 
-	  
-      timestep_vector[id] = abs(user_output_times_vector[id+1] - user_output_times_vector[id]);
-	  
-	  Rcout << "TEST timestep_vector[id]: " << timestep_vector[id] << std::endl;
-	  
+    for (id=0; id < timestep_vector.length(); id++) {
+      if (id == (int)(timestep_vector.length()-1)) {
+        // timesteps are calculated by subtracting previous output time from next output time
+        // therefore: number of output times = number of time steps + 1 (for x points => x-1 intervals !)
+        // when id reaches last output time point -> copy previous time step because there isn't a
+        // "next output time point" to subtract from!
+        timestep_vector[id] = timestep_vector[id-1];
+      } else {
+        timestep_vector[id] = fabs(user_output_times_vector[id+1] - user_output_times_vector[id]);
+      }
     }
   }
-  
-  Rcout << "TEST nintervals: " << nintervals << std::endl;
-  Rcout << "TEST nspecies: " << nspecies << std::endl;
-  
   NumericMatrix retval(nintervals, nspecies+2); // nspecies+2 because time and calcium
+  
+  
+  
+  Rcout << "timestep_vector[0] " << timestep_vector[0] << std::endl;
+  Rcout << "timestep_vector[1] " << timestep_vector[1] << std::endl;
+  Rcout << "timestep_vector[2] " << timestep_vector[2] << std::endl;
+  Rcout << "timestep_vector[3] " << timestep_vector[3] << std::endl;
+  Rcout << "timestep_vector[4] " << timestep_vector[4] << std::endl;
+  Rcout << "timestep_vector[5] " << timestep_vector[5] << std::endl;
+  Rcout << "timestep_vector[6] " << timestep_vector[6] << std::endl;
   
   
   

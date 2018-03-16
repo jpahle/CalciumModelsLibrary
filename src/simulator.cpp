@@ -139,15 +139,7 @@ DataFrame simulator(DataFrame user_input_df,
     // For a vector a = [1,2,3,10,87,...], the intervals between its items are given by a[2:end] - a[1:(end-1)]
     int id;
     for (id=0; id < timestep_vector.length(); id++) {
-      if (id == (int)(timestep_vector.length()-1)) {
-        // timesteps are calculated by subtracting previous output time from next output time
-        // therefore: number of output times = number of time steps + 1 (for x points => x-1 intervals !)
-        // when id reaches last output time point -> copy previous time step because there isn't a
-        // "next output time point" to subtract from!
-        timestep_vector[id] = timestep_vector[id-1];
-      } else {
-        timestep_vector[id] = fabs(user_output_times_vector[id+1] - user_output_times_vector[id]);
-      }
+      timestep_vector[id] = fabs(user_output_times_vector[id+1] - user_output_times_vector[id]);
     }
   }
   NumericMatrix retval(nintervals, nspecies+2); // nspecies+2 because time and calcium

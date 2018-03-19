@@ -62,8 +62,8 @@ static std::map <std::string, double> prop_params_map;
 //' @return the result of calling the model specific version of the function "simulator" 
 //' @examples
 //' sim_pkc()
-//' @export
 // [[Rcpp::plugins("cpp11")]]
+//' @export
 // [[Rcpp::export]]
 DataFrame sim_pkc(DataFrame user_input_df,
                   List user_sim_params,

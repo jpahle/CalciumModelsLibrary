@@ -74,7 +74,6 @@ input_df["Ca"] <- input_df["Ca"]/f
 
 # Stochastically simulate the model
 output <- sim_calmodulin(input_df, sim_params, model_params)
-output <- as.data.frame(output)
 
 # Plot the output
 colnames(output) <- c("time", "calcium", "Prot_inact", "Prot_act")
@@ -112,7 +111,7 @@ f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 
 # Deterministic simulation of the model
-output <- calmodulin_detSim(input_df,
+output <- detSim_calmodulin(input_df,
                             sim_params,
                             model_params)
 # Plot output

@@ -146,15 +146,6 @@ DataFrame simulator(DataFrame user_input_df,
   
   
   
-  Rcout << "timestep_vector[0] " << timestep_vector[0] << std::endl;
-  Rcout << "timestep_vector[1] " << timestep_vector[1] << std::endl;
-  Rcout << "timestep_vector[2] " << timestep_vector[2] << std::endl;
-  Rcout << "timestep_vector[3] " << timestep_vector[3] << std::endl;
-  Rcout << "timestep_vector[4] " << timestep_vector[4] << std::endl;
-  Rcout << "timestep_vector[5] " << timestep_vector[5] << std::endl;
-  Rcout << "timestep_vector[6] " << timestep_vector[6] << std::endl;
-  
-  
   
   /* SIMULATION LOOP */
   while (currentTime < endTime) {

@@ -10,7 +10,7 @@
 #' * sim_camkii()
 #' * sim_glycphos()
 #' * sim_pkc()
-#' * calmodulin_detSim()
+#' * detSim_calmodulin()
 #' @md
 #'
 #' @docType package

@@ -18,7 +18,7 @@ calcium-sensitive proteins.
 \item sim_camkii()
 \item sim_glycphos()
 \item sim_pkc()
-\item calmodulin_detSim()
+\item detSim_calmodulin()
 }
 }
 

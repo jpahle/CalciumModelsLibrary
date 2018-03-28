@@ -2,8 +2,8 @@
 set.seed(1)
 
 # Simulation Parameters (Vector)
-sim_params <- list(outputTimes = c(seq(0,20,0.1),30,40,50,60,120))
-#sim_params <- list()
+#sim_params <- list(outputTimes = c(seq(0,20,0.1),30,40,50,60,120))
+sim_params <- list()
 #sim_params <- list(endTime = 50, timestep = 2.6)
 #sim_params <- list(outputTimes = c(0,1))
 

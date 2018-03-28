@@ -2,23 +2,23 @@
 set.seed(1)
 
 # Simulation parameters (Vector)
-sim_params <- list(timestep = 0.05,
-                   endTime = 100)
+sim_params <- list(timestep = 1,
+                   endTime = 10)
 # Model Parameters (List)
 model_params <- list(vols      = c(vol = 1e-11),
-                     init_conc = c(Cl_ext = 300,
-                                   C = 100,
-                                   C_c = 0,
-                                   C_1 = 0,
-                                   C_1c = 0,
-                                   C_2 = 0,
-                                   C_2c = 0,
-                                   O = 0,
-                                   O_c = 0,
-                                   O_1 = 0,
-                                   O_1c = 0,
-                                   O_2 = 0,
-                                   O_2c = 0))
+                     init_conc = c(Cl_ext = 3,
+                                   C = 1,
+                                   C_c = 1,
+                                   C_1 = 1,
+                                   C_1c = 1,
+                                   C_2 = 1,
+                                   C_2c = 1,
+                                   O = 1,
+                                   O_c = 1,
+                                   O_1 = 1,
+                                   O_1c = 1,
+                                   O_2 = 1,
+                                   O_2c = 1))
 
 
 # Read Ca timeseries
@@ -28,11 +28,11 @@ f <- 6.0221415e14*model_params[["vols"]][["vol"]]
 input_df["Ca"] <- input_df["Ca"]/f
 
 # Simulate model
-start.time <- as.numeric(Sys.time())*1000
+start.time <- as.numeric(Sys.time())
 
 output <- sim_ano(input_df, sim_params, model_params)
 
-end.time <- as.numeric(Sys.time())*1000
+end.time <- as.numeric(Sys.time())
 
 time.taken <- end.time - start.time
 cat(time.taken)
@@ -40,10 +40,16 @@ cat(time.taken)
 # Plot output
 par(mar = c(5,5,2,5))
 colnames(output) <- c("time", "calcium", "Cl_ext", "C", "C_c", "C_1", "C_1c", "C_2", "C_2c", "O", "O_c", "O_1", "O_1c", "O_2", "O_2c")
-plot(output$time, output$calcium, col="blue", type="l", xlim = c(0,35), xlab="time [s]", ylab="activated Channel [nmol/l]")
-lines(output$time, output$C_1, col="red", type="l")
+# sum of active ano1 species
+active_ano_sum <- with(output, O + O_c + O_1 + O_1c + O_2 + O_2c)
+# sum of inactive ano1 species
+inactive_ano_sum <- with(output, C + C_c + C_1 + C_1c + C_2 + C_2c)
+# active ano fraction
+active_ano_frac <- 1/(1+(inactive_ano_sum/active_ano_sum))
+plot(output$time, output$calcium, col="blue", type="l", xlab="time [s]", ylab="activated Channel [nmol/l]")
+lines(output$time, active_ano_frac, col="red", type="l")
 axis(side = 4)
 mtext(side = 4, line = 3, 'calcium [a.u]')
-legend("topright", legend=c("calcium", "activated channel"),
+legend("topright", legend=c("calcium", "active ANO1 fraction"),
                    col=c("blue", "red"),
                    lty=c(1,1))

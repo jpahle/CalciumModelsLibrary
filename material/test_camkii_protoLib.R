@@ -1,5 +1,5 @@
 # Set rng seed for debugging tests
-set.seed(1)
+#set.seed(1)
 
 # Simulation parameters (Vector)
 sim_params <- list(timestep = 0.1,

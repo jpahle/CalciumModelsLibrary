@@ -26,10 +26,13 @@ time.taken <- end.time - start.time
 cat(time.taken)
 
 # Plot output
-colnames(output) <- c("time", "calcium", "Prot_inact", "Prot_act")
+colnames(output) <- c("time", "Ca", "Prot_inact", "Prot_act")
+# define active glycphos fraction
+glycphos_active_frac <- with(output, Prot_act/(Prot_inact+Prot_act))
 par(mar = c(5,5,2,5))
-plot(output$time, output$calcium, col="blue", xlim=c(0, 100), ylim=c(0,15), type="l", xlab="time [s]", ylab="glycogen phos. [nmol/l]")
+plot(output$time, output$Ca, col="blue", type="l", xlab="time [s]", ylab="glycogen phos. [nmol/l]")
 lines(output$time, output$Prot_act, col="red", type="l")
-axis(side = 4)
-mtext(side = 4, line = 3, 'calcium [a.u]')
-legend("topright", legend=c("calcium", "glycogen phos."), col=c("blue", "red"), lty=c(1,1))
+lines(output$time, glycphos_active_frac, col="green", type="l")
+#axis(side = 4)
+#mtext(side = 4, line = 3, 'calcium [a.u]')
+legend("topright", legend=c("calcium", "glycogen phos.", "active fraction [0,1]"), col=c("blue", "red", "green"), lty=c(1,1,1))

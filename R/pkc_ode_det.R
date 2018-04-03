@@ -1,13 +1,13 @@
-#' Specific wrapper function for glycphos calling the LSODA simulation function (provided by package deSolve)
+#' Specific wrapper function for pkc calling the LSODA simulation function (provided by package deSolve)
 #'
 #' @param input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
 #' @param input_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 #' @param input_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 #' @return the result of calling the lsoda simulation algorithm from deSolve 
 #' @examples
-#' detSim_glycphos()
+#' detSim_pkc()
 #' @export
-detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
+detSim_pkc <- function(input_df, input_sim_params, input_model_params) {
 
 
 
@@ -16,20 +16,40 @@ detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
   # USER INPUT 1 for new models: define default model parameters 
 
   # define default model parameters
-  default_model_params <- list(vols      = c(vol = 5e-14),
-                               init_conc = c(Prot_inact = 5,
-                                             Prot_act = 0),
-                               params    = c(VpM1 = 1.5,
-                                             VpM2 = 0.6,
-                                             alpha = 9,
-                                             gamma_ = 9,
-                                             K11 = 0.1,
-                                             Kp2 = 0.2,
-                                             Ka1_conc = 1e7,
-                                             Ka2_conc = 1e7,
-                                             Ka5_conc = 500,
-                                             Ka6_conc = 500,
-                                             gluc_conc = 1e7))
+  default_model_params <- list(vols      = c(vol = 1e-15),
+                               init_conc = c(PKC_inact = 1000,
+                                             CaPKC = 0,
+                                             DAGCaPKC = 0,
+                                             AADAGPKC_inact = 0,
+                                             AADAGPKC_act = 0,
+                                             PKCbasal = 20,
+                                             AAPKC = 0,
+                                             CaPKCmemb = 0,
+                                             AACaPKC = 0,
+                                             DAGPKCmemb = 0,
+                                             DAGPKC = 0),
+                               params    = c(k1 = 1,
+                                             k2 = 50,
+                                             k3 = 1.2e-7,
+                                             k4 = 0.1,
+                                             k5 = 1.2705,
+                                             k6 = 3.5026,
+                                             k7 = 1.2e-7,
+                                             k8 = 0.1,
+                                             k9 = 1,
+                                             k10 = 0.1,
+                                             k11 = 2,
+                                             k12 = 0.2,
+                                             k13 = 0.0006,
+                                             k14 = 0.5,
+                                             k15 = 7.998e-6,
+                                             k16 = 8.6348,
+                                             k17 = 6e-7,
+                                             k18 = 0.1,
+                                             k19 = 1.8e-5,
+                                             k20 = 2,
+                                             AA = 11000,
+                                             DAG = 5000))
   ################################# - Model - ################################
   ############################################################################
 
@@ -136,17 +156,25 @@ detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
   # USER INPUT 2 for new models: define differential equations  
 
   # model description function
-  glycphos_ode <- function(t, state, parameters) {
+  pkc_ode <- function(t, state, parameters) {
     with(as.list(c(state, parameters)), {
 
-      # define model ODEs
-      total = Prot_inact + Prot_act
+    # define model ODEs
       
-      dProt_inact   <- -(VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / Ka5_conc^4 + Ca^4)) * (Prot_inact/total) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total +                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
-      dProt_act     <-  (VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / Ka5_conc^4 + Ca^4)) * (Prot_inact/total) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total -                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
+      dPKC_inact <- - (k1*PKC_inact) + (k2*PKCbasal) - (k13*PKC_inact*Ca) + (k14*CaPKC) - (k17*PKC_inact*DAG) + (k18*DAGPKC) - (k3*PKC_inact*AA) + (k4*AAPKC)
+      dCaPKC <- + (k13*PKC_inact*Ca) - (k14*CaPKC) - (k15*CaPKC*DAG) + (k16*DAGCaPKC) - (k5*CaPKC) + (k6*CaPKCmemb) - (k7*CaPKC*AA) + (k8*AACaPKC)
+      dDAGCaPKC <- + (k15*CaPKC*DAG) - (k16*DAGCaPKC) - (k9*DAGCaPKC) + (k10*DAGPKCmemb)
+      dAADAGPKC_inact <- - (k11*AADAGPKC_inact) + (k12*AADAGPKC_act) + (k19*DAGPKC*AA) - (k20*AADAGPKC_inact)
+      dAADAGPKC_act <- + (k11*AADAGPKC_inact) - (k12*AADAGPKC_act)
+      dPKCbasal <- + (k1*PKC_inact) - (k2*PKCbasal)
+      dAAPKC <- + (k3*PKC_inact*AA) - (k4*AAPKC)
+      dCaPKCmemb <- + (k5*CaPKC) - (k6*CaPKCmemb)
+      dAACaPKC <- + (k7*CaPKC*AA) - (k8*AACaPKC)
+      dDAGPKCmemb <- + (k9*DAGCaPKC) - (k10*DAGPKCmemb)
+      dDAGPKC <- + (k17*PKC_inact*DAG) - (k18*DAGPKC) - (k19*DAGPKC*AA) + (k20*AADAGPKC_inact)
       
       # return list (=state vector) with differentials (and 0 for Ca since it is an external signal) 
-      list(c(0, dProt_inact, dProt_act))
+      list(c(0, dPKC_inact, dCaPKC, dDAGCaPKC, dAADAGPKC_inact, dAADAGPKC_act, dPKCbasal, dAAPKC, dCaPKCmemb, dAACaPKC, dDAGPKCmemb, dDAGPKC))
     })
   }
   ################################# - Model - ################################
@@ -176,12 +204,12 @@ detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
   ############################################################################
   ############################# - Simulation - ###############################
   # USER INPUT 3 for new models: adapt name of 'func' argument 
-  #                              (glycphos_ode for glycphos model, etc.)
+  #                              (pkc_ode for pkc model, etc.)
   
   # simulate model with LSODA
   output <- deSolve::lsoda(y = c(Ca = input_df$Ca[[1]], unlist(default_init_conc)),
                            times = lsodaTimes,
-                           func = glycphos_ode,
+                           func = pkc_ode,
                            parms = unlist(default_params),
                            event = list(func = eventFun, time = input_df_subset$time))
 

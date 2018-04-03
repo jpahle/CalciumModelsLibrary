@@ -1,13 +1,13 @@
-#' Specific wrapper function for glycphos calling the LSODA simulation function (provided by package deSolve)
+#' Specific wrapper function for camkii calling the LSODA simulation function (provided by package deSolve)
 #'
 #' @param input_df A Dataframe: the input Calcium time series (with at least two columns: "time" in s and "Ca" in nMol/l).
 #' @param input_sim_params A NumericVector: contains values for the simulation end ("endTime") and its timesteps ("timestep").
 #' @param input_model_params A List: the model specific parameters. Can contain up to three different vectors named "vols" (model volumes), "init_conc" (initial conditions) and "params" (propensity equation parameters). 
 #' @return the result of calling the lsoda simulation algorithm from deSolve 
 #' @examples
-#' detSim_glycphos()
+#' detSim_camkii()
 #' @export
-detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
+detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
 
 
 
@@ -17,19 +17,31 @@ detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
 
   # define default model parameters
   default_model_params <- list(vols      = c(vol = 5e-14),
-                               init_conc = c(Prot_inact = 5,
-                                             Prot_act = 0),
-                               params    = c(VpM1 = 1.5,
-                                             VpM2 = 0.6,
-                                             alpha = 9,
-                                             gamma_ = 9,
-                                             K11 = 0.1,
-                                             Kp2 = 0.2,
-                                             Ka1_conc = 1e7,
-                                             Ka2_conc = 1e7,
-                                             Ka5_conc = 500,
-                                             Ka6_conc = 500,
-                                             gluc_conc = 1e7))
+                               init_conc = c(W_I = 40,
+                                             W_B = 0,
+                                             W_P = 0,
+                                             W_T = 0,
+                                             W_A = 0),
+                               params    = c(a = -0.22,
+                                             b = 1.826,
+                                             c_ = 0.1,
+                                             k_IB = 0.01,
+                                             k_BI = 0.8,
+                                             k_PT = 1,
+                                             k_TP = 1e-12,
+                                             k_TA = 0.0008,
+                                             k_AT = 0.01,
+                                             k_AA = 0.29,
+                                             c_B = 0.75,
+                                             c_P = 1,
+                                             c_T = 0.8,
+                                             c_A = 0.8,
+                                             camT = 1000,
+                                             Kd = 1000,
+                                             Vm_phos = 0.005,
+                                             Kd_phos = 0.3,
+                                             totalC = 40,
+                                             h = 4.0))
   ################################# - Model - ################################
   ############################################################################
 
@@ -136,17 +148,17 @@ detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
   # USER INPUT 2 for new models: define differential equations  
 
   # model description function
-  glycphos_ode <- function(t, state, parameters) {
+  camkii_ode <- function(t, state, parameters) {
     with(as.list(c(state, parameters)), {
 
       # define model ODEs
-      total = Prot_inact + Prot_act
-      
-      dProt_inact   <- -(VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / Ka5_conc^4 + Ca^4)) * (Prot_inact/total) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total +                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
-      dProt_act     <-  (VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / Ka5_conc^4 + Ca^4)) * (Prot_inact/total) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total -                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
-      
+      dW_I <- - (k_IB*camT*Ca^4/(Ca^4+Kd^4)*W_I) + (k_IB*W_B) + ((Vm_phos*W_A)/(Kd_phos+W_A/totalC))
+      dW_B <- + (k_IB*camT*Ca^4/(Ca^4+Kd^4)*W_I) - (k_BI*W_B) + ((Vm_phos*W_P)/(Kd_phos+W_P/totalC)) + ((Vm_phos*W_T)/(Kd_phos+W_T/totalC)) - (k_AA*totalC*(a*(W_B+W_P+W_A+W_T)/totalC+b*((W_B+W_P+W_A+W_T)/totalC)^2+c_*((W_B+W_P+W_A+W_T)/totalC)^3)*(c_B*W_B/totalC^2)*(2*(c_B*W_B)+c_P*W_P+c_T*W_T+c_A*W_A))
+      dW_P <- - (k_PT*W_P-k_TP*W_T*Ca^4) - ((Vm_phos*W_P)/(Kd_phos+W_P/totalC)) + (k_AA*totalC*(a*(W_B+W_P+W_A+W_T)/totalC+b*((W_B+W_P+W_A+W_T)/totalC)^2+c_*((W_B+W_P+W_A+W_T)/totalC)^3)*(c_B*W_B/totalC^2)*(2*(c_B*W_B)+c_P*W_P+c_T*W_T+c_A*W_A))
+      dW_T <- + (k_PT*W_P-k_TP*W_T*Ca^4) - (k_TA*W_T) + (k_AT*W_A*(camT-camT*Ca^4/(Ca^4+Kd^4))) - ((Vm_phos*W_T)/(Kd_phos+W_T/totalC))
+      dW_A <- + (k_TA*W_T) - (k_AT*W_A*(camT-camT*Ca^4/(Ca^4+Kd^4))) - ((Vm_phos*W_A)/(Kd_phos+W_A/totalC))
       # return list (=state vector) with differentials (and 0 for Ca since it is an external signal) 
-      list(c(0, dProt_inact, dProt_act))
+      list(c(0, dW_I, dW_B, dW_P, dW_T, dW_A))
     })
   }
   ################################# - Model - ################################
@@ -176,12 +188,12 @@ detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
   ############################################################################
   ############################# - Simulation - ###############################
   # USER INPUT 3 for new models: adapt name of 'func' argument 
-  #                              (glycphos_ode for glycphos model, etc.)
+  #                              (camkii_ode for camkii model, etc.)
   
   # simulate model with LSODA
   output <- deSolve::lsoda(y = c(Ca = input_df$Ca[[1]], unlist(default_init_conc)),
                            times = lsodaTimes,
-                           func = glycphos_ode,
+                           func = camkii_ode,
                            parms = unlist(default_params),
                            event = list(func = eventFun, time = input_df_subset$time))
 

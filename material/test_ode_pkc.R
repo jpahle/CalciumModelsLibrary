@@ -1,6 +1,3 @@
-# Set rng seed for debugging tests
-set.seed(1)
-
 # Simulation parameters (Vector)
 sim_params <- list(timestep = 0.01,
                    endTime = 100)
@@ -28,7 +25,7 @@ colnames(input_df) <- c("time", "Ca")
 start.time <- as.numeric(Sys.time())*1000
 
 # Simulate model
-output <- sim_pkc(input_df, sim_params, model_params)
+output <- detSim_pkc(input_df, sim_params, model_params)
 
 end.time <- as.numeric(Sys.time())*1000
 

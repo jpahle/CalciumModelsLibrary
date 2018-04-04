@@ -2,22 +2,27 @@
 set.seed(1)
 
 # Simulation parameters (Vector)
-sim_params <- list(timestep = 0.01,
-                   endTime = 100)
+sim_params <- list(timestep = 1,
+                   endTime = 10)
 # Model Parameters (List)
-model_params <- list(vols      = c(vol = 1e-11))
+model_params <- list(vols      = c(vol = 1e-11)
+                     )
 
 
 # Read Ca timeseries
-input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
+#input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
 # convert part number from input table to concentration (c*f=n since f = Avogadro*Vol)
-f <- 6.0221415e14*model_params[["vols"]][["vol"]]
-input_df["Ca"] <- input_df["Ca"]/f
+#f <- 6.0221415e14*model_params[["vols"]][["vol"]]
+#input_df["Ca"] <- input_df["Ca"]/f
+
+# Sine(baseline, amp, period, phase, duration, resolution)
+input_df <- as.data.frame(OscillatorGenerator::Sine(0, 1, 2, 5, 10, 0.01))
+colnames(input_df) <- c("time", "Ca")
 
 # Simulate model
 start.time <- as.numeric(Sys.time())
 
-output <- sim_ano(input_df, sim_params, model_params)
+output <- detSim_ano(input_df, sim_params, model_params)
 
 end.time <- as.numeric(Sys.time())
 

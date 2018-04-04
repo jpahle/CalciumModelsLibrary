@@ -1,5 +1,5 @@
 # Set rng seed for debugging tests
-set.seed(1)
+#set.seed(1)
 
 # Simulation parameters (Vector)
 sim_params <- list(timestep = 0.01,
@@ -74,5 +74,5 @@ output$active_fraction <- with(output, (PKCbasal +
 par(mfrow = c(3,1))
 plot(output$time, output$calcium, col="blue",type="l", xlab="time [s]", ylab="concentration [a.u.]", main = "Calcium")
 plot(output$time, output$PKC_act, col="red", type = "l", xlab="time [s]", ylab="concentration [nmol/l]", main = "Sum of active PKC species")
-plot(output$time, output$active_fraction, col="orange", type="l", xlab="time [s]", ylab="concentration [nmol/l]", main = "Active PKC fraction of total PKC")
+plot(output$time, output$active_fraction, col="orange", type="l", xlab="time [s]", ylab="active fraction", main = "Active PKC fraction of total PKC")
 par(mfrow = c(1,1))

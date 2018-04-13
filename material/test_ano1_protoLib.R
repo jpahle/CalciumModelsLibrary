@@ -3,16 +3,21 @@ set.seed(1)
 
 # Simulation parameters (Vector)
 sim_params <- list(timestep = 0.01,
-                   endTime = 100)
+                   endTime = 20)
 # Model Parameters (List)
-model_params <- list(vols      = c(vol = 1e-11))
-
+model_params <- list(vols      = c(vol = 1e-11),
+                     init_conc = c(Cl_ext = 3e06))
 
 # Read Ca timeseries
-input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
+#input_df <- read.table("material/ca5e-14_2.85_1000_0.05s.out", col.names = c("time", "steps", "G_alpha", "PLC", "Ca"))
 # convert part number from input table to concentration (c*f=n since f = Avogadro*Vol)
-f <- 6.0221415e14*model_params[["vols"]][["vol"]]
-input_df["Ca"] <- input_df["Ca"]/f
+#f <- 6.0221415e14*model_params[["vols"]][["vol"]]
+#input_df["Ca"] <- input_df["Ca"]/f
+
+# Sine(baseline, amp, period, phase, duration, resolution)
+input_df <- as.data.frame(OscillatorGenerator::Sine(0, 1e06, 5, 5, 20, 0.01))
+
+colnames(input_df) <- c("time", "Ca")
 
 # Simulate model
 start.time <- as.numeric(Sys.time())
@@ -33,10 +38,11 @@ active_ano_sum <- with(output, O + O_c + O_1 + O_1c + O_2 + O_2c)
 inactive_ano_sum <- with(output, C + C_c + C_1 + C_1c + C_2 + C_2c)
 # active ano fraction
 active_ano_frac <- 1/(1+(inactive_ano_sum/active_ano_sum))
-plot(output$time, output$calcium, col="blue", type="l", xlab="time [s]", ylab="activated Channel [nmol/l]")
-lines(output$time, active_ano_frac, col="red", type="l")
+plot(output$time, active_ano_frac, col="red", type="l", ylim = c(0,0.06), xlab="time [s]", ylab="active ANO1 fraction [nmol/l]")
+par(new=T)
+plot(output$time, output$calcium, col="blue", type="l", axes=F, xlab=NA, ylab=NA, cex=1.2)
 axis(side = 4)
-mtext(side = 4, line = 3, 'calcium [a.u]')
+mtext(side = 4, line = 3, "calcium [a.u.]")
 legend("topright", legend=c("calcium", "active ANO1 fraction"),
-                   col=c("blue", "red"),
-                   lty=c(1,1))
+       col=c("blue", "red"),
+       lty=c(1,1))

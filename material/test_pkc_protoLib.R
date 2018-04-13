@@ -22,7 +22,7 @@ model_params <- list(vols      = c(vol = 1e-15),
 #input_df <- read.table("material/Sine_Input.txt", col.names = c("time", "Ca"))
 
 # Sine(baseline, amp, period, phase, duration, resolution)
-input_df <- as.data.frame(OscillatorGenerator::Sine(200, 400, 20, 5, 200, 0.01))
+input_df <- as.data.frame(OscillatorGenerator::Sine(200, 1000, 20, 5, 200, 0.01))
 colnames(input_df) <- c("time", "Ca")
 
 start.time <- as.numeric(Sys.time())*1000

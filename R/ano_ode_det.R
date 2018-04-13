@@ -17,7 +17,7 @@ detSim_ano <- function(input_df, input_sim_params, input_model_params) {
 
   # define default model parameters
   default_model_params <- list(vols      = c(vol = 1e-11),
-                               init_conc = c(Cl_ext = 300,
+                               init_conc = c(Cl_ext = 30e6,
                                              C = 100,
                                              C_c = 0,
                                              C_1 = 0,

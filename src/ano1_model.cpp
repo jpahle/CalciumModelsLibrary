@@ -173,7 +173,7 @@ List init() {
   );
   // Default initial conditions
   NumericVector init_conc = NumericVector::create(
-     _["Cl_ext"] = 300,
+     _["Cl_ext"] = 30e6,
      _["C"] = 100,
      _["C_c"] = 0,
      _["C_1"] = 0,

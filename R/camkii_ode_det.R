@@ -16,7 +16,7 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
   # USER INPUT 1 for new models: define default model parameters 
 
   # define default model parameters
-  default_model_params <- list(vols      = c(vol = 5e-14),
+  default_model_params <- list(vols      = c(vol = 5e-15),
                                init_conc = c(W_I = 40,
                                              W_B = 0,
                                              W_P = 0,
@@ -152,9 +152,9 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
     with(as.list(c(state, parameters)), {
 
       # define model ODEs
-      dW_I <- - (k_IB*camT*Ca^4/(Ca^4+Kd^4)*W_I) + (k_IB*W_B) + ((Vm_phos*W_A)/(Kd_phos+W_A/totalC))
-      dW_B <- + (k_IB*camT*Ca^4/(Ca^4+Kd^4)*W_I) - (k_BI*W_B) + ((Vm_phos*W_P)/(Kd_phos+W_P/totalC)) + ((Vm_phos*W_T)/(Kd_phos+W_T/totalC)) - (k_AA*totalC*(a*(W_B+W_P+W_A+W_T)/totalC+b*((W_B+W_P+W_A+W_T)/totalC)^2+c_*((W_B+W_P+W_A+W_T)/totalC)^3)*(c_B*W_B/totalC^2)*(2*(c_B*W_B)+c_P*W_P+c_T*W_T+c_A*W_A))
-      dW_P <- - (k_PT*W_P-k_TP*W_T*Ca^4) - ((Vm_phos*W_P)/(Kd_phos+W_P/totalC)) + (k_AA*totalC*(a*(W_B+W_P+W_A+W_T)/totalC+b*((W_B+W_P+W_A+W_T)/totalC)^2+c_*((W_B+W_P+W_A+W_T)/totalC)^3)*(c_B*W_B/totalC^2)*(2*(c_B*W_B)+c_P*W_P+c_T*W_T+c_A*W_A))
+      dW_I <- - (k_IB*camT*Ca^4/(Ca^4+Kd^4)*W_I) + (k_BI*W_B) + ((Vm_phos*W_A)/(Kd_phos+W_A/totalC))
+      dW_B <- + (k_IB*camT*Ca^4/(Ca^4+Kd^4)*W_I) - (k_BI*W_B) + ((Vm_phos*W_P)/(Kd_phos+W_P/totalC)) + ((Vm_phos*W_T)/(Kd_phos+W_T/totalC)) - (k_AA*totalC*(a*(W_B+W_P+W_A+W_T)/totalC+b*((W_B+W_P+W_A+W_T)/totalC)^2+c_*((W_B+W_P+W_A+W_T)/totalC)^3)*(c_B*W_B/totalC^2)*(2*c_B*W_B+c_P*W_P+c_T*W_T+c_A*W_A))
+      dW_P <- - (k_PT*W_P-k_TP*W_T*Ca^4) - ((Vm_phos*W_P)/(Kd_phos+W_P/totalC)) + (k_AA*totalC*(a*(W_B+W_P+W_A+W_T)/totalC+b*((W_B+W_P+W_A+W_T)/totalC)^2+c_*((W_B+W_P+W_A+W_T)/totalC)^3)*(c_B*W_B/totalC^2)*(2*c_B*W_B+c_P*W_P+c_T*W_T+c_A*W_A))
       dW_T <- + (k_PT*W_P-k_TP*W_T*Ca^4) - (k_TA*W_T) + (k_AT*W_A*(camT-camT*Ca^4/(Ca^4+Kd^4))) - ((Vm_phos*W_T)/(Kd_phos+W_T/totalC))
       dW_A <- + (k_TA*W_T) - (k_AT*W_A*(camT-camT*Ca^4/(Ca^4+Kd^4))) - ((Vm_phos*W_A)/(Kd_phos+W_A/totalC))
       # return list (=state vector) with differentials (and 0 for Ca since it is an external signal) 

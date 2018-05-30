@@ -18,7 +18,7 @@ detSim_ano <- function(input_df, input_sim_params, input_model_params) {
   # define default model parameters
   default_model_params <- list(vols      = c(vol = 1e-11),
                                init_conc = c(Cl_ext = 30e6,
-                                             C = 100,
+                                             C = 1,
                                              C_c = 0,
                                              C_1 = 0,
                                              C_1c = 0,
@@ -53,7 +53,7 @@ detSim_ano <- function(input_df, input_sim_params, input_model_params) {
                                              zkocl1 = 0.6485,
                                              zkocl2 = 0.03,
                                              l = 41.6411,
-                                             L = 0.6485,
+                                             L = 0.1284,
                                              m = 0.0102,
                                              M = 0.0632,
                                              h = 0.3367,

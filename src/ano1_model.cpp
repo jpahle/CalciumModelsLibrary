@@ -174,7 +174,7 @@ List init() {
   // Default initial conditions
   NumericVector init_conc = NumericVector::create(
      _["Cl_ext"] = 30e6,
-     _["C"] = 100,
+     _["C"] = 1,
      _["C_c"] = 0,
      _["C_1"] = 0,
      _["C_1c"] = 0,
@@ -215,7 +215,7 @@ List init() {
   params.push_back(0.6485, "zkocl1");
   params.push_back(0.03, "zkocl2");
   params.push_back(41.6411, "l");
-  params.push_back(0.6485, "L");
+  params.push_back(0.1284, "L");
   params.push_back(0.0102, "m");
   params.push_back(0.0632, "M");
   params.push_back(0.3367, "h");
@@ -309,7 +309,7 @@ void calculate_amu() {
   amu[22] = amu[21] +  pow(h,2) * kccl1 * exp(zkccl1 * vterm) * x[0] * x[5]; //f: C_2 - Cl
   amu[23] = amu[22] +  pow(H,2) * kccl2 * exp(-zkccl2 * vterm) * x[6]; //b: C_2 - Cl
   
-  amu[24] = amu[23] +  H*m*pow(l,2)/pow(m,2) * acl1 * exp(zacl1 * vterm) * x[6]; //f: C_2c - O
+  amu[24] = amu[23] +  H*m*pow(l,2)/pow(M,2) * acl1 * exp(zacl1 * vterm) * x[6]; //f: C_2c - O
   amu[25] = amu[24] +  pow(h,2)*pow(L,2) * bcl1 * exp(-zbcl1 * vterm) * x[12]; //b: C_2c - O
   
   amu[26] = amu[25] +  k01 * exp(zk01 * vterm) * 2 * calcium[ntimepoint] * x[7]; //f: O - Ca
@@ -323,13 +323,13 @@ void calculate_amu() {
   amu[32] = amu[31] +  k01 * exp(zk01 * vterm) * calcium[ntimepoint] * x[9]; //f: O_1 - Ca
   amu[33] = amu[32] +  2 * k02 * exp(-zk02 * vterm) * x[11]; //b: O_1 - Ca
   amu[34] = amu[33] +  m * kocl1 * exp(zkocl1 * vterm) * x[0] * x[9]; //f: O_1 - Cl
-  amu[35] = amu[34] +  M * kocl2 * exp(-zkocl1 * vterm) * x[10]; //b: O_1 - Cl
+  amu[35] = amu[34] +  M * kocl2 * exp(-zkocl2 * vterm) * x[10]; //b: O_1 - Cl
   
   amu[36] = amu[35] +  m/M * k01 * exp(zk01 * vterm) * calcium[ntimepoint] * x[10]; //f: O_1c - Ca
   amu[37] = amu[36] +  2 * k02 * exp(-zk02 * vterm) * x[12]; //b: O_1c - Ca
   
   amu[38] = amu[37] +  pow(m,2) * kocl1 * exp(zkocl1 * vterm) * x[0] * x[11]; //f: O_2 - Cl
-  amu[39] = amu[38] +  pow(M,2) * kocl2 * exp(-zkocl1 * vterm) * x[12]; //b: O_2 - Cl
+  amu[39] = amu[38] +  pow(M,2) * kocl2 * exp(-zkocl2 * vterm) * x[12]; //b: O_2 - Cl
   
 }
 

@@ -97,12 +97,12 @@ Following the naming convention described above (section [Model Overview](#model
 
 ```{r fig2, fig.height = 5, fig.width = 7, fig.align = "center"}
 # Supply simulation parameters as vector
-sim_params <- c(timestep = 0.05,
+sim_params <- list(timestep = 0.05,
                 endTime = 100)
 # Supply model parameters as list
 model_params <- list(vols      = c(vol = 5e-14),
-                     init_conc = c(Cal_off = 5,
-                                   Cal_on = 0),
+                     init_conc = c(Prot_inact = 5,
+                                   Prot_act = 0),
                      params    = c(k_on = 0.025))
 
 # Supply a calcium input timeseries file

@@ -23,7 +23,7 @@ static std::map <std::string, double> prop_params_map;
 //' * vol = 5e-15
 //' 
 //' Default Initial Conditions:
-//' * W_I = 40
+//' * W_I = 800
 //' * W_B = 0
 //' * W_P = 0
 //' * W_T = 0
@@ -157,7 +157,7 @@ List init() {
   );
   // Default initial conditions
   NumericVector init_conc = NumericVector::create(
-    _["W_I"] = 800, //800
+    _["W_I"] = 800,
     _["W_B"] = 0,
     _["W_P"] = 0,
     _["W_T"] = 0,
@@ -167,7 +167,7 @@ List init() {
   NumericVector params = NumericVector::create(
     _["a"] = -0.22,
     _["b"] = 1.826,
-    _["c"] = -0.8, //-0.8
+    _["c"] = -0.8,
     _["k_IB"] = 0.01,
     _["k_BI"] = 0.8,
     _["k_PT"] = 1,
@@ -183,7 +183,7 @@ List init() {
     _["Kd"] = 1000,
     _["Vm_phos"] = 0.005,
     _["Kd_phos"] = 0.3,
-    _["totalC"] = 800, //800
+    _["totalC"] = 800,
     _["h"] = 4.0
   );
     
@@ -237,7 +237,7 @@ void calculate_amu() {
   amu[8] = amu[7] + ((Vm_phos * x[3]) / (Kd_phos + (x[3] / (totalC*f))));
   amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / (totalC*f))));
   
-   
+  
   
   /*
   amu[0] = k_IB * x[0] * camT * pow((double)calcium[ntimepoint],(double)h) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h) ); // binding

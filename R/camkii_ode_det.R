@@ -17,7 +17,7 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
 
   # define default model parameters
   default_model_params <- list(vols      = c(vol = 5e-15),
-                               init_conc = c(W_I = 40,
+                               init_conc = c(W_I = 800,
                                              W_B = 0,
                                              W_P = 0,
                                              W_T = 0,
@@ -151,6 +151,8 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
   camkii_ode <- function(t, state, parameters) {
     with(as.list(c(state, parameters)), {
       # helper functions
+      #vol <- 5e-15
+      #f <- 6.0221415e+14 * vol
       activeSubunits <- (W_B + W_P + W_T + W_A) / totalC
       prob <-  a * activeSubunits + b * activeSubunits^2 + c_ * activeSubunits^3
       # define model ODEs

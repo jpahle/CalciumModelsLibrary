@@ -24,7 +24,7 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
                                              W_A = 0),
                                params    = c(a = -0.22,
                                              b = 1.826,
-                                             c_ = 0.1,
+                                             c_ = -0.8,
                                              k_IB = 0.01,
                                              k_BI = 0.8,
                                              k_PT = 1,
@@ -40,7 +40,7 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
                                              Kd = 1000,
                                              Vm_phos = 0.005,
                                              Kd_phos = 0.3,
-                                             totalC = 40,
+                                             totalC = 800,
                                              h = 4.0))
   ################################# - Model - ################################
   ############################################################################

@@ -32,7 +32,7 @@ static std::map <std::string, double> prop_params_map;
 //' Default Reaction Parameters:
 //' * a = -0.22
 //' * b = 1.826
-//' * c = 0.1
+//' * c = -0.8
 //' * k_IB = 0.01
 //' * k_BI = 0.8
 //' * k_PT = 1
@@ -48,7 +48,7 @@ static std::map <std::string, double> prop_params_map;
 //' * Kd = 1000
 //' * Vm_phos = 0.005
 //' * Kd_phos = 0.3
-//' * totalC = 40
+//' * totalC = 800
 //' * h = 4.0
 //' @md
 //' @return the result of calling the model specific version of the function "simulator" 
@@ -157,7 +157,7 @@ List init() {
   );
   // Default initial conditions
   NumericVector init_conc = NumericVector::create(
-    _["W_I"] = 40,
+    _["W_I"] = 800, //800
     _["W_B"] = 0,
     _["W_P"] = 0,
     _["W_T"] = 0,
@@ -167,7 +167,7 @@ List init() {
   NumericVector params = NumericVector::create(
     _["a"] = -0.22,
     _["b"] = 1.826,
-    _["c"] = 0.1,
+    _["c"] = -0.8, //-0.8
     _["k_IB"] = 0.01,
     _["k_BI"] = 0.8,
     _["k_PT"] = 1,
@@ -183,7 +183,7 @@ List init() {
     _["Kd"] = 1000,
     _["Vm_phos"] = 0.005,
     _["Kd_phos"] = 0.3,
-    _["totalC"] = 40,
+    _["totalC"] = 800, //800
     _["h"] = 4.0
   );
     
@@ -225,17 +225,39 @@ void calculate_amu() {
   amu[0] = x[0] * ((k_IB * camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h)));
   amu[1] = amu[0] + k_BI * x[1];
   
-  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / totalC;
+  double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / (totalC*f);
   double prob =  a * activeSubunits + b*(pow((double)activeSubunits,(double)2)) + c*(pow((double)activeSubunits,(double)3));
-  amu[2] = amu[1] +  totalC * k_AA * prob * ((c_B * x[1]) / pow((double)totalC,(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
+  amu[2] = amu[1] +  (totalC*f) * k_AA * prob * ((c_B * x[1]) / pow((double)(totalC*f),(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
   
   amu[3] = amu[2] + k_PT * x[2];
   amu[4] = amu[3] + k_TP * x[3] * pow((double)calcium[ntimepoint],(double)h);
   amu[5] = amu[4] + k_TA * x[3];
   amu[6] = amu[5] + k_AT * x[4] * (camT - ((camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h))));
-  amu[7] = amu[6] + ((Vm_phos * x[2]) / (Kd_phos + (x[2] / totalC)));
-  amu[8] = amu[7] + ((Vm_phos * x[3]) / (Kd_phos + (x[3] / totalC)));
-  amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / totalC)));
+  amu[7] = amu[6] + ((Vm_phos * x[2]) / (Kd_phos + (x[2] / (totalC*f))));
+  amu[8] = amu[7] + ((Vm_phos * x[3]) / (Kd_phos + (x[3] / (totalC*f))));
+  amu[9] = amu[8] + ((Vm_phos * x[4]) / (Kd_phos + (x[4] / (totalC*f))));
+  
+   
+  
+  /*
+  amu[0] = k_IB * x[0] * camT * pow((double)calcium[ntimepoint],(double)h) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h) ); // binding
+  amu[1] = amu[0] + k_BI * x[1]; // binding reverse
+    
+  // phoshporylation
+  double activeSubunits = (x[1] + x[2] + x[3] + x[4])/(totalC*f);
+  double prob =  a * activeSubunits + b* pow((double)activeSubunits,(double)2) + c*pow((double)activeSubunits,(double)3);
+  
+  amu[2] = amu[1] +  totalC*f * k_AA *prob  *c_B * x[1]/ pow((double)totalC,(double)2) *(2*c_B*x[1] +  c_P*x[2] + c_T*x[3]+ c_A*x[4]);
+  
+  amu[3] = amu[2] + k_PT * x[2];  //  trapping
+  amu[4] = amu[3] + k_TP * x[3] * pow((double)calcium[ntimepoint],(double)h);  //  trapping reverse
+  amu[5] = amu[4] + k_TA * x[3];  // autonomous
+  amu[6] = amu[5] + k_AT * x[4] * (camT - camT * pow((double)calcium[ntimepoint],(double)h) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h))); // autonomous reverse
+  amu[7] = amu[6] +  Vm_phos * (x[2]) / (Kd_phos + x[2]/(f*totalC)); // phosphatase on W_P
+  amu[8] = amu[7] +  Vm_phos * (x[3]) / (Kd_phos + x[3]/(f*totalC)); // phosphatase on W_T
+  amu[9] = amu[8] + Vm_phos * (x[4]) / (Kd_phos + x[4]/(f*totalC)); // phosphatase on W_A
+  */
+  
 }
 
 // Stoichiometric matrix

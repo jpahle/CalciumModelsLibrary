@@ -27,6 +27,7 @@ extern double *amu;
 extern unsigned long long int *x;
 extern int nspecies;
 extern int nreactions;
+extern double f;
 // Global shared functions
 extern void calculate_amu();
 extern NumericMatrix get_stM();
@@ -97,7 +98,6 @@ DataFrame simulator(DataFrame user_input_df,
   // initial concentration vector
   NumericVector ic = default_init_conc; 
   // conversion factor
-  double f;
   f = 6.0221415e14*vol;
   int i;
   for (i=0; i < ic.length(); i++) {

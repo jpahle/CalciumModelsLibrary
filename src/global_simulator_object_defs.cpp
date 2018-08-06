@@ -14,7 +14,7 @@ double *amu;
 unsigned long long int *x;
 int nspecies;
 int nreactions;
-
+double f;
 
 // Empty placeholder functions
 // Since the simulator function 'blueprint' in simulator.cpp is also compiled (Rcpp Issue, it doesn't need to be compiled) we create these placeholders to satisfy the compiler.

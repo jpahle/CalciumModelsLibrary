@@ -19,7 +19,7 @@ detSim_calcineurin <- function(input_df, input_sim_params, input_model_params) {
   default_model_params <- list(vols      = c(vol = 5e-14),
                                init_conc = c(Prot_inact = 5.0,
                                              Prot_act = 0),
-                               params    = c(k_on = 1.0,
+                               params    = c(k_on = 1e-9,
                                              k_off = 1.0,
                                              p = 3.0))
   ################################# - Model - ################################

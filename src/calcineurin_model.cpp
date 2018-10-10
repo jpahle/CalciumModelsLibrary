@@ -142,7 +142,7 @@ List init() {
   );
   // Default propensity equation parameters
   NumericVector params = NumericVector::create(
-    _["k_on"] = 1,
+    _["k_on"] = 1e-9,
     _["k_off"] = 1,
     _["p"] = 3.0
   );

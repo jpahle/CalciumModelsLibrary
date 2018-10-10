@@ -191,6 +191,7 @@ void calculate_amu() {
   double Ka6_conc = prop_params_map["Ka6_conc"];
   double gluc_conc = prop_params_map["gluc_conc"];
   
+  
   double total = x[0] + x[1];
   double activeFraction = x[1]/total;
   
@@ -200,7 +201,7 @@ void calculate_amu() {
   double Ka6_conc_pow4 = Ka6_conc * Ka6_conc * Ka6_conc * Ka6_conc;   
 
   // divide VpM1 and VpM2 by 60 to convert the units from min^-1 to s^-1
-  amu[0] = (VpM1 / 60.0 * (1.0 + gamma * Ca_conc_pow4 / Ka5_conc_pow4 + Ca_conc_pow4)) * ( 1.0 - activeFraction) / ((K11 / (1.0 + Ca_conc_pow4 / Ka6_conc_pow4)) + 1.0 - activeFraction) * total;
+  amu[0] = (VpM1 / 60.0 * (1.0 + gamma * Ca_conc_pow4 / (Ka5_conc_pow4 + Ca_conc_pow4)) * ( 1.0 - activeFraction)) / ((K11 / (1.0 + Ca_conc_pow4 / Ka6_conc_pow4)) + 1.0 - activeFraction) * total;
   amu[1] = amu[0] + ((VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * activeFraction) / (Kp2 / (1 + gluc_conc / Ka2_conc) + activeFraction) * total);
 }
 

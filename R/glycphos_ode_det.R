@@ -142,8 +142,8 @@ detSim_glycphos <- function(input_df, input_sim_params, input_model_params) {
       # define model ODEs
       total = Prot_inact + Prot_act
       
-      dProt_inact   <- -(VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / Ka5_conc^4 + Ca^4)) * (Prot_inact/total) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total +                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
-      dProt_act     <-  (VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / Ka5_conc^4 + Ca^4)) * (Prot_inact/total) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total -                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
+      dProt_inact   <- -(VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / (Ka5_conc^4 + Ca^4)) * (Prot_inact/total)) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total +                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
+      dProt_act     <-  (VpM1 / 60.0 * (1.0 + gamma_ * Ca^4 / (Ka5_conc^4 + Ca^4)) * (Prot_inact/total)) / ((K11 / (1.0 + Ca^4 / Ka6_conc^4)) + (Prot_inact/total)) * total -                  (VpM2 / 60.0 * (1.0 + alpha * gluc_conc / (Ka1_conc + gluc_conc)) * (Prot_act/total)) / (Kp2 / (1 + gluc_conc / Ka2_conc) + (Prot_act/total)) * total
       
       # return list (=state vector) with differentials (and 0 for Ca since it is an external signal) 
       list(c(0, dProt_inact, dProt_act))

@@ -91,8 +91,8 @@ DataFrame simulator(DataFrame user_input_df,
     user_output_times_set = 1;
   }
   // ------------ Memory allocation for propensity and particle number pointers ------------
-  amu = (double *)Calloc(nreactions, double);
-  x = (unsigned long long int *)Calloc(nspecies, unsigned long long int);
+  amu = (double *)calloc(nreactions, sizeof(double));
+  x = (unsigned long long int *)calloc(nspecies, sizeof(unsigned long long int));
   // ------------ Conversion from concentration (nmol/l) to particle numbers (factor: n/f = c <=> c*f = n) ------------
   vol = default_vols[0];
   // initial concentration vector
@@ -221,8 +221,8 @@ DataFrame simulator(DataFrame user_input_df,
   }
      
   // Free dyn. allocated pointers
-  Free(amu);
-  Free(x);
+  free(amu);
+  free(x);
   
   // Send random generator state back to R
   PutRNGstate();

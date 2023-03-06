@@ -40,7 +40,6 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
                                              Kd = 1000,
                                              Vm_phos = 0.005,
                                              Kd_phos = 0.3,
-                                             totalC = 800,
                                              h = 4.0))
   ################################# - Model - ################################
   ############################################################################
@@ -153,6 +152,7 @@ detSim_camkii <- function(input_df, input_sim_params, input_model_params) {
       # helper functions
       #vol <- 5e-15
       #f <- 6.0221415e+14 * vol
+      totalC <- W_I + W_B + W_P + W_T + W_A
       activeSubunits <- (W_B + W_P + W_T + W_A) / totalC
       prob <-  a * activeSubunits + b * activeSubunits^2 + c_ * activeSubunits^3
       # define model ODEs

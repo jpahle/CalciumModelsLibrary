@@ -48,7 +48,6 @@ static std::map <std::string, double> prop_params_map;
 //' * Kd = 1000
 //' * Vm_phos = 0.005
 //' * Kd_phos = 0.3
-//' * totalC = 800
 //' * h = 4.0
 //' @md
 //' @return the result of calling the model specific version of the function "simulator" 
@@ -183,7 +182,6 @@ List init() {
     _["Kd"] = 1000,
     _["Vm_phos"] = 0.005,
     _["Kd_phos"] = 0.3,
-    _["totalC"] = 800,
     _["h"] = 4.0
   );
     
@@ -219,12 +217,12 @@ void calculate_amu() {
   double Kd = prop_params_map["Kd"];
   double Vm_phos = prop_params_map["Vm_phos"];
   double Kd_phos = prop_params_map["Kd_phos"];
-  double totalC = prop_params_map["totalC"];
   double h = prop_params_map["h"];
   
   amu[0] = x[0] * ((k_IB * camT * pow((double)calcium[ntimepoint],(double)h)) / (pow((double)calcium[ntimepoint],(double)h) + pow((double)Kd,(double)h)));
   amu[1] = amu[0] + k_BI * x[1];
   
+  double totalC = x[0] + x[1] + x[2] + x[3] + x[4];
   double activeSubunits = (x[1] + x[2] + x[3] + x[4]) / (totalC*f);
   double prob =  a * activeSubunits + b*(pow((double)activeSubunits,(double)2)) + c*(pow((double)activeSubunits,(double)3));
   amu[2] = amu[1] +  (totalC*f) * k_AA * prob * ((c_B * x[1]) / pow((double)(totalC*f),(double)2)) * (2*c_B*x[1] + c_P*x[2] + c_T*x[3]+ c_A*x[4]);
